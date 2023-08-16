@@ -10,6 +10,10 @@ public class InGameUI : MonoBehaviour
     [SerializeField]
     private float gameTime;
     private float timer;
+    [SerializeField]
+    private int playerPoints;
+    [SerializeField]
+    private int AIPoints;
 
 
     [SerializeField]
@@ -20,15 +24,30 @@ public class InGameUI : MonoBehaviour
     private Image timerImage;
 
     [SerializeField]
-    [Range(500, 700)]
-    public float sliderValuePerfectShot;
+    private RectTransform perfectShotIndicator;
     [SerializeField]
-    [Range(700, 900)]
+    private RectTransform backboardShotIndicator;
+    [Range(0, 700)]
+    public float sliderValuePerfectShot;
+    [Range(0, 700)]
     public float sliderValueBackboardShot;
+
+    [Header("Random Backboard Bonus")]
+    internal bool backBoardBonusActive;
+    [SerializeField]
+    private GameObject backBoardBonusUI;
+    [SerializeField]
+    private int backBoardBonusTurnDurationMax;
+    [Range(0, 10)]
+    private float percentageToActiveBackboardBonus;
+
+    private int backBoardBonusTurnDuration;
 
     void Start()
     {
+        backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
         timer = gameTime;
+        SetPositionOfShotPointsOnSlider();
     }
 
     // Update is called once per frame
@@ -38,12 +57,51 @@ public class InGameUI : MonoBehaviour
         timerImage.fillAmount = timer / gameTime;
     }
 
+    public void SetPositionOfShotPointsOnSlider()
+    {
+        perfectShotIndicator.localPosition = new Vector3(perfectShotIndicator.localPosition.x, sliderValuePerfectShot, perfectShotIndicator.localPosition.z);
+        backboardShotIndicator.localPosition = new Vector3(backboardShotIndicator.localPosition.x, sliderValueBackboardShot, backboardShotIndicator.localPosition.z);
+    }
+
     public float GetSliderValuePerfectShot()
     {
-        return sliderValuePerfectShot;
+        return sliderValuePerfectShot / 700;
     }
-    public float GetSliderValuebackboardShot()
+    public float GetSliderValueBackboardShot()
     {
-        return sliderValueBackboardShot;
+        return sliderValueBackboardShot / 700;
+    }
+
+    public void AddPlayerPoints(int points)
+    {
+        playerPoints += points;
+        playerPointsText.text = playerPoints.ToString();
+    }
+    public void AddAIPoints(int points)
+    {
+        AIPoints += points;
+        aiPointsText.text = AIPoints.ToString();
+    }
+
+    public void DoRandomToDoBackboardBonus()
+    {
+        if (backBoardBonusActive)
+        {
+            backBoardBonusTurnDuration--;
+            if(backBoardBonusTurnDuration <= 0)
+            {
+                backBoardBonusActive = false;
+                backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
+            }
+        }
+        else
+        {
+            int rnd = Random.Range(0, 10);
+            if (rnd >= percentageToActiveBackboardBonus)
+            {
+                backBoardBonusActive = true;
+                backBoardBonusUI.SetActive(true);
+            }
+        }
     }
 }

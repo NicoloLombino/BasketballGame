@@ -33,13 +33,23 @@ public class InGameUI : MonoBehaviour
     public float sliderValueBackboardShot;
 
     [Header("Random Backboard Bonus")]
-    internal bool backBoardBonusActive;
+    internal bool isBackBoardBonusActive;
+    internal int pointsToGiveOnBackboardBonus;
     [SerializeField]
-    private GameObject backBoardBonusUI;
+    private GameObject backBoardBonusUI4;
+    [SerializeField]
+    private GameObject backBoardBonusUI5;
     [SerializeField]
     private int backBoardBonusTurnDurationMax;
-    [Range(0, 10)]
+    [SerializeField, Range(0, 10)]
     private float percentageToActiveBackboardBonus;
+
+    [Header("Fire Bonus")]
+    internal bool isFireBonusActive;
+    [SerializeField]
+    private Slider fireBonusSlider;
+    [SerializeField]
+    private Image fireImageBackground;
 
     private int backBoardBonusTurnDuration;
 
@@ -72,10 +82,33 @@ public class InGameUI : MonoBehaviour
         return sliderValueBackboardShot / 700;
     }
 
-    public void AddPlayerPoints(int points)
+    public void AddPlayerPoints(int points, bool isBackboardShot)
     {
-        playerPoints += points;
+        // check points to give
+        int pointsToGive = points;
+        if (isFireBonusActive)
+        {
+            pointsToGive *= 2;
+        }
+        if (isBackboardShot && isBackBoardBonusActive)
+        {
+            pointsToGive += pointsToGiveOnBackboardBonus;
+        }
+
+        playerPoints += pointsToGive;
         playerPointsText.text = playerPoints.ToString();
+        if(!isFireBonusActive)
+        {
+            fireBonusSlider.value += points;
+
+            if (fireBonusSlider.value >= 10)
+            {
+                fireBonusSlider.value = 10;
+                StartCoroutine(ActiveFireBonus());
+            }
+        }
+
+
     }
     public void AddAIPoints(int points)
     {
@@ -83,25 +116,51 @@ public class InGameUI : MonoBehaviour
         aiPointsText.text = AIPoints.ToString();
     }
 
-    public void DoRandomToDoBackboardBonus()
+    public void DoRandomBackboardBonus()
     {
-        if (backBoardBonusActive)
+        if (isBackBoardBonusActive)
         {
             backBoardBonusTurnDuration--;
             if(backBoardBonusTurnDuration <= 0)
             {
-                backBoardBonusActive = false;
+                isBackBoardBonusActive = false;
                 backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
+                backBoardBonusUI4.SetActive(false);
+                backBoardBonusUI5.SetActive(false);
+                pointsToGiveOnBackboardBonus = 0;
             }
         }
         else
         {
-            int rnd = Random.Range(0, 10);
-            if (rnd >= percentageToActiveBackboardBonus)
+            int rnd = Random.Range(0, 11);
+            if (rnd >= percentageToActiveBackboardBonus && rnd < 10)
             {
-                backBoardBonusActive = true;
-                backBoardBonusUI.SetActive(true);
+                isBackBoardBonusActive = true;
+                backBoardBonusUI4.SetActive(true);
+                pointsToGiveOnBackboardBonus = 4;
             }
+            else if(rnd >= 10)
+            {
+                isBackBoardBonusActive = true;
+                backBoardBonusUI5.SetActive(true);
+                pointsToGiveOnBackboardBonus = 5;
+            }
+
         }
+    }
+
+    private IEnumerator ActiveFireBonus()
+    {
+        isFireBonusActive = true;
+        fireImageBackground.enabled = true;
+
+        while(fireBonusSlider.value > 0)
+        {
+            fireBonusSlider.value -= Time.deltaTime;
+            yield return null;
+        }
+
+        isFireBonusActive = false;
+        fireImageBackground.enabled = false;
     }
 }

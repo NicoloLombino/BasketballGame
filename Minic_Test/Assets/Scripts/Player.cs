@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
 
     private float throwingTimer;
     private Vector3 throwEndPositionWithRandomError;
-    private bool isThrowingBall;
+    protected bool isThrowingBall;
 
     private bool ignoreInputs;
 
@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(ThrowingBall(throwingPowerSlider.value));
-        }
+        } 
 
         // mobile input
 
@@ -128,6 +128,20 @@ public class Player : MonoBehaviour
                 + Vector3.up * 5 * Mathf.Sin(throwingPercent * 3.14f);
             yield return null;
         }
+
+        yield return new WaitForSecondsRealtime(2);
+        ResetShot();
+    }
+
+    private void ResetShot()
+    {
+        ball.position = dribblePosition.position;
+        isThrowingBall = false;
+        ignoreInputs = false;
+        touch.phase = TouchPhase.Ended;
+        swipingTimer = 0;
+        inputInitPosition = Vector3.zero;
+        throwingTimer = 0;
     }
 
     private void CheckThrowingResult(float throwPower)
@@ -154,19 +168,19 @@ public class Player : MonoBehaviour
         {
             // enter in basket --> 2 points
             Debug.Log("ENTER 2 POINTS LESS");
-            inGameUI.AddPlayerPoints(2);
+            inGameUI.AddPlayerPoints(2, false);
         }
         else if (throwPower >= perfectShotValue && throwPower < twoPointsMore)
         {
             // enter in basket --> 3 points
             Debug.Log("ENTER 3 POINTS");
-            inGameUI.AddPlayerPoints(3);
+            inGameUI.AddPlayerPoints(3, false);
         }
         else if (throwPower >= twoPointsMore && throwPower < backboardLess)
         {
             // enter in basket --> 2 points
             Debug.Log("ENTER 2 POINTS MORE");
-            inGameUI.AddPlayerPoints(2);
+            inGameUI.AddPlayerPoints(2, false);
         }
         else if (throwPower >= backboardLess && throwPower < backboardShotValue)
         {
@@ -177,12 +191,19 @@ public class Player : MonoBehaviour
         {
             // hit backboard and enter in basket --> 2 points
             Debug.Log("HIT BACKBOARD AND ENTER 2 POINTS");
-            inGameUI.AddPlayerPoints(2);
+            inGameUI.AddPlayerPoints(2, true);
         }
         else
         {
             // hit backboard and go out
             Debug.Log("HIT BACKBOARD AND GO OUT MORE");
         }
+
+        inGameUI.DoRandomBackboardBonus();
+    }
+
+    private void MovePlayerToNextPosition()
+    {
+
     }
 }

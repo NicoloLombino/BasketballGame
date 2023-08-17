@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject myCamera;
+
     [Header("Player stats")]
     [Range(0,2)]
     public int shootingPosition;
@@ -25,6 +28,8 @@ public class Player : MonoBehaviour
     private Transform throwEndPosition;
     [SerializeField]
     private float maxSwipingTimer;
+    [SerializeField]
+    private Transform[] playerPositions;
 
     [Header("UI components")]
     [SerializeField]
@@ -37,62 +42,66 @@ public class Player : MonoBehaviour
 
     [Header("reference")]
     [SerializeField]
-    private InGameUI inGameUI;
+    private GameManager gameManager;
 
-
+    private int currentPlayerPosition = 0;
     private float throwingTimer;
     private Vector3 throwEndPositionWithRandomError;
     protected bool isThrowingBall;
 
     private bool ignoreInputs;
+    private bool makePoints;
 
     private float swipingTimer;
 
 
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isThrowingBall && !ignoreInputs)
+        if(gameManager.isInGame)
         {
-            ball.position = dribblePosition.position + Vector3.up * 0.5f + Vector3.up * Mathf.Abs(Mathf.Sin(Time.time * dribbleHeight));
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(ThrowingBall(throwingPowerSlider.value));
-        } 
-
-        // mobile input
-
-        if (Input.touchCount > 0 && !ignoreInputs)
-        {
-            touch = Input.GetTouch(0);
-            if (inputInitPosition == Vector3.zero)
-            {           
-                inputInitPosition = touch.position;
-                Debug.Log(inputInitPosition.y);
-                maxPosY = touch.position;
+            if (!isThrowingBall && !ignoreInputs)
+            {
+                ball.position = dribblePosition.position + Vector3.up * 0.5f + Vector3.up * Mathf.Abs(Mathf.Sin(Time.time * dribbleHeight));
             }
 
-            swipingTimer += Time.deltaTime;
-            if (touch.phase == TouchPhase.Moved)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (touch.position.y > maxPosY.y)
+                StartCoroutine(ThrowingBall(throwingPowerSlider.value));
+            }
+
+            // mobile input
+
+            if (Input.touchCount > 0 && !ignoreInputs)
+            {
+                touch = Input.GetTouch(0);
+                if (inputInitPosition == Vector3.zero)
                 {
-                    throwingPowerSlider.value = (touch.position.y - inputInitPosition.y)/ 700;
+                    inputInitPosition = touch.position;
+                    Debug.Log(inputInitPosition.y);
                     maxPosY = touch.position;
                 }
-            }
-            if (touch.phase == TouchPhase.Ended || swipingTimer >= maxSwipingTimer)
-            {
-                Debug.Log("init "+ inputInitPosition.y);
-                Debug.Log("end " + touch.position.y);
-                StartCoroutine(ThrowingBall(throwingPowerSlider.value));
+
+                swipingTimer += Time.deltaTime;
+                if (touch.phase == TouchPhase.Moved)
+                {
+                    if (touch.position.y > maxPosY.y)
+                    {
+                        throwingPowerSlider.value = (touch.position.y - inputInitPosition.y) / 700;
+                        maxPosY = touch.position;
+                    }
+                }
+                if (touch.phase == TouchPhase.Ended || swipingTimer >= maxSwipingTimer)
+                {
+                    //Debug.Log("init "+ inputInitPosition.y);
+                    //Debug.Log("end " + touch.position.y);
+                    StartCoroutine(ThrowingBall(throwingPowerSlider.value));
+                }
             }
         }
     }
@@ -118,18 +127,19 @@ public class Player : MonoBehaviour
         }
 
         CheckThrowingResult(throwPower);
+        myCamera.GetComponent<Animator>().SetTrigger("Throw");
 
         float throwingPercent = 0;
         while (throwingPercent < 1)
         {
             throwingTimer += Time.deltaTime;
             throwingPercent = throwingTimer / throwingDuration;
-            ball.position = Vector3.Lerp(throwStartPosition.position, throwEndPositionWithRandomError, throwingPercent)
+            ball.position = Vector3.Lerp(throwStartPosition.position, throwEndPosition.position, throwingPercent)
                 + Vector3.up * 5 * Mathf.Sin(throwingPercent * 3.14f);
             yield return null;
         }
 
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(1);
         ResetShot();
     }
 
@@ -142,12 +152,18 @@ public class Player : MonoBehaviour
         swipingTimer = 0;
         inputInitPosition = Vector3.zero;
         throwingTimer = 0;
+        throwingPowerSlider.value = 0;
+        if(makePoints)
+        {
+            StartCoroutine(MovePlayerToNextPosition());
+            makePoints = false;
+        }
     }
 
     private void CheckThrowingResult(float throwPower)
     {
-        float perfectShotValue = inGameUI.GetSliderValuePerfectShot(); // 3 points
-        float backboardShotValue = inGameUI.GetSliderValueBackboardShot();
+        float perfectShotValue = gameManager.GetSliderValuePerfectShot(); // 3 points
+        float backboardShotValue = gameManager.GetSliderValueBackboardShot();
         float basketboard = perfectShotValue - 0.2f; // hit the basket
         float twoPointsLess = perfectShotValue - 0.1f; // 2 points
         float twoPointsMore = perfectShotValue + 0.1f; // 2 points
@@ -168,19 +184,21 @@ public class Player : MonoBehaviour
         {
             // enter in basket --> 2 points
             Debug.Log("ENTER 2 POINTS LESS");
-            inGameUI.AddPlayerPoints(2, false);
+            makePoints = true;
         }
         else if (throwPower >= perfectShotValue && throwPower < twoPointsMore)
         {
             // enter in basket --> 3 points
             Debug.Log("ENTER 3 POINTS");
-            inGameUI.AddPlayerPoints(3, false);
+            gameManager.AddPlayerPoints(3, false);
+            makePoints = true;
         }
         else if (throwPower >= twoPointsMore && throwPower < backboardLess)
         {
             // enter in basket --> 2 points
             Debug.Log("ENTER 2 POINTS MORE");
-            inGameUI.AddPlayerPoints(2, false);
+            gameManager.AddPlayerPoints(2, false);
+            makePoints = true;
         }
         else if (throwPower >= backboardLess && throwPower < backboardShotValue)
         {
@@ -191,7 +209,8 @@ public class Player : MonoBehaviour
         {
             // hit backboard and enter in basket --> 2 points
             Debug.Log("HIT BACKBOARD AND ENTER 2 POINTS");
-            inGameUI.AddPlayerPoints(2, true);
+            gameManager.AddPlayerPoints(2, true);
+            makePoints = true;
         }
         else
         {
@@ -199,11 +218,35 @@ public class Player : MonoBehaviour
             Debug.Log("HIT BACKBOARD AND GO OUT MORE");
         }
 
-        inGameUI.DoRandomBackboardBonus();
+        gameManager.DoRandomBackboardBonus();
     }
 
-    private void MovePlayerToNextPosition()
+    private IEnumerator MovePlayerToNextPosition()
     {
+        currentPlayerPosition++;
+        if(currentPlayerPosition >= playerPositions.Length)
+        {
+            currentPlayerPosition = 0;
+        }
 
+        float movingTimer = 0;
+        float movingPercent = 0;
+        Vector3 startPosition = transform.position;
+        Vector3 startRotation = transform.eulerAngles;
+        while (movingPercent < 1)
+        {
+            movingTimer += Time.deltaTime;
+            movingPercent = movingTimer / 0.7f;
+            transform.position = Vector3.Lerp(startPosition, playerPositions[currentPlayerPosition].position, movingPercent);
+            transform.eulerAngles = Vector3.Lerp(startRotation, playerPositions[currentPlayerPosition].eulerAngles, movingPercent);
+            yield return null;
+        }
+        //transform.position = playerPositions[currentPlayerPosition].position;
+        //transform.eulerAngles = playerPositions[currentPlayerPosition].eulerAngles;
+    }
+
+    public void HandleEndGame()
+    {
+        ignoreInputs = true;
     }
 }

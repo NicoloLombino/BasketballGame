@@ -6,6 +6,10 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("SaveData")]
+    [SerializeField]
+    private SaveData saveDataScriptableObject;
+
     [Header("Game Manager")]
     [SerializeField]
     private float gameTime;
@@ -65,6 +69,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI rewardText;
     [SerializeField]
+    private GameObject newRecordText;
+    [SerializeField]
     private string winText;
     [SerializeField]
     private string loseText;
@@ -88,16 +94,22 @@ public class GameManager : MonoBehaviour
     public float sliderValuePerfectShot;
     [Range(0, 700)]
     public float sliderValueBackboardShot;
+    [SerializeField]
+    private int nextPointsToIncreaseShotValuesOnSlider;
+    [SerializeField]
+    private int[] pointsToIncreaseShotValuesOnSlider;
 
 
     private Player winner;
     private int backBoardBonusTurnDuration;
+    private int levelOnShotSlider = 0;
 
     void Start()
     {
         isInGame = true;
         backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
         timer = gameTime;
+        nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
         SetPositionOfShotPointsOnSlider();
     }
 
@@ -123,11 +135,11 @@ public class GameManager : MonoBehaviour
 
     public float GetSliderValuePerfectShot()
     {
-        return sliderValuePerfectShot / 700;
+        return sliderValuePerfectShot / 800;
     }
     public float GetSliderValueBackboardShot()
     {
-        return sliderValueBackboardShot / 700;
+        return sliderValueBackboardShot / 800;
     }
 
     public void AddPlayerPoints(int points, bool isBackboardShot)
@@ -150,13 +162,18 @@ public class GameManager : MonoBehaviour
         {
             fireBonusSlider.value += points;
 
-            if (fireBonusSlider.value >= 10)
+            if (fireBonusSlider.value >= 9)
             {
-                fireBonusSlider.value = 10;
+                fireBonusSlider.value = 9;
                 StartCoroutine(ActiveFireBonus());
             }
         }
         CheckParticlesToUseOnBasket(points, isFireBonusActive);
+
+        if(playerPoints >= nextPointsToIncreaseShotValuesOnSlider)
+        {
+            IncreaseShotValuesOnSlider();
+        }
     }
 
     private void CheckParticlesToUseOnBasket(int points, bool fireActive)
@@ -249,6 +266,7 @@ public class GameManager : MonoBehaviour
         player.HandleEndGame();
         AI.HandleEndGame();
         CheckWinner();
+        CheckRecordScore();
         CheckReward();
     }
 
@@ -284,5 +302,28 @@ public class GameManager : MonoBehaviour
             goldToGive = playerPoints;
             rewardText.text = rewardText1 + " " + goldToGive.ToString() + " " + rewardText2;
         }
+        saveDataScriptableObject.AddGold(goldToGive);
+    }
+
+    private void CheckRecordScore()
+    {
+        if(playerPoints > saveDataScriptableObject.maxScore)
+        {
+            saveDataScriptableObject.SetNewMaxScore(playerPoints);
+            newRecordText.SetActive(true);
+        }
+    }
+
+    private void IncreaseShotValuesOnSlider()
+    {
+        if (levelOnShotSlider >= pointsToIncreaseShotValuesOnSlider.Length - 1)
+            return;
+
+        levelOnShotSlider++;
+        nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
+
+        sliderValuePerfectShot += 50;
+        sliderValueBackboardShot += 50;
+        SetPositionOfShotPointsOnSlider();
     }
 }

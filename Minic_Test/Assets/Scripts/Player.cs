@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
                 if (inputInitPosition == Vector3.zero)
                 {
                     inputInitPosition = touch.position;
-                    Debug.Log(inputInitPosition.y);
+                    //Debug.Log(inputInitPosition.y);
                     maxPosY = touch.position;
                 }
 
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
                 {
                     if (touch.position.y > maxPosY.y)
                     {
-                        throwingPowerSlider.value = (touch.position.y - inputInitPosition.y) / 700;
+                        throwingPowerSlider.value = (touch.position.y - inputInitPosition.y) / 800;
                         maxPosY = touch.position;
                     }
                 }
@@ -184,6 +184,7 @@ public class Player : MonoBehaviour
         {
             // enter in basket --> 2 points
             Debug.Log("ENTER 2 POINTS LESS");
+            gameManager.AddPlayerPoints(2, false);
             makePoints = true;
         }
         else if (throwPower >= perfectShotValue && throwPower < twoPointsMore)

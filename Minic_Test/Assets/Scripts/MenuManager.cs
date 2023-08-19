@@ -18,6 +18,8 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
+        saveDataScriptableObject.LoadAllSavedValues();
+        AISlider.value = saveDataScriptableObject.AILevel;
         SetValuesOnMenu();
     }
 
@@ -30,6 +32,11 @@ public class MenuManager : MonoBehaviour
     {
         maxScoreText.text = saveDataScriptableObject.maxScore.ToString();
         goldText.text = saveDataScriptableObject.gold.ToString();
+    }
+
+    public void SetBallMaterial(int materialIndex)
+    {
+        saveDataScriptableObject.SetBallMaterial(materialIndex);
     }
 
     public void GoToGameScene()

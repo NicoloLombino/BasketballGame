@@ -6,6 +6,8 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public bool isAndroidSetup;
+
     [Header("SaveData")]
     [SerializeField]
     private SaveData saveDataScriptableObject;
@@ -61,7 +63,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI aiPointsText;
     [SerializeField]
-    private Image timerImage;
+    private Image timerImagePlayer;
+    [SerializeField]
+    private Image timerImageAI;
     [SerializeField]
     private GameObject endUI;
     [SerializeField]
@@ -119,7 +123,8 @@ public class GameManager : MonoBehaviour
         if(isInGame)
         {
             timer -= Time.deltaTime;
-            timerImage.fillAmount = timer / gameTime;
+            timerImagePlayer.fillAmount = timer / gameTime;
+            timerImageAI.fillAmount = timer / gameTime;
             if (timer <= 0)
             {
                 EndMatch();
@@ -142,7 +147,7 @@ public class GameManager : MonoBehaviour
         return sliderValueBackboardShot / 800;
     }
 
-    public void AddPlayerPoints(int points, bool isBackboardShot)
+    public void AddPlayerPoints(int points, bool isBackboardShot, bool playerHasFireBonusActive)
     {
         // check points to give
         int pointsToGive = points;
@@ -151,7 +156,7 @@ public class GameManager : MonoBehaviour
         {
             pointsToGive += pointsToGiveOnBackboardBonus;
         }
-        if (isFireBonusActive)
+        if (playerHasFireBonusActive)
         {
             pointsToGive *= 2;
         }
@@ -168,7 +173,8 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(ActiveFireBonus());
             }
         }
-        CheckParticlesToUseOnBasket(points, isFireBonusActive);
+
+        //CheckParticlesToUseOnBasket(points, isFireBonusActive);
 
         if(playerPoints >= nextPointsToIncreaseShotValuesOnSlider)
         {
@@ -198,9 +204,17 @@ public class GameManager : MonoBehaviour
         }
         Destroy(particlesOnBasket, 1);
     }
-    public void AddAIPoints(int points)
+    public void AddAIPoints(int points, bool isBackboardShot)
     {
-        AIPoints += points;
+        // check points to give
+        int pointsToGive = points;
+
+        if (isBackboardShot && isBackBoardBonusActive)
+        {
+            pointsToGive += pointsToGiveOnBackboardBonus;
+        }
+
+        AIPoints += pointsToGive;
         aiPointsText.text = AIPoints.ToString();
     }
 
@@ -220,14 +234,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            int rnd = Random.Range(0, 11);
-            if (rnd >= percentageToActiveBackboardBonus && rnd < 10)
+            int rnd = Random.Range(0, 15);
+            if (rnd >= percentageToActiveBackboardBonus && rnd < 13)
             {
                 isBackBoardBonusActive = true;
                 backBoardBonusUI4.SetActive(true);
                 pointsToGiveOnBackboardBonus = 4;
             }
-            else if(rnd >= 10)
+            else if(rnd >= 13)
             {
                 isBackBoardBonusActive = true;
                 backBoardBonusUI5.SetActive(true);
@@ -248,6 +262,11 @@ public class GameManager : MonoBehaviour
             fireBonusSlider.value -= Time.deltaTime;
             yield return null;
         }
+        
+        while(player.ignoreInputs)
+        {
+            yield return null;
+        }
 
         DisableFireBonus();
     }
@@ -264,7 +283,6 @@ public class GameManager : MonoBehaviour
     {
         isInGame = false;
         player.HandleEndGame();
-        AI.HandleEndGame();
         CheckWinner();
         CheckRecordScore();
         CheckReward();

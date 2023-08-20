@@ -7,7 +7,7 @@ public class Ball : MonoBehaviour
     AudioSource audioSource;
 
     [SerializeField]
-    private Player playerOwner;
+    private PlayerBase playerOwner;
 
     [Header("Ball audioclips")]
     [SerializeField, Tooltip("clips to instantiate: " +
@@ -42,7 +42,10 @@ public class Ball : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        gameObject.GetComponent<MeshRenderer>().material = materials[PlayerPrefs.GetInt("BallMaterialIndex")];
+        if (playerOwner.gameObject.GetComponent<Player>() != null)
+        {
+            gameObject.GetComponent<MeshRenderer>().material = materials[PlayerPrefs.GetInt("BallMaterialIndex")];
+        }
     }
     void Start()
     {

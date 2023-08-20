@@ -3,54 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class Player : PlayerBase
 {
     [SerializeField]
     private GameObject myCamera;
 
-    [Header("Player stats")]
-    [Range(0,2)]
-    public int shootingPosition;
-    [Header("Ball components")]
-    [SerializeField]
-    private Transform ball;
-    [SerializeField]
-    private Transform dribblePosition;
-    [SerializeField]
-    private float dribbleHeight;
-    [SerializeField]
-    private float throwingDuration;
-
     [Header("Throwing components")]
     [SerializeField]
-    private Transform throwStartPosition; 
-    [SerializeField]
-    private Transform throwEndPosition;
-    [SerializeField]
     private float maxSwipingTimer;
-    [SerializeField]
-    private Transform[] playerPositions;
 
     [Header("UI components")]
     [SerializeField]
     private Slider throwingPowerSlider;
+    [SerializeField]
+    private RectTransform sliderValueCursor;
 
     [Header("mobile inputs components")]
     Touch touch;
     Vector3 inputInitPosition;
     Vector2 maxPosY;
-
-    [Header("reference")]
-    [SerializeField]
-    private GameManager gameManager;
-
-    private int currentPlayerPosition = 0;
-    private float throwingTimer;
-    private Vector3 throwEndPositionWithRandomError;
-    protected bool isThrowingBall;
-
-    internal bool ignoreInputs;
-    private bool makePoints;
 
     private float swipingTimer;
 
@@ -64,29 +35,17 @@ public class Player : MonoBehaviour
     float pixelMaxPerc;
     float pixelMaxY;
 
-
-
-
     void Start()
     {
 
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if(gameManager.isInGame)
         {
-            if (!isThrowingBall && !ignoreInputs)
-            {
-                ball.position = dribblePosition.position + Vector3.up * 0.5f + Vector3.up * Mathf.Abs(Mathf.Sin(Time.time * dribbleHeight));
-            }
-
-            //if (Input.GetKeyDown(KeyCode.Space))
-            //{
-            //    StartCoroutine(ThrowingBall(throwingPowerSlider.value));
-            //}
-
             if(gameManager.isAndroidSetup)
             {
                 ReadAndroidInput();
@@ -96,10 +55,12 @@ public class Player : MonoBehaviour
                 ReadPCInput();
             }              
         }
+
+        sliderValueCursor.localPosition = new Vector2(sliderValueCursor.localPosition.x, throwingPowerSlider.value * 800 - sliderValueCursor.sizeDelta.y/2);
     }
 
     // OLD SYSTEM
-    
+
     //private void ReadAndroidInput()
     //{
     //    if (Input.touchCount > 0 && !ignoreInputs)
@@ -299,8 +260,6 @@ public class Player : MonoBehaviour
     {
         ignoreInputs = true;
     }
-
-
 
     private void ReadAndroidInput()
     {

@@ -31,7 +31,7 @@ public class PlayerBase : MonoBehaviour
     protected Vector3 throwEndPositionWithRandomError;
     protected bool isThrowingBall;
 
-    protected bool ignoreInputs;
+    internal bool ignoreInputs;
     protected bool makePoints;
 
 

@@ -146,8 +146,11 @@ public class GameManager : MonoBehaviour
 
     public void SetPositionOfShotPointsOnSlider()
     {
-        perfectShotIndicator.localPosition = new Vector3(perfectShotIndicator.localPosition.x, sliderValuePerfectShot, perfectShotIndicator.localPosition.z);
-        backboardShotIndicator.localPosition = new Vector3(backboardShotIndicator.localPosition.x, sliderValueBackboardShot, backboardShotIndicator.localPosition.z);
+        perfectShotIndicator.localPosition = new Vector3(perfectShotIndicator.localPosition.x, valueTo3PointsMin * 800 / 10, perfectShotIndicator.localPosition.z);
+        backboardShotIndicator.localPosition = new Vector3(backboardShotIndicator.localPosition.x, valueToBackboardAndPointsMin * 800 / 10, backboardShotIndicator.localPosition.z);
+
+        perfectShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueTo3PointsMax - valueTo3PointsMin) / 10) * 800));
+        backboardShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueToBackboardAndPointsMax - valueToBackboardAndPointsMin) / 10) * 800));
     }
 
     public float GetSliderValuePerfectShot()

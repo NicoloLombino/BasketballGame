@@ -10,7 +10,7 @@ public class AIPlayer : PlayerBase
     [Header("AI components")]
     [SerializeField]
     private float timerToThrow;
-    [SerializeField, Range(0,11)]
+    [SerializeField, Range(0,10)]
     private int accuracy;
 
     [Header("Fire bonus components")]
@@ -45,11 +45,26 @@ public class AIPlayer : PlayerBase
     {
         int rndValueOnThrow = Random.Range(accuracy, 11);
         float rndError = ((10f - rndValueOnThrow) / 10f) * (1 - saveDataScriptableObject.AILevel / 10f);
-        float rndErrorOnThrow = rndError * Mathf.Sign(Random.Range(-1, 1)); 
+        float rndAim = Random.Range(0f, 11f);
+        Debug.Log("rndAim = " + rndAim);
+        float aimSign = 0;
+        float totalAim = ((float)(accuracy + saveDataScriptableObject.AILevel) / 2);
+        if (rndAim <= totalAim)
+        {
+            Debug.Log("MINORE");
+            aimSign = 1;
+        }
+        else
+        {
+            Debug.Log("MAGGIORE");
+            aimSign = -1;
+        }
+        float rndErrorOnThrow = rndError * aimSign;  /*Mathf.Sign(Random.Range(-1, (saveDataScriptableObject.AILevel + 1)));*/ 
         float finalThrowValueOnSlider = sliderValue + rndErrorOnThrow;
+        Debug.Log("rndError " + rndError);
+        Debug.Log("aimSign " + aimSign);
         Debug.Log("with RND= " + rndValueOnThrow + " AND ERROR= " + rndErrorOnThrow + " FINAL= " + finalThrowValueOnSlider);
-
-        StartCoroutine(ThrowingBall(finalThrowValueOnSlider, isFireBonusActive));
+        StartCoroutine(ThrowingBall(finalThrowValueOnSlider, isFireBonusActive)); 
     }
 
     private void CheckBestThrow()
@@ -59,12 +74,15 @@ public class AIPlayer : PlayerBase
         if(gameManager.isBackBoardBonusActive)
         {
             // aim to backboard
-            throwValue = gameManager.GetSliderValueBackboardShot();
+            //throwValue = gameManager.GetSliderValueBackboardShot();
+            throwValue = (gameManager.valueToBackboardAndPointsMin / 10 )/*+ gameManager.valueToBackboardAndPointsMax) / 20*/;
+
         }
         else
         {
             // aim to basket to get 3 points
-            throwValue = gameManager.GetSliderValuePerfectShot();
+            //throwValue = gameManager.GetSliderValuePerfectShot();
+            throwValue = (gameManager.valueTo3PointsMin + gameManager.valueTo3PointsMax) / 20;
         }
 
         AIThrowingBall(throwValue);
@@ -118,13 +136,22 @@ public class AIPlayer : PlayerBase
 
     private void CheckThrowingResult(float throwPower, bool hasFireBonus)
     {
-        float perfectShotValue = gameManager.GetSliderValuePerfectShot(); // 3 points
-        float backboardShotValue = gameManager.GetSliderValueBackboardShot();
-        float basketboard = perfectShotValue - 0.2f; // hit the basket
-        float twoPointsLess = perfectShotValue - 0.1f; // 2 points
-        float twoPointsMore = perfectShotValue + 0.1f; // 2 points
-        float backboardLess = twoPointsMore + 0.1f; // hit the backboard left or right
-        float backboardMore = backboardShotValue + 0.1f; // hit the backboard up
+        //float perfectShotValue = gameManager.GetSliderValuePerfectShot(); // 3 points
+        //float backboardShotValue = gameManager.GetSliderValueBackboardShot();
+        //float basketboard = perfectShotValue - 0.2f; // hit the basket
+        //float twoPointsLess = perfectShotValue - 0.1f; // 2 points
+        //float twoPointsMore = perfectShotValue + 0.1f; // 2 points
+        //float backboardLess = twoPointsMore + 0.1f; // hit the backboard left or right
+        //float backboardMore = backboardShotValue + 0.1f; // hit the backboard up 
+
+        float basketboard = gameManager.valueToHitBasketAndGoOut / 10;
+        float twoPointsLess = gameManager.valueTo2PointsMin / 10;
+        float perfectShotValueMin = gameManager.valueTo3PointsMin / 10; // 3 points
+        float perfectShotValueMax = gameManager.valueTo3PointsMax / 10; // 3 points
+        //float twoPointsMore = gameManager.valueTo2PointsMax / 10;
+        float twoPointsMore = gameManager.valueTo2PointsMax / 10; // hit the backboard left or right
+        float backboardShotValue = gameManager.valueToBackboardAndPointsMin / 10;
+        float backboardMore = gameManager.valueToBackboardAndPointsMax / 10;
 
         int points = 0;
         bool isBackboardShot = false;
@@ -141,28 +168,28 @@ public class AIPlayer : PlayerBase
             Debug.Log("AI --> HIT BASKET");
             DisableFireBonus();
         }
-        else if (throwPower >= twoPointsLess && throwPower < perfectShotValue)
+        else if (throwPower >= twoPointsLess && throwPower < perfectShotValueMin)
         {
             // enter in basket --> 2 points
             Debug.Log("AI --> ENTER 2 POINTS LESS");
-            points = hasFireBonus ? 4 : 2;
+            points = 2;
             makePoints = true;
         }
-        else if (throwPower >= perfectShotValue && throwPower < twoPointsMore)
+        else if (throwPower >= perfectShotValueMin && throwPower <= perfectShotValueMax)
         {
             // enter in basket --> 3 points
             Debug.Log("AI --> ENTER 3 POINTS");
-            points = hasFireBonus ? 6 : 3;
+            points = 3;
             makePoints = true;
         }
-        else if (throwPower >= twoPointsMore && throwPower < backboardLess)
+        else if (throwPower > perfectShotValueMax && throwPower <= twoPointsMore)
         {
             // enter in basket --> 2 points
             Debug.Log("AI --> ENTER 2 POINTS MORE");
-            points = hasFireBonus ? 4 : 2;
+            points = 2;
             makePoints = true;
         }
-        else if (throwPower >= backboardLess && throwPower < backboardShotValue)
+        else if (throwPower > twoPointsMore && throwPower < backboardShotValue)
         {
             // hit backboard and go out --> NO points
             Debug.Log("AI --> HIT BACKBOARD AND GO OUT LESS");
@@ -172,7 +199,7 @@ public class AIPlayer : PlayerBase
         {
             // hit backboard and enter in basket --> 2 points
             Debug.Log("AI --> HIT BACKBOARD AND ENTER 2 POINTS");
-            points = hasFireBonus ? 4 : 2;
+            points = 2;
             isBackboardShot = true;
             makePoints = true;
         }
@@ -183,7 +210,7 @@ public class AIPlayer : PlayerBase
             DisableFireBonus();
         }
 
-        gameManager.AddAIPoints(points, isBackboardShot);
+        gameManager.AddAIPoints(points, isBackboardShot, hasFireBonus);
         CheckFireBonusOnAI(points);
         gameManager.DoRandomBackboardBonus();
     }

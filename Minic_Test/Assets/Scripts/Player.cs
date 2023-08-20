@@ -190,14 +190,22 @@ public class Player : MonoBehaviour
 
     private void CheckThrowingResult(float throwPower, bool hasFireBonus)
     {
-        float perfectShotValue = gameManager.GetSliderValuePerfectShot(); // 3 points
-        float backboardShotValue = gameManager.GetSliderValueBackboardShot();
-        float basketboard = perfectShotValue - 0.2f; // hit the basket
-        float twoPointsLess = perfectShotValue - 0.1f; // 2 points
-        float twoPointsMore = perfectShotValue + 0.1f; // 2 points
-        float backboardLess = twoPointsMore + 0.1f; // hit the backboard left or right
-        float backboardMore = backboardShotValue + 0.1f; // hit the backboard up
+        //float perfectShotValue = gameManager.GetSliderValuePerfectShot(); // 3 points
+        //float backboardShotValue = gameManager.GetSliderValueBackboardShot();
+        //float basketboard = perfectShotValue - 0.2f; // hit the basket
+        //float twoPointsLess = perfectShotValue - 0.1f; // 2 points
+        //float twoPointsMore = perfectShotValue + 0.1f; // 2 points
+        //float backboardLess = twoPointsMore + 0.1f; // hit the backboard left or right
+        //float backboardMore = backboardShotValue + 0.1f; // hit the backboard up
 
+        float basketboard = gameManager.valueToHitBasketAndGoOut / 10;
+        float twoPointsLess = gameManager.valueTo2PointsMin / 10;
+        float perfectShotValueMin = gameManager.valueTo3PointsMin / 10; // 3 points
+        float perfectShotValueMax = gameManager.valueTo3PointsMax / 10; // 3 points
+        //float twoPointsMore = gameManager.valueTo2PointsMax / 10;
+        float twoPointsMore = gameManager.valueTo2PointsMax / 10; // hit the backboard left or right
+        float backboardShotValue = gameManager.valueToBackboardAndPointsMin / 10;
+        float backboardMore = gameManager.valueToBackboardAndPointsMax / 10;
 
         if (throwPower < basketboard)
         {
@@ -212,7 +220,7 @@ public class Player : MonoBehaviour
             gameManager.DisableFireBonus();
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(0, 0, hasFireBonus);
         }
-        else if (throwPower >= twoPointsLess && throwPower < perfectShotValue)
+        else if (throwPower >= twoPointsLess && throwPower < perfectShotValueMin)
         {
             // enter in basket --> 2 points
             Debug.Log("ENTER 2 POINTS LESS");
@@ -220,7 +228,7 @@ public class Player : MonoBehaviour
             makePoints = true;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
         }
-        else if (throwPower >= perfectShotValue && throwPower < twoPointsMore)
+        else if (throwPower >= perfectShotValueMin && throwPower <= perfectShotValueMax)
         {
             // enter in basket --> 3 points
             Debug.Log("ENTER 3 POINTS");
@@ -228,7 +236,7 @@ public class Player : MonoBehaviour
             makePoints = true;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 3, hasFireBonus);
         }
-        else if (throwPower >= twoPointsMore && throwPower < backboardLess)
+        else if (throwPower > perfectShotValueMax && throwPower <= twoPointsMore)
         {
             // enter in basket --> 2 points
             Debug.Log("ENTER 2 POINTS MORE");
@@ -236,14 +244,14 @@ public class Player : MonoBehaviour
             makePoints = true;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
         }
-        else if (throwPower >= backboardLess && throwPower < backboardShotValue)
+        else if (throwPower > twoPointsMore && throwPower < backboardShotValue)
         {
             // hit backboard and go out --> NO points
             Debug.Log("HIT BACKBOARD AND GO OUT LESS");
             gameManager.DisableFireBonus();
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
         }
-        else if (throwPower >= backboardShotValue && throwPower < backboardMore)
+        else if (throwPower >= backboardShotValue && throwPower <= backboardMore)
         {
             // hit backboard and enter in basket --> 2 points
             Debug.Log("HIT BACKBOARD AND ENTER 2 POINTS");

@@ -85,11 +85,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private string rewardText2;
 
-    internal bool isFireBonusActive;
-    internal bool isBackBoardBonusActive;
-    internal int pointsToGiveOnBackboardBonus;
-    internal bool isInGame;
-
+    [Header("Throwing Ball Slider")]
     [SerializeField]
     private RectTransform perfectShotIndicator;
     [SerializeField]
@@ -103,6 +99,21 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int[] pointsToIncreaseShotValuesOnSlider;
 
+    [Header("Values to get points on Throwing Ball Slider, (from 0 to 1)")]
+    public float valueTo3PointsMin;  // P
+    public float valueTo3PointsMax;  // P + x
+    public float valueTo2PointsMin;  // P - y
+    public float valueTo2PointsMax;  // P + x + y
+    public float valueToExitFrom2PointsMax;  // P + x + y
+    public float valueToBackboardAndPointsMin;  // > P + x + y && < B + z
+    public float valueToBackboardAndPointsMax;  // B + z
+    public float valueToHitBasketAndGoOut;
+
+
+    internal bool isFireBonusActive;
+    internal bool isBackBoardBonusActive;
+    internal int pointsToGiveOnBackboardBonus;
+    internal bool isInGame;
 
     private Player winner;
     private int backBoardBonusTurnDuration;
@@ -115,6 +126,7 @@ public class GameManager : MonoBehaviour
         timer = gameTime;
         nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
         SetPositionOfShotPointsOnSlider();
+        //perfectShotIndicator.localScale -= Vector3.up * (sliderValuePerfectShot / 700);
     }
 
     // Update is called once per frame
@@ -140,11 +152,11 @@ public class GameManager : MonoBehaviour
 
     public float GetSliderValuePerfectShot()
     {
-        return sliderValuePerfectShot / 800;
+        return sliderValuePerfectShot / 700; 
     }
     public float GetSliderValueBackboardShot()
     {
-        return sliderValueBackboardShot / 800;
+        return sliderValueBackboardShot / 700;
     }
 
     public void AddPlayerPoints(int points, bool isBackboardShot, bool playerHasFireBonusActive)
@@ -182,29 +194,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CheckParticlesToUseOnBasket(int points, bool fireActive)
-    {
-        GameObject particlesOnBasket = new GameObject();
-        if (points == 2)
-        {
-            particlesOnBasket = Instantiate(PointsParticles2, basketPosition.position, Quaternion.identity);
-            // rotate the particles
-            particlesOnBasket.transform.eulerAngles += Vector3.right * -90;
-        }
-        else if(points == 3)
-        {
-            if(fireActive)
-            {
-                particlesOnBasket = Instantiate(PointsAndFireBasketParticles3, basketPosition.position, Quaternion.identity);
-            }
-            else
-            {
-                particlesOnBasket = Instantiate(PointsParticles3, basketPosition.position, Quaternion.identity);
-            }
-        }
-        Destroy(particlesOnBasket, 1);
-    }
-    public void AddAIPoints(int points, bool isBackboardShot)
+    //private void CheckParticlesToUseOnBasket(int points, bool fireActive)
+    //{
+    //    GameObject particlesOnBasket = new GameObject();
+    //    if (points == 2)
+    //    {
+    //        particlesOnBasket = Instantiate(PointsParticles2, basketPosition.position, Quaternion.identity);
+    //        // rotate the particles
+    //        particlesOnBasket.transform.eulerAngles += Vector3.right * -90;
+    //    }
+    //    else if(points == 3)
+    //    {
+    //        if(fireActive)
+    //        {
+    //            particlesOnBasket = Instantiate(PointsAndFireBasketParticles3, basketPosition.position, Quaternion.identity);
+    //        }
+    //        else
+    //        {
+    //            particlesOnBasket = Instantiate(PointsParticles3, basketPosition.position, Quaternion.identity);
+    //        }
+    //    }
+    //    Destroy(particlesOnBasket, 1);
+    //}
+
+    public void AddAIPoints(int points, bool isBackboardShot, bool hasFireBonusActive)
     {
         // check points to give
         int pointsToGive = points;
@@ -212,6 +225,10 @@ public class GameManager : MonoBehaviour
         if (isBackboardShot && isBackBoardBonusActive)
         {
             pointsToGive += pointsToGiveOnBackboardBonus;
+        }
+        if (hasFireBonusActive)
+        {
+            pointsToGive *= 2;
         }
 
         AIPoints += pointsToGive;

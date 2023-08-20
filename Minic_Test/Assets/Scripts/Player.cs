@@ -278,7 +278,7 @@ public class Player : PlayerBase
 
             swipingTimer += Time.deltaTime;
 
-            if (touch.phase == TouchPhase.Moved)
+            if (touch.phase == TouchPhase.Moved && swipingTimer < maxSwipingTimer)
             {
                 if (touch.position.y > maxPosY.y)
                 {
@@ -308,7 +308,7 @@ public class Player : PlayerBase
                 pixelMaxPerc = pixelInitPerc + 50;
                 pixelMaxY = pixelMaxPerc * Screen.height / 100;
             }
-            else if (Input.GetMouseButton(0) && mouseMovementStarted)
+            else if (Input.GetMouseButton(0) && mouseMovementStarted && swipingTimer < maxSwipingTimer)
             {
                 swipingTimer += Time.deltaTime;
                 if (Input.mousePosition.y > maxPosY.y)

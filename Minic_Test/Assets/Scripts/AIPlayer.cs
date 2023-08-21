@@ -46,9 +46,9 @@ public class AIPlayer : PlayerBase
     {
         int rndValueOnThrow = Random.Range(accuracy, 11);
         float rndError = ((10f - rndValueOnThrow) / 10f) * (1 - saveDataScriptableObject.AILevel / 10f);
-        float rndAim = Random.Range(0f, 11f);
+        int rndAim = Random.Range(0, 11);
         Debug.Log("rndAim = " + rndAim);
-        float aimSign = 0;
+        float aimSign = 1;
         float totalAim = ((float)(accuracy + saveDataScriptableObject.AILevel) / 2);
         if (rndAim <= totalAim)
         {
@@ -119,6 +119,12 @@ public class AIPlayer : PlayerBase
                 + transform.up * 0.75f * Mathf.Sin(throwingPercent2 * 3.14f);
             yield return null;
         }
+
+        if (makePoints)
+        {
+            gameManager.AddAIPoints(pointsEarned, doBackboardShot, hasFireBonus);
+        }
+        gameManager.DoRandomBackboardBonus();
 
         yield return new WaitForSecondsRealtime(0.1f);
         ResetShot();
@@ -228,9 +234,9 @@ public class AIPlayer : PlayerBase
             ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex],
             ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex].GetChild(0));
 
-        gameManager.AddAIPoints(points, isBackboardShot, hasFireBonus);
+        //gameManager.AddAIPoints(points, isBackboardShot, hasFireBonus);
+        SetThrowValues(points, isBackboardShot);
         CheckFireBonusOnAI(points);
-        gameManager.DoRandomBackboardBonus();
     }
 
     private void CheckFireBonusOnAI(int points)

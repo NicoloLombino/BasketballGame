@@ -32,6 +32,9 @@ public class PlayerBase : MonoBehaviour
     protected float throwingTimer;
     protected bool isThrowingBall;
 
+    protected bool doBackboardShot;
+    protected int pointsEarned;
+
     internal bool ignoreInputs;
     protected bool makePoints;
 
@@ -62,6 +65,12 @@ public class PlayerBase : MonoBehaviour
     protected void MovePlayerToNextPosition()
     {
         StartCoroutine(MovingPlayerToNextPosition());
+    }
+
+    protected void SetThrowValues(int pointsToGive, bool isBackboardShot)
+    {
+        pointsEarned = pointsToGive;
+        doBackboardShot = isBackboardShot;
     }
 
     private IEnumerator MovingPlayerToNextPosition()

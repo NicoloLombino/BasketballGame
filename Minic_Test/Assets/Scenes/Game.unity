@@ -9501,29 +9501,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b9c2bfba22591458b482148d8b1627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAndroidSetup: 0
+  isAndroidSetup: 1
   saveDataScriptableObject: {fileID: 11400000, guid: a9e6080d3583474469fe44227950fd54,
     type: 2}
-  gameTime: 4
+  gameTime: 60
   playerPoints: 0
   AIPoints: 0
   backBoardBonusUI4: {fileID: 1455004084}
   backBoardBonusUI5: {fileID: 594455120}
   backBoardBonusTurnDurationMax: 4
-  percentageToActiveBackboardBonus: 10
+  percentageToActiveBackboardBonus: 12
+  percentageToActiveBackboardBonus5: 25
   fireBonusSlider: {fileID: 788616148}
   fireImageBackground: {fileID: 1224335313}
   fireOnBallParticles: {fileID: 596056019}
   fireImageBackgroundColorWhenActive: {r: 1, g: 0.6666667, b: 0, a: 1}
   player: {fileID: 138861201}
   AI: {fileID: 2127683095}
-  basketPosition: {fileID: 2121307235}
-  PointsAndFireBasketParticles3: {fileID: 3199916115043807398, guid: ae45153dd89162747ada10e1488ac0a3,
-    type: 3}
-  PointsParticles3: {fileID: 215929382876943244, guid: 6033376b13bab724fb650f3c4659c83b,
-    type: 3}
-  PointsParticles2: {fileID: 3529240441617463980, guid: 9ac51e382876ef94ea6676b5d998c462,
-    type: 3}
   playerPointsText: {fileID: 1210811510}
   aiPointsText: {fileID: 1170174282}
   timerImagePlayer: {fileID: 1861857154}
@@ -9547,7 +9541,6 @@ MonoBehaviour:
   valueTo3PointsMax: 5
   valueTo2PointsMin: 3
   valueTo2PointsMax: 6
-  valueToExitFrom2PointsMax: 0
   valueToBackboardAndPointsMin: 8
   valueToBackboardAndPointsMax: 9
   valueToHitBasketAndGoOut: 2
@@ -13535,7 +13528,7 @@ MonoBehaviour:
   saveDataScriptableObject: {fileID: 11400000, guid: a9e6080d3583474469fe44227950fd54,
     type: 2}
   timerToThrow: 2
-  accuracy: 8
+  accuracy: 7
   fireOnBallParticles: {fileID: 1250557400}
 --- !u!136 &2127683096
 CapsuleCollider:

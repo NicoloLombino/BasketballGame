@@ -33,9 +33,6 @@ public class Player : PlayerBase
     private float pixelMaxPerc;
     private float pixelMaxY;
 
-    private bool doBackboardShot;
-    private int pointsEarned;
-
     protected override void Update()
     {
         base.Update();
@@ -136,6 +133,7 @@ public class Player : PlayerBase
         {
             gameManager.AddPlayerPoints(pointsEarned, doBackboardShot, hasFireBonus);
         }
+        gameManager.DoRandomBackboardBonus();
 
         yield return new WaitForSecondsRealtime(0.1f);
         ResetShot();
@@ -260,14 +258,14 @@ public class Player : PlayerBase
             ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex],
             ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex].GetChild(0));
 
-        gameManager.DoRandomBackboardBonus();
+        //gameManager.DoRandomBackboardBonus();
     }
 
-    private void SetThrowValues(int pointsToGive, bool isBackboardShot)
-    {
-        pointsEarned = pointsToGive;
-        doBackboardShot = isBackboardShot;
-    }
+    //private void SetThrowValues(int pointsToGive, bool isBackboardShot)
+    //{
+    //    pointsEarned = pointsToGive;
+    //    doBackboardShot = isBackboardShot;
+    //}
 
     public void HandleEndGame()
     {

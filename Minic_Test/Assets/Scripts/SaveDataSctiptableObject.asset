@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b56cfba90dd6b34ab4719076541c987, type: 3}
   m_Name: SaveDataSctiptableObject
   m_EditorClassIdentifier: 
-  gold: 0
-  maxScore: 0
+  gold: 1016
+  maxScore: 87
+  AILevel: 8
+  ballMaterialIndex: 1

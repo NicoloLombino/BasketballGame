@@ -29,8 +29,10 @@ public class GameManager : MonoBehaviour
     private GameObject backBoardBonusUI5;
     [SerializeField]
     private int backBoardBonusTurnDurationMax;
-    [SerializeField, Range(0, 10)]
-    private float percentageToActiveBackboardBonus;
+    [SerializeField, Range(0, 100)]
+    private int percentageToActiveBackboardBonus;
+    [SerializeField, Range(0, 100)]
+    private int percentageToActiveBackboardBonus5;
 
     [Header("Fire Bonus")]
     [SerializeField]
@@ -95,7 +97,6 @@ public class GameManager : MonoBehaviour
     public float valueTo3PointsMax;  // P + x
     public float valueTo2PointsMin;  // P - y
     public float valueTo2PointsMax;  // P + x + y
-    public float valueToExitFrom2PointsMax;  // P + x + y
     public float valueToBackboardAndPointsMin;  // > P + x + y && < B + z
     public float valueToBackboardAndPointsMax;  // B + z
     public float valueToHitBasketAndGoOut; // < P - y
@@ -209,19 +210,37 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            int rnd = Random.Range(0, 15);
-            if (rnd >= percentageToActiveBackboardBonus && rnd < 13)
+            int rnd1 = Random.Range(0, 100);
+            Debug.Log("rand back 1 = " + rnd1);
+            if(rnd1 <= percentageToActiveBackboardBonus)
             {
-                isBackBoardBonusActive = true;
-                backBoardBonusUI4.SetActive(true);
-                pointsToGiveOnBackboardBonus = 4;
+                int rnd2 = Random.Range(0, 100);
+                Debug.Log("rand back 2 = " + rnd2);
+                if (rnd2 <= percentageToActiveBackboardBonus5)
+                {
+                    isBackBoardBonusActive = true;
+                    backBoardBonusUI5.SetActive(true);
+                    pointsToGiveOnBackboardBonus = 5;
+                }
+                else
+                {
+                    isBackBoardBonusActive = true;
+                    backBoardBonusUI4.SetActive(true);
+                    pointsToGiveOnBackboardBonus = 4;
+                }
             }
-            else if(rnd >= 13)
-            {
-                isBackBoardBonusActive = true;
-                backBoardBonusUI5.SetActive(true);
-                pointsToGiveOnBackboardBonus = 5;
-            }
+            //if (rnd >= percentageToActiveBackboardBonus && rnd < 13)
+            //{
+            //    isBackBoardBonusActive = true;
+            //    backBoardBonusUI4.SetActive(true);
+            //    pointsToGiveOnBackboardBonus = 4;
+            //}
+            //else if(rnd >= 13)
+            //{
+            //    isBackBoardBonusActive = true;
+            //    backBoardBonusUI5.SetActive(true);
+            //    pointsToGiveOnBackboardBonus = 5;
+            //}
         }
     }
 

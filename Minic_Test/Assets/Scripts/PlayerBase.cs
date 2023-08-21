@@ -28,7 +28,7 @@ public class PlayerBase : MonoBehaviour
 
     protected int currentPlayerPosition = 0;
     protected float throwingTimer;
-    protected Vector3 throwEndPositionWithRandomError;
+    public Transform throwEndPositionWithRandomError;
     protected bool isThrowingBall;
 
     internal bool ignoreInputs;

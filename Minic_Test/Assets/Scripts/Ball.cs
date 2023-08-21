@@ -30,6 +30,29 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private Material[] materials;
 
+    [System.Serializable]
+    public struct BallThrowingPosition
+    {
+        [SerializeField, Tooltip("Positions: " +
+        "0 go out, " +
+        "1 hit basket and go out," +
+        "2 take 2 points," +
+        "3 take 3 points," +
+        "4 hit backboard and go out 1," +
+        "5 hit backboars and take 2 points," +
+        "6 hit backboard and go out 2")]
+        public Transform[] ballPositions;
+    }
+
+    [Header("Ball Throwing Position to use according to player throw")]
+    public BallThrowingPosition[] ballThrowingPositions;
+
+    //[Header("Ball Throwing Position to use according to player throw")]
+    //[SerializeField, Tooltip("Positions: " +
+    //"0 go out, " +
+    //"1 hit basket and go out" +
+    //"2 take 2 points" +
+    //"3 take 3 points ")]
 
     [SerializeField]
     private AudioClip clipBounce;
@@ -37,6 +60,8 @@ public class Ball : MonoBehaviour
     private int clipToPlay;
     private int pointsToGive;
     private bool isFireBonusActive;
+
+    public AnimationCurve aCurve;
 
 
     private void Awake()
@@ -108,6 +133,24 @@ public class Ball : MonoBehaviour
         Destroy(particlesOnBasket, 1);
     }
 
+    public void ThrowBallAnimation(Vector3 endPosition, float duration, int playerPosition)
+    {
+        StartCoroutine(Curve(endPosition, duration, playerPosition));
+    }
+    public IEnumerator Curve(Vector3 endPosition, float duration, int playerPosition)
+    {
+        Vector3 startPos = transform.position;
+        Vector3 endPos = endPosition;
+        float normalizedTime = 0.0f;
+        while (normalizedTime <= 1.0f)
+        {
+            float yOffset = aCurve.Evaluate(normalizedTime);
+            transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
+            normalizedTime += Time.deltaTime / duration;
+            yield return null;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Basket"))
@@ -116,4 +159,6 @@ public class Ball : MonoBehaviour
             CheckParticlesToUseOnBasket(pointsToGive, isFireBonusActive);
         }
     }
+
+
 }

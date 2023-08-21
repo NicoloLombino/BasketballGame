@@ -125,6 +125,19 @@ public class Player : PlayerBase
             yield return null;
         }
 
+        throwingTimer = 0;
+        float throwingPercent2 = 0;
+        while (throwingPercent2 < 1)
+        {
+            throwingTimer += Time.deltaTime;
+            throwingPercent2 = throwingTimer / (throwingDuration / 2);
+            ball.position = Vector3.Lerp(throwEndPosition.position, throwEndPositionWithRandomError.position, throwingPercent2)
+                + transform.up * 0.75f * Mathf.Sin(throwingPercent2 * 3.14f);
+            yield return null;
+        }
+
+        //ball.GetComponent<Ball>().ThrowBallAnimation(throwEndPosition.position, 1, currentPlayerPosition);
+
         yield return new WaitForSecondsRealtime(1);
         ResetShot();
     }
@@ -173,6 +186,7 @@ public class Player : PlayerBase
             // NO, no points
             Debug.Log("GO OUT");
             gameManager.DisableFireBonus();
+            SetBallPositionOnThrowing(ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[0], ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[0].GetChild(0));
         }
         else if (throwPower >= basketboard && throwPower < twoPointsLess)
         {
@@ -180,6 +194,7 @@ public class Player : PlayerBase
             Debug.Log("HIT BASKET");
             gameManager.DisableFireBonus();
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(0, 0, hasFireBonus);
+            SetBallPositionOnThrowing(ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[1], ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[1].GetChild(0));
         }
         else if (throwPower >= twoPointsLess && throwPower < perfectShotValueMin)
         {
@@ -188,6 +203,8 @@ public class Player : PlayerBase
             gameManager.AddPlayerPoints(2, false, hasFireBonus);
             makePoints = true;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
+            SetBallPositionOnThrowing(ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[2], ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[2].GetChild(0));
+
         }
         else if (throwPower >= perfectShotValueMin && throwPower <= perfectShotValueMax)
         {
@@ -196,6 +213,8 @@ public class Player : PlayerBase
             gameManager.AddPlayerPoints(3, false, hasFireBonus);
             makePoints = true;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 3, hasFireBonus);
+            SetBallPositionOnThrowing(ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[3], ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[3].GetChild(0));
+
         }
         else if (throwPower > perfectShotValueMax && throwPower <= twoPointsMore)
         {
@@ -204,6 +223,8 @@ public class Player : PlayerBase
             gameManager.AddPlayerPoints(2, false, hasFireBonus);
             makePoints = true;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
+            SetBallPositionOnThrowing(ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[2], ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[2].GetChild(0));
+
         }
         else if (throwPower > twoPointsMore && throwPower < backboardShotValue)
         {
@@ -211,6 +232,8 @@ public class Player : PlayerBase
             Debug.Log("HIT BACKBOARD AND GO OUT LESS");
             gameManager.DisableFireBonus();
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
+            SetBallPositionOnThrowing(ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[4], ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[4].GetChild(0));
+
         }
         else if (throwPower >= backboardShotValue && throwPower <= backboardMore)
         {
@@ -219,6 +242,8 @@ public class Player : PlayerBase
             gameManager.AddPlayerPoints(2, true, hasFireBonus);
             makePoints = true;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(3, 2, hasFireBonus);
+            SetBallPositionOnThrowing(ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[5], ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[5].GetChild(0));
+
         }
         else
         {
@@ -226,6 +251,8 @@ public class Player : PlayerBase
             Debug.Log("HIT BACKBOARD AND GO OUT MORE");
             gameManager.DisableFireBonus();
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
+            SetBallPositionOnThrowing(ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[6], ball.GetComponent<Ball>().ballThrowingPositions[currentPlayerPosition].ballPositions[6].GetChild(0));
+
         }
 
         gameManager.DoRandomBackboardBonus();
@@ -323,5 +350,11 @@ public class Player : PlayerBase
                 StartCoroutine(ThrowingBall(throwingPowerSlider.value, gameManager.isFireBonusActive));
             }
         }
+    }
+
+    private void SetBallPositionOnThrowing(Transform endPos1, Transform endPos2)
+    {
+        throwEndPosition = endPos1;
+        throwEndPositionWithRandomError = endPos2;
     }
 }

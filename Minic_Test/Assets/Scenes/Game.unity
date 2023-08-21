@@ -1202,12 +1202,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1595097678}
-  ball: {fileID: 1960071376}
+  ball: {fileID: 1960071379}
   dribblePosition: {fileID: 1680847193}
   dribbleHeight: 5
   throwingDuration: 1
   throwStartPosition: {fileID: 348048450}
-  throwEndPosition: {fileID: 2121307235}
   playerPositions:
   - {fileID: 2043822647}
   - {fileID: 1827056907}
@@ -1216,7 +1215,7 @@ MonoBehaviour:
   - {fileID: 1736334308}
   - {fileID: 1855898735}
   - {fileID: 353527647}
-  throwEndPositionWithRandomError: {fileID: 957485159}
+  throwEndPosition: {fileID: 2121307235}
   myCamera: {fileID: 963194225}
   maxSwipingTimer: 1
   throwingPowerSlider: {fileID: 2070114860}
@@ -1315,7 +1314,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 1aeb4b16053a15040a02dbec0558d2d3, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1843,7 +1842,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: -70, z: 0}
 --- !u!114 &353527648
 MonoBehaviour:
@@ -2997,7 +2996,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b9561d532212d7541905f99b4d33f118,
         type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b9561d532212d7541905f99b4d33f118,
         type: 3}
@@ -6740,7 +6739,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8b2efdc94fe4e1647b2858a9d2c43624,
         type: 3}
       propertyPath: m_TagString
-      value: Basket
+      value: BasketZone
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b2efdc94fe4e1647b2858a9d2c43624, type: 3}
@@ -6756,19 +6755,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1054163835}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1054163838
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1054163837}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1000, y: 781.7, z: 2809.0654}
-  m_Center: {x: 0, y: 378, z: 161.98947}
 --- !u!65 &1054163839
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7829,7 +7815,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 1aeb4b16053a15040a02dbec0558d2d3, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8449,6 +8435,51 @@ Transform:
   - {fileID: 602879404}
   m_Father: {fileID: 146682355}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1386537008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1386537010}
+  - component: {fileID: 1386537009}
+  m_Layer: 0
+  m_Name: BasketCollider
+  m_TagString: Basket
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1386537009
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386537008}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 500, y: 550, z: 500}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1386537010
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386537008}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
+  m_LocalPosition: {x: 0, y: 2.9998155, z: 1.9366655}
+  m_LocalScale: {x: 0.0030000014, y: 0.002326772, z: 0.0017466921}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1395375670
 GameObject:
@@ -9473,7 +9504,7 @@ MonoBehaviour:
   isAndroidSetup: 0
   saveDataScriptableObject: {fileID: 11400000, guid: a9e6080d3583474469fe44227950fd54,
     type: 2}
-  gameTime: 60
+  gameTime: 4
   playerPoints: 0
   AIPoints: 0
   backBoardBonusUI4: {fileID: 1455004084}
@@ -9485,7 +9516,7 @@ MonoBehaviour:
   fireOnBallParticles: {fileID: 596056019}
   fireImageBackgroundColorWhenActive: {r: 1, g: 0.6666667, b: 0, a: 1}
   player: {fileID: 138861201}
-  AI: {fileID: 0}
+  AI: {fileID: 2127683095}
   basketPosition: {fileID: 2121307235}
   PointsAndFireBasketParticles3: {fileID: 3199916115043807398, guid: ae45153dd89162747ada10e1488ac0a3,
     type: 3}
@@ -9533,7 +9564,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1595097680
 AudioSource:
@@ -9775,6 +9806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerOwner: {fileID: 2127683095}
+  clipBounce: {fileID: 8300000, guid: e773afe57e71b354bb2c69c4efbccacc, type: 3}
   clips:
   - {fileID: 8300000, guid: 80ce15cccaf0cb94e9ab509ba137d290, type: 3}
   - {fileID: 8300000, guid: 5b0eaa1dbb7858b44b1dd5e81d42d24d, type: 3}
@@ -9789,14 +9821,63 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 895793e2ad54eea4685099be369c4db9, type: 2}
   - {fileID: 2100000, guid: a1df690903ca42f4f8ade413dd32cb2b, type: 2}
   - {fileID: 2100000, guid: 9731e657731bea440a1b24053df5495c, type: 2}
-  ballThrowingPositions: []
-  clipBounce: {fileID: 8300000, guid: e773afe57e71b354bb2c69c4efbccacc, type: 3}
-  aCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  ballThrowingPositions:
+  - ballPositions:
+    - {fileID: 1405599227}
+    - {fileID: 1589950098}
+    - {fileID: 719738880}
+    - {fileID: 453305074}
+    - {fileID: 782655896}
+    - {fileID: 833629601}
+    - {fileID: 1718401535}
+  - ballPositions:
+    - {fileID: 1405599227}
+    - {fileID: 2044261579}
+    - {fileID: 1019580916}
+    - {fileID: 453305074}
+    - {fileID: 1033263578}
+    - {fileID: 1330450986}
+    - {fileID: 950532107}
+  - ballPositions:
+    - {fileID: 1405599227}
+    - {fileID: 48691691}
+    - {fileID: 269813388}
+    - {fileID: 453305074}
+    - {fileID: 2006104907}
+    - {fileID: 486674654}
+    - {fileID: 602517725}
+  - ballPositions:
+    - {fileID: 1405599227}
+    - {fileID: 549182804}
+    - {fileID: 545516660}
+    - {fileID: 453305074}
+    - {fileID: 919600376}
+    - {fileID: 2043793951}
+    - {fileID: 574191074}
+  - ballPositions:
+    - {fileID: 1405599227}
+    - {fileID: 1961123481}
+    - {fileID: 565831362}
+    - {fileID: 453305074}
+    - {fileID: 1280464727}
+    - {fileID: 325912460}
+    - {fileID: 5102692}
+  - ballPositions:
+    - {fileID: 1405599227}
+    - {fileID: 28718338}
+    - {fileID: 1361778001}
+    - {fileID: 453305074}
+    - {fileID: 568927098}
+    - {fileID: 1022873194}
+    - {fileID: 1235371415}
+  - ballPositions:
+    - {fileID: 1405599227}
+    - {fileID: 1461334685}
+    - {fileID: 1939048685}
+    - {fileID: 453305074}
+    - {fileID: 2060034765}
+    - {fileID: 622077632}
+    - {fileID: 2037845475}
 --- !u!1 &1611636831
 GameObject:
   m_ObjectHideFlags: 0
@@ -10257,7 +10338,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680847192}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0000001, y: -1, z: 0.5}
+  m_LocalPosition: {x: 1.0000001, y: -0.5, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10402,7 +10483,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: -25, z: 0}
 --- !u!114 &1736334309
 MonoBehaviour:
@@ -10513,7 +10594,7 @@ RectTransform:
   - {fileID: 1205792030}
   - {fileID: 1395375671}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -10974,7 +11055,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
 --- !u!114 &1827056908
 MonoBehaviour:
@@ -11118,7 +11199,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
 --- !u!114 &1855898736
 MonoBehaviour:
@@ -11192,7 +11273,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 26b8e798f7fb2ad429e6108d72f1d85c, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11344,7 +11425,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 26b8e798f7fb2ad429e6108d72f1d85c, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11430,7 +11511,7 @@ Transform:
   - {fileID: 2121307235}
   - {fileID: 1928893125}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1928141788
 GameObject:
@@ -11462,7 +11543,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1928141790
 MonoBehaviour:
@@ -11616,7 +11697,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 25, z: 0}
 --- !u!114 &1958984266
 MonoBehaviour:
@@ -11680,6 +11761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerOwner: {fileID: 138861201}
+  clipBounce: {fileID: 8300000, guid: e773afe57e71b354bb2c69c4efbccacc, type: 3}
   clips:
   - {fileID: 8300000, guid: 80ce15cccaf0cb94e9ab509ba137d290, type: 3}
   - {fileID: 8300000, guid: 5b0eaa1dbb7858b44b1dd5e81d42d24d, type: 3}
@@ -11751,49 +11833,6 @@ MonoBehaviour:
     - {fileID: 2060034765}
     - {fileID: 622077632}
     - {fileID: 2037845475}
-  clipBounce: {fileID: 8300000, guid: e773afe57e71b354bb2c69c4efbccacc, type: 3}
-  aCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.33
-      value: 4
-      inSlope: -0.31783485
-      outSlope: -0.31783485
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.66
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: -4
-      inSlope: -1.9576682
-      outSlope: -1.9576682
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 1
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!82 &1960071380
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12015,7 +12054,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1968643258
 GameObject:
@@ -12117,7 +12156,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1980473696
 PrefabInstance:
@@ -12517,7 +12556,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 70, z: 0}
 --- !u!114 &2043822648
 MonoBehaviour:
@@ -13307,7 +13346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2121307234}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.5, z: 2}
+  m_LocalPosition: {x: 0, y: 3.25, z: 1.875}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13479,12 +13518,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1595097678}
-  ball: {fileID: 1609377049}
+  ball: {fileID: 1609377055}
   dribblePosition: {fileID: 1331010768}
   dribbleHeight: 5
   throwingDuration: 1
   throwStartPosition: {fileID: 1142935339}
-  throwEndPosition: {fileID: 2121307235}
   playerPositions:
   - {fileID: 2043822647}
   - {fileID: 1827056907}
@@ -13493,7 +13531,7 @@ MonoBehaviour:
   - {fileID: 1736334308}
   - {fileID: 1855898735}
   - {fileID: 353527647}
-  throwEndPositionWithRandomError: {fileID: 0}
+  throwEndPosition: {fileID: 2121307235}
   saveDataScriptableObject: {fileID: 11400000, guid: a9e6080d3583474469fe44227950fd54,
     type: 2}
   timerToThrow: 2
@@ -13578,7 +13616,7 @@ Transform:
   - {fileID: 1142935339}
   - {fileID: 1331010768}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2129416948
 GameObject:

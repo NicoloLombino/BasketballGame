@@ -21,8 +21,9 @@ public class AIPlayer : PlayerBase
 
     private float timer;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         timerToThrow += (10 / saveDataScriptableObject.AILevel) / 3;
     }
 
@@ -51,18 +52,14 @@ public class AIPlayer : PlayerBase
         float totalAim = ((float)(accuracy + saveDataScriptableObject.AILevel) / 2);
         if (rndAim <= totalAim)
         {
-            Debug.Log("MINORE");
             aimSign = 1;
         }
         else
         {
-            Debug.Log("MAGGIORE");
             aimSign = -1;
         }
-        float rndErrorOnThrow = rndError * aimSign;  /*Mathf.Sign(Random.Range(-1, (saveDataScriptableObject.AILevel + 1)));*/ 
+        float rndErrorOnThrow = rndError * aimSign; 
         float finalThrowValueOnSlider = sliderValue + rndErrorOnThrow;
-        Debug.Log("rndError " + rndError);
-        Debug.Log("aimSign " + aimSign);
         Debug.Log("with RND= " + rndValueOnThrow + " AND ERROR= " + rndErrorOnThrow + " FINAL= " + finalThrowValueOnSlider);
         StartCoroutine(ThrowingBall(finalThrowValueOnSlider, isFireBonusActive)); 
     }
@@ -74,31 +71,29 @@ public class AIPlayer : PlayerBase
         if(gameManager.isBackBoardBonusActive)
         {
             // aim to backboard
-            //throwValue = gameManager.GetSliderValueBackboardShot();
-            throwValue = (gameManager.valueToBackboardAndPointsMin / 10 )/*+ gameManager.valueToBackboardAndPointsMax) / 20*/;
-
+            throwValue = (gameManager.valueToBackboardAndPointsMin / 10 );
         }
         else
         {
             // aim to basket to get 3 points
-            //throwValue = gameManager.GetSliderValuePerfectShot();
             throwValue = (gameManager.valueTo3PointsMin + gameManager.valueTo3PointsMax) / 20;
         }
 
         AIThrowingBall(throwValue);
     }
+
     private IEnumerator ThrowingBall(float throwPower, bool hasFireBonus)
     {
         ignoreInputs = true;
         float preparingTimer = 0;
         float preparingPercent = 0;
-        //float preparingDuration = 0;
-        Vector3 ballPosition = ball.position;
+        Vector3 ballPosition = ball.transform.position;
+
         while (preparingPercent < 1)
         {
             preparingTimer += Time.deltaTime;
             preparingPercent = preparingTimer / 0.7f;
-            ball.position = Vector3.Lerp(ballPosition, throwStartPosition.position, preparingPercent);
+            ball.transform.position = Vector3.Lerp(ballPosition, throwStartPosition.position, preparingPercent);
             yield return null;
         }
 
@@ -109,23 +104,35 @@ public class AIPlayer : PlayerBase
         {
             throwingTimer += Time.deltaTime;
             throwingPercent = throwingTimer / throwingDuration;
-            ball.position = Vector3.Lerp(throwStartPosition.position, throwEndPosition.position, throwingPercent)
+            ball.transform.position = Vector3.Lerp(throwStartPosition.position, throwEndPosition.position, throwingPercent)
                 + Vector3.up * 5 * Mathf.Sin(throwingPercent * 3.14f);
             yield return null;
         }
 
-        yield return new WaitForSecondsRealtime(1);
+        throwingTimer = 0;
+        float throwingPercent2 = 0;
+        while (throwingPercent2 < 1)
+        {
+            throwingTimer += Time.deltaTime;
+            throwingPercent2 = throwingTimer / (throwingDuration / 2);
+            ball.transform.position = Vector3.Lerp(throwEndPosition.position, throwEndPositionChild.position, throwingPercent2)
+                + transform.up * 0.75f * Mathf.Sin(throwingPercent2 * 3.14f);
+            yield return null;
+        }
+
+        yield return new WaitForSecondsRealtime(0.1f);
         ResetShot();
     }
 
     private void ResetShot()
     {
-        ball.position = dribblePosition.position;
+        ball.transform.position = dribblePosition.position;
         isThrowingBall = false;
         throwingTimer = 0;
+        ball.hasMakeSound = false;
         if (makePoints)
         {
-            StartCoroutine(MovePlayerToNextPosition());
+            MovePlayerToNextPosition();
             makePoints = false;
         }
         else
@@ -136,31 +143,24 @@ public class AIPlayer : PlayerBase
 
     private void CheckThrowingResult(float throwPower, bool hasFireBonus)
     {
-        //float perfectShotValue = gameManager.GetSliderValuePerfectShot(); // 3 points
-        //float backboardShotValue = gameManager.GetSliderValueBackboardShot();
-        //float basketboard = perfectShotValue - 0.2f; // hit the basket
-        //float twoPointsLess = perfectShotValue - 0.1f; // 2 points
-        //float twoPointsMore = perfectShotValue + 0.1f; // 2 points
-        //float backboardLess = twoPointsMore + 0.1f; // hit the backboard left or right
-        //float backboardMore = backboardShotValue + 0.1f; // hit the backboard up 
-
-        float basketboard = gameManager.valueToHitBasketAndGoOut / 10;
-        float twoPointsLess = gameManager.valueTo2PointsMin / 10;
+        float basketboard = gameManager.valueToHitBasketAndGoOut / 10; // 0 points
+        float twoPointsLess = gameManager.valueTo2PointsMin / 10; // 2 points
         float perfectShotValueMin = gameManager.valueTo3PointsMin / 10; // 3 points
         float perfectShotValueMax = gameManager.valueTo3PointsMax / 10; // 3 points
-        //float twoPointsMore = gameManager.valueTo2PointsMax / 10;
         float twoPointsMore = gameManager.valueTo2PointsMax / 10; // hit the backboard left or right
-        float backboardShotValue = gameManager.valueToBackboardAndPointsMin / 10;
-        float backboardMore = gameManager.valueToBackboardAndPointsMax / 10;
+        float backboardShotValue = gameManager.valueToBackboardAndPointsMin / 10; // 2 points backboard
+        float backboardMore = gameManager.valueToBackboardAndPointsMax / 10; // 2 points
 
         int points = 0;
         bool isBackboardShot = false;
+        int ballThrowingAnimationIndex;
 
         if (throwPower < basketboard)
         {
             // NO, no points
             Debug.Log("AI --> GO OUT");
             DisableFireBonus();
+            ballThrowingAnimationIndex = 0;
         }
         else if (throwPower >= basketboard && throwPower < twoPointsLess)
         {
@@ -168,6 +168,7 @@ public class AIPlayer : PlayerBase
             Debug.Log("AI --> HIT BASKET");
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(0, 0, hasFireBonus);
             DisableFireBonus();
+            ballThrowingAnimationIndex = 1;
         }
         else if (throwPower >= twoPointsLess && throwPower < perfectShotValueMin)
         {
@@ -176,6 +177,7 @@ public class AIPlayer : PlayerBase
             points = 2;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
             makePoints = true;
+            ballThrowingAnimationIndex = 2;
         }
         else if (throwPower >= perfectShotValueMin && throwPower <= perfectShotValueMax)
         {
@@ -184,6 +186,7 @@ public class AIPlayer : PlayerBase
             points = 3;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 3, hasFireBonus);
             makePoints = true;
+            ballThrowingAnimationIndex = 3;
         }
         else if (throwPower > perfectShotValueMax && throwPower <= twoPointsMore)
         {
@@ -192,6 +195,7 @@ public class AIPlayer : PlayerBase
             points = 2;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
             makePoints = true;
+            ballThrowingAnimationIndex = 2;
         }
         else if (throwPower > twoPointsMore && throwPower < backboardShotValue)
         {
@@ -199,8 +203,9 @@ public class AIPlayer : PlayerBase
             Debug.Log("AI --> HIT BACKBOARD AND GO OUT LESS");
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
             DisableFireBonus();
+            ballThrowingAnimationIndex = 4;
         }
-        else if (throwPower >= backboardShotValue && throwPower < backboardMore)
+        else if (throwPower >= backboardShotValue && throwPower <= backboardMore)
         {
             // hit backboard and enter in basket --> 2 points
             Debug.Log("AI --> HIT BACKBOARD AND ENTER 2 POINTS");
@@ -208,6 +213,7 @@ public class AIPlayer : PlayerBase
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(3, 2, hasFireBonus);
             isBackboardShot = true;
             makePoints = true;
+            ballThrowingAnimationIndex = 5;
         }
         else
         {
@@ -215,7 +221,12 @@ public class AIPlayer : PlayerBase
             Debug.Log("AI --> HIT BACKBOARD AND GO OUT MORE");
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
             DisableFireBonus();
+            ballThrowingAnimationIndex = 6;
         }
+
+        SetBallAnimationPositionsOnThrowing(
+            ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex],
+            ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex].GetChild(0));
 
         gameManager.AddAIPoints(points, isBackboardShot, hasFireBonus);
         CheckFireBonusOnAI(points);
@@ -260,28 +271,5 @@ public class AIPlayer : PlayerBase
         fireBonusValue = 0;
         isFireBonusActive = false;
         fireOnBallParticles.SetActive(false);
-    }
-
-    private IEnumerator MovePlayerToNextPosition()
-    {
-        currentPlayerPosition++;
-        if (currentPlayerPosition >= playerPositions.Length)
-        {
-            currentPlayerPosition = 0;
-        }
-
-        float movingTimer = 0;
-        float movingPercent = 0;
-        Vector3 startPosition = transform.position;
-        Vector3 startRotation = transform.eulerAngles;
-        while (movingPercent < 1)
-        {
-            movingTimer += Time.deltaTime;
-            movingPercent = movingTimer / 0.5f;
-            transform.position = Vector3.Lerp(startPosition, playerPositions[currentPlayerPosition].position, movingPercent);
-            transform.eulerAngles = Vector3.Lerp(startRotation, playerPositions[currentPlayerPosition].eulerAngles, movingPercent);
-            yield return null;
-        }
-        ignoreInputs = false;
     }
 }

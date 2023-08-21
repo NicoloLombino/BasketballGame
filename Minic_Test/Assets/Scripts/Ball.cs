@@ -10,6 +10,8 @@ public class Ball : MonoBehaviour
     private PlayerBase playerOwner;
 
     [Header("Ball audioclips")]
+    [SerializeField]
+    private AudioClip clipBounce;
     [SerializeField, Tooltip("clips to instantiate: " +
         "0 hit basket and go out, " +
         "1 enter in basket and take points," +
@@ -54,14 +56,12 @@ public class Ball : MonoBehaviour
     //"2 take 2 points" +
     //"3 take 3 points ")]
 
-    [SerializeField]
-    private AudioClip clipBounce;
+    internal bool hasMakeSound;
 
     private int clipToPlay;
     private int pointsToGive;
     private bool isFireBonusActive;
 
-    public AnimationCurve aCurve;
 
 
     private void Awake()
@@ -71,10 +71,6 @@ public class Ball : MonoBehaviour
         {
             gameObject.GetComponent<MeshRenderer>().material = materials[PlayerPrefs.GetInt("BallMaterialIndex")];
         }
-    }
-    void Start()
-    {
-        
     }
 
     void Update()
@@ -133,30 +129,39 @@ public class Ball : MonoBehaviour
         Destroy(particlesOnBasket, 1);
     }
 
-    public void ThrowBallAnimation(Vector3 endPosition, float duration, int playerPosition)
-    {
-        StartCoroutine(Curve(endPosition, duration, playerPosition));
-    }
-    public IEnumerator Curve(Vector3 endPosition, float duration, int playerPosition)
-    {
-        Vector3 startPos = transform.position;
-        Vector3 endPos = endPosition;
-        float normalizedTime = 0.0f;
-        while (normalizedTime <= 1.0f)
-        {
-            float yOffset = aCurve.Evaluate(normalizedTime);
-            transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
-            normalizedTime += Time.deltaTime / duration;
-            yield return null;
-        }
-    }
+    //public void ThrowBallAnimation(Vector3 endPosition, float duration, int playerPosition)
+    //{
+    //    StartCoroutine(Curve(endPosition, duration, playerPosition));
+    //}
+    //public IEnumerator Curve(Vector3 endPosition, float duration, int playerPosition)
+    //{
+    //    Vector3 startPos = transform.position;
+    //    Vector3 endPos = endPosition;
+    //    float normalizedTime = 0.0f;
+    //    while (normalizedTime <= 1.0f)
+    //    {
+    //        float yOffset = aCurve.Evaluate(normalizedTime);
+    //        transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
+    //        normalizedTime += Time.deltaTime / duration;
+    //        yield return null;
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Basket"))
+        if(other.CompareTag("BasketZone"))
         {
             audioSource.PlayOneShot(clips[clipToPlay]);
+            hasMakeSound = true;
+        }
+        else if(other.CompareTag("Basket"))
+        {
             CheckParticlesToUseOnBasket(pointsToGive, isFireBonusActive);
+            if(!hasMakeSound)
+            {
+                audioSource.PlayOneShot(clips[clipToPlay]);
+                hasMakeSound = true;
+            }
         }
     }
 

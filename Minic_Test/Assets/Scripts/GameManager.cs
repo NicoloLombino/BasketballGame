@@ -44,19 +44,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Reference")]
     [SerializeField]
-    private Player player;
+    private PlayerBase player;
     [SerializeField]
-    private Player AI;
-
-    [Header("Particles")]
-    [SerializeField]
-    private Transform basketPosition;
-    [SerializeField]
-    private GameObject PointsAndFireBasketParticles3;
-    [SerializeField]
-    private GameObject PointsParticles3;
-    [SerializeField]
-    private GameObject PointsParticles2;
+    private PlayerBase AI;
 
     [Header("UI")]
     [SerializeField]
@@ -108,7 +98,7 @@ public class GameManager : MonoBehaviour
     public float valueToExitFrom2PointsMax;  // P + x + y
     public float valueToBackboardAndPointsMin;  // > P + x + y && < B + z
     public float valueToBackboardAndPointsMax;  // B + z
-    public float valueToHitBasketAndGoOut;
+    public float valueToHitBasketAndGoOut; // < P - y
 
 
     internal bool isFireBonusActive;
@@ -116,7 +106,7 @@ public class GameManager : MonoBehaviour
     internal int pointsToGiveOnBackboardBonus;
     internal bool isInGame;
 
-    private Player winner;
+    private PlayerBase winner;
     private int backBoardBonusTurnDuration;
     private int levelOnShotSlider = 0;
 
@@ -127,10 +117,8 @@ public class GameManager : MonoBehaviour
         timer = gameTime;
         nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
         SetPositionOfShotPointsOnSlider();
-        //perfectShotIndicator.localScale -= Vector3.up * (sliderValuePerfectShot / 700);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(isInGame)
@@ -152,15 +140,6 @@ public class GameManager : MonoBehaviour
 
         perfectShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueTo3PointsMax - valueTo3PointsMin) / 10) * 800));
         backboardShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueToBackboardAndPointsMax - valueToBackboardAndPointsMin) / 10) * 800));
-    }
-
-    public float GetSliderValuePerfectShot()
-    {
-        return sliderValuePerfectShot / 700; 
-    }
-    public float GetSliderValueBackboardShot()
-    {
-        return sliderValueBackboardShot / 700;
     }
 
     public void AddPlayerPoints(int points, bool isBackboardShot, bool playerHasFireBonusActive)
@@ -190,36 +169,11 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //CheckParticlesToUseOnBasket(points, isFireBonusActive);
-
         if(playerPoints >= nextPointsToIncreaseShotValuesOnSlider)
         {
             IncreaseShotValuesOnSlider();
         }
     }
-
-    //private void CheckParticlesToUseOnBasket(int points, bool fireActive)
-    //{
-    //    GameObject particlesOnBasket = new GameObject();
-    //    if (points == 2)
-    //    {
-    //        particlesOnBasket = Instantiate(PointsParticles2, basketPosition.position, Quaternion.identity);
-    //        // rotate the particles
-    //        particlesOnBasket.transform.eulerAngles += Vector3.right * -90;
-    //    }
-    //    else if(points == 3)
-    //    {
-    //        if(fireActive)
-    //        {
-    //            particlesOnBasket = Instantiate(PointsAndFireBasketParticles3, basketPosition.position, Quaternion.identity);
-    //        }
-    //        else
-    //        {
-    //            particlesOnBasket = Instantiate(PointsParticles3, basketPosition.position, Quaternion.identity);
-    //        }
-    //    }
-    //    Destroy(particlesOnBasket, 1);
-    //}
 
     public void AddAIPoints(int points, bool isBackboardShot, bool hasFireBonusActive)
     {
@@ -268,7 +222,6 @@ public class GameManager : MonoBehaviour
                 backBoardBonusUI5.SetActive(true);
                 pointsToGiveOnBackboardBonus = 5;
             }
-
         }
     }
 
@@ -303,7 +256,6 @@ public class GameManager : MonoBehaviour
     private void EndMatch()
     {
         isInGame = false;
-        player.HandleEndGame();
         CheckWinner();
         CheckRecordScore();
         CheckReward();
@@ -320,6 +272,7 @@ public class GameManager : MonoBehaviour
         else
         {
             endUIText.text = drawText;
+            winner = null;
         }
     }
 
@@ -329,18 +282,17 @@ public class GameManager : MonoBehaviour
         if(winner == player)
         {
             goldToGive = playerPoints * 2;
-            rewardText.text = rewardText1 + " " + goldToGive.ToString() + " " + rewardText2;
         }
         else if (winner == AI)
         {
             goldToGive = Mathf.FloorToInt(playerPoints / 2);
-            rewardText.text = rewardText1 + " " + goldToGive.ToString() + " " + rewardText2;
         }
-        else
+        else // if (winner == null)
         {
             goldToGive = playerPoints;
-            rewardText.text = rewardText1 + " " + goldToGive.ToString() + " " + rewardText2;
         }
+
+        rewardText.text = rewardText1 + " " + goldToGive.ToString() + " " + rewardText2;
         saveDataScriptableObject.AddGold(goldToGive);
     }
 

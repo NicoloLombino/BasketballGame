@@ -22,11 +22,14 @@ public class AIPlayer : PlayerBase
     private float fireBonusValue;
 
     private float timer;
+    private float fireValueDecreasingDivisor;
 
     protected override void Start()
     {
         base.Start();
+
         timerToThrow += (10 / saveDataScriptableObject.AILevel) / 3;
+        fireValueDecreasingDivisor = gameManager.fireBonusDecreasingSpeedDivisor;
     }
 
     protected override void Update()
@@ -41,6 +44,11 @@ public class AIPlayer : PlayerBase
                 CheckBestThrow();
                 timer = 0;
             }
+        }
+
+        if(!isFireBonusActive)
+        {
+            fireBonusValue -= Time.deltaTime / fireValueDecreasingDivisor;
         }
     }
 
@@ -249,11 +257,11 @@ public class AIPlayer : PlayerBase
     {
         if (!isFireBonusActive)
         {
-            fireBonusValue += points;
+            fireBonusValue += points == 2 ? 2.5f : 4f;
 
-            if (fireBonusValue >= 9)
+            if (fireBonusValue >= gameManager.maxFireBonusTime)
             {
-                fireBonusValue = 9;
+                fireBonusValue = gameManager.maxFireBonusTime;
                 StartCoroutine(ActiveFireBonus());
             }
         }

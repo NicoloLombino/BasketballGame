@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour
     private Color fireImageBackgroundColorWhenActive;
     [SerializeField]
     private GameObject fireBonusUI;
+    public float maxFireBonusTime;
+    public float fireBonusDecreasingSpeedDivisor;
 
     [Header("Reference")]
     [SerializeField]
@@ -78,14 +80,6 @@ public class GameManager : MonoBehaviour
     private PointsEffectText pointsEffectText;
     [SerializeField]
     private GameObject backboardBonusShotPointsUI;
-    //[SerializeField]
-    //private GameObject normalShotPointsUI;
-    //[SerializeField]
-    //private GameObject perfectShotPointsUI;
-    //[SerializeField]
-    //private TextMeshProUGUI normalShotPointsText;
-    //[SerializeField]
-    //private TextMeshProUGUI perfectShotPointsText;
 
     [Header("UI edit texts")]
     [SerializeField]
@@ -105,9 +99,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private RectTransform backboardShotIndicator;
     [SerializeField]
-    private int nextPointsToIncreaseShotValuesOnSlider;
-    [SerializeField]
     private int[] pointsToIncreaseShotValuesOnSlider;
+    [SerializeField]
+    private float shotIndicatorPositionInSliderIncrement;
 
     [Header("Values to get points on Throwing Ball Slider, (from 0 to 10)")]
     public float valueTo3PointsMin;  // P
@@ -127,6 +121,7 @@ public class GameManager : MonoBehaviour
     private PlayerBase winner;
     private int backBoardBonusTurnDuration;
     private int levelOnShotSlider = 0;
+    private int nextPointsToIncreaseShotValuesOnSlider;
 
     void Start()
     {
@@ -134,6 +129,7 @@ public class GameManager : MonoBehaviour
         backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
         timer = gameTime;
         nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
+        fireBonusSlider.maxValue = maxFireBonusTime;
         SetPositionOfShotPointsOnSlider();
     }
 
@@ -148,6 +144,11 @@ public class GameManager : MonoBehaviour
             {
                 EndMatch();
             }
+        }
+
+        if (!isFireBonusActive)
+        {
+            fireBonusSlider.value -= Time.deltaTime / fireBonusDecreasingSpeedDivisor;
         }
     }
 
@@ -168,6 +169,7 @@ public class GameManager : MonoBehaviour
         if (isBackboardShot && isBackBoardBonusActive)
         {
             pointsToGive += pointsToGiveOnBackboardBonus;
+            DisableBackboardBonus();
         }
         if (playerHasFireBonusActive)
         {
@@ -176,13 +178,13 @@ public class GameManager : MonoBehaviour
 
         playerPoints += pointsToGive;
         playerPointsText.text = playerPoints.ToString();
-        if(!isFireBonusActive)
+        if(!isFireBonusActive) 
         {
-            fireBonusSlider.value += points;
+            fireBonusSlider.value += points == 2 ? 2.5f : 4f;
 
-            if (fireBonusSlider.value >= 9)
+            if (fireBonusSlider.value >= maxFireBonusTime)
             {
-                fireBonusSlider.value = 9;
+                fireBonusSlider.value = maxFireBonusTime;
                 StartCoroutine(ActiveFireBonus());
             }
         }
@@ -203,6 +205,7 @@ public class GameManager : MonoBehaviour
         if (isBackboardShot && isBackBoardBonusActive)
         {
             pointsToGive += pointsToGiveOnBackboardBonus;
+            DisableBackboardBonus();
         }
         if (hasFireBonusActive)
         {
@@ -220,11 +223,7 @@ public class GameManager : MonoBehaviour
             backBoardBonusTurnDuration--;
             if(backBoardBonusTurnDuration <= 0)
             {
-                isBackBoardBonusActive = false;
-                backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
-                backBoardBonusUI4.SetActive(false);
-                backBoardBonusUI5.SetActive(false);
-                pointsToGiveOnBackboardBonus = 0;
+                DisableBackboardBonus();
             }
         }
         else
@@ -237,18 +236,28 @@ public class GameManager : MonoBehaviour
                 Debug.Log("rand back 2 = " + rnd2);
                 if (rnd2 <= percentageToActiveBackboardBonus5)
                 {
-                    isBackBoardBonusActive = true;
                     backBoardBonusUI5.SetActive(true);
                     pointsToGiveOnBackboardBonus = 5;
                 }
                 else
                 {
-                    isBackBoardBonusActive = true;
                     backBoardBonusUI4.SetActive(true);
                     pointsToGiveOnBackboardBonus = 4;
                 }
+
+                isBackBoardBonusActive = true;
+                backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
             }
         }
+    }
+
+    private void DisableBackboardBonus()
+    {
+        isBackBoardBonusActive = false;
+        backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
+        backBoardBonusUI4.SetActive(false);
+        backBoardBonusUI5.SetActive(false);
+        pointsToGiveOnBackboardBonus = 0;
     }
 
     private IEnumerator ActiveFireBonus()
@@ -263,8 +272,8 @@ public class GameManager : MonoBehaviour
             fireBonusSlider.value -= Time.deltaTime;
             yield return null;
         }
-        
-        while(player.ignoreInputs)
+
+        while (player.ignoreInputs)
         {
             yield return null;
         }
@@ -357,12 +366,24 @@ public class GameManager : MonoBehaviour
 
     private void IncreaseShotValuesOnSlider()
     {
-        if (levelOnShotSlider >= pointsToIncreaseShotValuesOnSlider.Length - 1)
+        if (levelOnShotSlider < pointsToIncreaseShotValuesOnSlider.Length - 1)
+        {
+            levelOnShotSlider++;
+            nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
+
+            valueTo3PointsMin += shotIndicatorPositionInSliderIncrement;
+            valueTo3PointsMax += shotIndicatorPositionInSliderIncrement;
+            valueTo2PointsMin += shotIndicatorPositionInSliderIncrement;
+            valueTo2PointsMax += shotIndicatorPositionInSliderIncrement;
+            valueToBackboardAndPointsMin += shotIndicatorPositionInSliderIncrement;
+            valueToBackboardAndPointsMax += shotIndicatorPositionInSliderIncrement;
+            valueToHitBasketAndGoOut += shotIndicatorPositionInSliderIncrement;
+
+            SetPositionOfShotPointsOnSlider();
+        }
+        else
+        {
             return;
-
-        levelOnShotSlider++;
-        nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
-
-        SetPositionOfShotPointsOnSlider();
+        }
     }
 }

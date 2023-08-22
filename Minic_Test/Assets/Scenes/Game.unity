@@ -9974,13 +9974,15 @@ MonoBehaviour:
   backBoardBonusUI4: {fileID: 1455004084}
   backBoardBonusUI5: {fileID: 594455120}
   backBoardBonusTurnDurationMax: 4
-  percentageToActiveBackboardBonus: 12
+  percentageToActiveBackboardBonus: 8
   percentageToActiveBackboardBonus5: 25
   fireBonusSlider: {fileID: 788616148}
   fireImageBackground: {fileID: 1224335313}
   fireOnBallParticles: {fileID: 596056019}
   fireImageBackgroundColorWhenActive: {r: 1, g: 0.6666667, b: 0, a: 1}
   fireBonusUI: {fileID: 1529012362}
+  maxFireBonusTime: 10
+  fireBonusDecreasingSpeedDivisor: 6
   player: {fileID: 138861201}
   AI: {fileID: 2127683095}
   basketTransform: {fileID: 2121307235}
@@ -10003,15 +10005,15 @@ MonoBehaviour:
   rewardText2: GOLD
   perfectShotIndicator: {fileID: 1453151426}
   backboardShotIndicator: {fileID: 1523336287}
-  nextPointsToIncreaseShotValuesOnSlider: 0
-  pointsToIncreaseShotValuesOnSlider: 0a0000000f00000014000000
-  valueTo3PointsMin: 4
-  valueTo3PointsMax: 5
+  pointsToIncreaseShotValuesOnSlider: 0a0000001e00000000000000
+  shotIndicatorPositionInSliderIncrement: 1
+  valueTo3PointsMin: 3.5
+  valueTo3PointsMax: 4.5
   valueTo2PointsMin: 3
-  valueTo2PointsMax: 6
-  valueToBackboardAndPointsMin: 8
-  valueToBackboardAndPointsMax: 9
-  valueToHitBasketAndGoOut: 2
+  valueTo2PointsMax: 5
+  valueToBackboardAndPointsMin: 6
+  valueToBackboardAndPointsMax: 7
+  valueToHitBasketAndGoOut: 2.5
 --- !u!4 &1595097679
 Transform:
   m_ObjectHideFlags: 0
@@ -14363,7 +14365,7 @@ MonoBehaviour:
   throwEndPosition: {fileID: 2121307235}
   saveDataScriptableObject: {fileID: 11400000, guid: a9e6080d3583474469fe44227950fd54,
     type: 2}
-  timerToThrow: 2
+  timerToThrow: 1
   accuracy: 7
   fireOnBallParticles: {fileID: 1250557400}
   fireBonusUI: {fileID: 1730852942}

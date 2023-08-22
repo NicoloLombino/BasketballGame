@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     [SerializeField, Range(0, 100)]
     private int percentageToActiveBackboardBonus;
     [SerializeField, Range(0, 100)]
+    [Tooltip("if the backboard bonus is actived this determines if the bonus is + 4 or + 5")]
     private int percentageToActiveBackboardBonus5;
 
     [Header("Fire Bonus")]
@@ -43,14 +44,18 @@ public class GameManager : MonoBehaviour
     private GameObject fireOnBallParticles;
     [SerializeField]
     private Color fireImageBackgroundColorWhenActive;
+    [SerializeField]
+    private GameObject fireBonusUI;
 
     [Header("Reference")]
     [SerializeField]
     private PlayerBase player;
     [SerializeField]
     private PlayerBase AI;
+    [SerializeField]
+    private Transform basketTransform;
 
-    [Header("UI")]
+    [Header("UI components")]
     [SerializeField]
     private TextMeshProUGUI playerPointsText;
     [SerializeField]
@@ -67,6 +72,22 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI rewardText;
     [SerializeField]
     private GameObject newRecordText;
+
+    [Header("UI 3D")]
+    [SerializeField]
+    private PointsEffectText pointsEffectText;
+    [SerializeField]
+    private GameObject backboardBonusShotPointsUI;
+    //[SerializeField]
+    //private GameObject normalShotPointsUI;
+    //[SerializeField]
+    //private GameObject perfectShotPointsUI;
+    //[SerializeField]
+    //private TextMeshProUGUI normalShotPointsText;
+    //[SerializeField]
+    //private TextMeshProUGUI perfectShotPointsText;
+
+    [Header("UI edit texts")]
     [SerializeField]
     private string winText;
     [SerializeField]
@@ -83,16 +104,12 @@ public class GameManager : MonoBehaviour
     private RectTransform perfectShotIndicator;
     [SerializeField]
     private RectTransform backboardShotIndicator;
-    [Range(0, 700)]
-    public float sliderValuePerfectShot;
-    [Range(0, 700)]
-    public float sliderValueBackboardShot;
     [SerializeField]
     private int nextPointsToIncreaseShotValuesOnSlider;
     [SerializeField]
     private int[] pointsToIncreaseShotValuesOnSlider;
 
-    [Header("Values to get points on Throwing Ball Slider, (from 0 to 1)")]
+    [Header("Values to get points on Throwing Ball Slider, (from 0 to 10)")]
     public float valueTo3PointsMin;  // P
     public float valueTo3PointsMax;  // P + x
     public float valueTo2PointsMin;  // P - y
@@ -174,6 +191,8 @@ public class GameManager : MonoBehaviour
         {
             IncreaseShotValuesOnSlider();
         }
+
+        SpawnPointsOnUI(points, pointsToGive, isBackboardShot && isBackBoardBonusActive);
     }
 
     public void AddAIPoints(int points, bool isBackboardShot, bool hasFireBonusActive)
@@ -229,18 +248,6 @@ public class GameManager : MonoBehaviour
                     pointsToGiveOnBackboardBonus = 4;
                 }
             }
-            //if (rnd >= percentageToActiveBackboardBonus && rnd < 13)
-            //{
-            //    isBackBoardBonusActive = true;
-            //    backBoardBonusUI4.SetActive(true);
-            //    pointsToGiveOnBackboardBonus = 4;
-            //}
-            //else if(rnd >= 13)
-            //{
-            //    isBackBoardBonusActive = true;
-            //    backBoardBonusUI5.SetActive(true);
-            //    pointsToGiveOnBackboardBonus = 5;
-            //}
         }
     }
 
@@ -249,6 +256,7 @@ public class GameManager : MonoBehaviour
         isFireBonusActive = true;
         fireImageBackground.color = fireImageBackgroundColorWhenActive;
         fireOnBallParticles.SetActive(true);
+        fireBonusUI.SetActive(true);
 
         while (fireBonusSlider.value > 0)
         {
@@ -270,6 +278,29 @@ public class GameManager : MonoBehaviour
         isFireBonusActive = false;
         fireImageBackground.color = Color.white;
         fireOnBallParticles.SetActive(false);
+        fireBonusUI.SetActive(false);
+    }
+
+    private void SpawnPointsOnUI(int pointsBase, int totalPoints, bool isBackboardShotWithBonusActive)
+    {
+        PointsEffectText pointsTextEffect = Instantiate(pointsEffectText, basketTransform.position + Vector3.up, Quaternion.identity);
+        if (pointsBase == 2)
+        {
+            pointsTextEffect.pointsText.color = new Color(1.0f, 0.64f, 0.0f);  // orange
+
+
+            if(isBackboardShotWithBonusActive)
+            {
+                GameObject backboardBonusTextEffect = Instantiate(backboardBonusShotPointsUI, basketTransform.position + Vector3.up, Quaternion.identity);
+            }
+        }
+        else // pointsBase == 3 -> Perfect shot
+        {
+            pointsTextEffect.pointsText.color = Color.green;
+            pointsTextEffect.upText.gameObject.SetActive(true);
+        }
+
+        pointsTextEffect.pointsText.text = "+ " + totalPoints + " Pts!";
     }
 
     private void EndMatch()
@@ -332,8 +363,6 @@ public class GameManager : MonoBehaviour
         levelOnShotSlider++;
         nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
 
-        sliderValuePerfectShot += 50;
-        sliderValueBackboardShot += 50;
         SetPositionOfShotPointsOnSlider();
     }
 }

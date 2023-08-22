@@ -126,26 +126,9 @@ public class Ball : MonoBehaviour
                 particlesOnBasket = Instantiate(particlesToUse[1], basketPosition.position, Quaternion.identity);
             }
         }
+        pointsToGive = 0;
         Destroy(particlesOnBasket, 1);
     }
-
-    //public void ThrowBallAnimation(Vector3 endPosition, float duration, int playerPosition)
-    //{
-    //    StartCoroutine(Curve(endPosition, duration, playerPosition));
-    //}
-    //public IEnumerator Curve(Vector3 endPosition, float duration, int playerPosition)
-    //{
-    //    Vector3 startPos = transform.position;
-    //    Vector3 endPos = endPosition;
-    //    float normalizedTime = 0.0f;
-    //    while (normalizedTime <= 1.0f)
-    //    {
-    //        float yOffset = aCurve.Evaluate(normalizedTime);
-    //        transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
-    //        normalizedTime += Time.deltaTime / duration;
-    //        yield return null;
-    //    }
-    //}
 
     private void OnTriggerEnter(Collider other)
     {

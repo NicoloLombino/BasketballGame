@@ -16,6 +16,8 @@ public class AIPlayer : PlayerBase
     [Header("Fire bonus components")]
     [SerializeField]
     private GameObject fireOnBallParticles;
+    [SerializeField]
+    private GameObject fireBonusUI;
     private bool isFireBonusActive;
     private float fireBonusValue;
 
@@ -99,6 +101,9 @@ public class AIPlayer : PlayerBase
 
         CheckThrowingResult(throwPower, hasFireBonus);
 
+        // the sound of throwing ball
+        audioSource.Play();
+
         float throwingPercent = 0;
         while (throwingPercent < 1)
         {
@@ -132,13 +137,13 @@ public class AIPlayer : PlayerBase
 
     private void ResetShot()
     {
-        ball.transform.position = dribblePosition.position;
+        ball.transform.position = dribblePosition.position + Vector3.up * 0.7f;
         isThrowingBall = false;
         throwingTimer = 0;
         ball.hasMakeSound = false;
         if (makePoints)
         {
-            MovePlayerToNextPosition();
+            MovePlayerToNextPosition(-1);
             makePoints = false;
         }
         else
@@ -166,6 +171,7 @@ public class AIPlayer : PlayerBase
             // NO, no points
             Debug.Log("AI --> GO OUT");
             DisableFireBonus();
+            ball.hasMakeSound = true;
             ballThrowingAnimationIndex = 0;
         }
         else if (throwPower >= basketboard && throwPower < twoPointsLess)
@@ -257,6 +263,7 @@ public class AIPlayer : PlayerBase
     {
         isFireBonusActive = true;
         fireOnBallParticles.SetActive(true);
+        fireBonusUI.SetActive(true);
 
         while (fireBonusValue > 0)
         {
@@ -277,5 +284,6 @@ public class AIPlayer : PlayerBase
         fireBonusValue = 0;
         isFireBonusActive = false;
         fireOnBallParticles.SetActive(false);
+        fireBonusUI.SetActive(false);
     }
 }

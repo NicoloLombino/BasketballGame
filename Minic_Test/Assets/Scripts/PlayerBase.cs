@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
+    protected AudioSource audioSource;
+
     [Header("reference")]
     [SerializeField]
     protected GameManager gameManager;
@@ -38,8 +40,10 @@ public class PlayerBase : MonoBehaviour
     internal bool ignoreInputs;
     protected bool makePoints;
 
-
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     protected virtual void Start()
     {
         currentPlayerPosition = Random.Range(0, playerPositions.Length);
@@ -62,9 +66,14 @@ public class PlayerBase : MonoBehaviour
         throwEndPositionChild = endPos2;
     }
 
-    protected void MovePlayerToNextPosition()
+    /// <summary>
+    /// to move player in one direction after a point
+    /// direction = 1 or -1   --> 1 = player, -1 = AI
+    /// </summary>
+    /// <param name="direction"></param>
+    protected void MovePlayerToNextPosition(int direction)
     {
-        StartCoroutine(MovingPlayerToNextPosition());
+        StartCoroutine(MovingPlayerToNextPosition(direction));
     }
 
     protected void SetThrowValues(int pointsToGive, bool isBackboardShot)
@@ -73,12 +82,16 @@ public class PlayerBase : MonoBehaviour
         doBackboardShot = isBackboardShot;
     }
 
-    private IEnumerator MovingPlayerToNextPosition()
+    private IEnumerator MovingPlayerToNextPosition(int direction)
     {
-        currentPlayerPosition++;
+        currentPlayerPosition += direction;
         if (currentPlayerPosition >= playerPositions.Length)
         {
             currentPlayerPosition = 0;
+        }
+        else if(currentPlayerPosition < 0)
+        {
+            currentPlayerPosition = playerPositions.Length - 1;
         }
 
         float movingTimer = 0;
@@ -94,6 +107,7 @@ public class PlayerBase : MonoBehaviour
             yield return null;
         }
 
+        yield return new WaitForSecondsRealtime(0.5f);
         ignoreInputs = false;
     }
 }

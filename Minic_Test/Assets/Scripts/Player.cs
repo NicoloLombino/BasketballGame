@@ -50,7 +50,7 @@ public class Player : PlayerBase
             }              
         }
 
-        sliderValueCursor.localPosition = new Vector2(sliderValueCursor.localPosition.x, throwingPowerSlider.value * 800 - sliderValueCursor.sizeDelta.y/2);
+        sliderValueCursor.localPosition = new Vector2(sliderValueCursor.localPosition.x, throwingPowerSlider.value * gameManager.throwingBallSliderRect.rect.height - sliderValueCursor.sizeDelta.y/2);
     }
 
     /// <summary>

@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fcff56afc50c70459a2c96b27a6c4a8, type: 3}
+  m_Name: UIINfoSO
+  m_EditorClassIdentifier: 
+  m_HorizontalInfor:
+  - m_Name: BasketThrowSlider
+    m_UpInfor: {x: 40, y: 50}
+    m_DownInfor: {x: 60, y: 600}
+    m_AnchorInfor:
+      m_Min: {x: 0, y: 0}
+      m_Max: {x: 0, y: 0}
+  - m_Name: FireBonusSlider
+    m_UpInfor: {x: 50, y: -240}
+    m_DownInfor: {x: 320, y: 85}
+    m_AnchorInfor:
+      m_Min: {x: 0, y: 1}
+      m_Max: {x: 0, y: 1}
+  - m_Name: PlayerImage
+    m_UpInfor: {x: 120, y: 30}
+    m_DownInfor: {x: 160, y: 160}
+    m_AnchorInfor:
+      m_Min: {x: 0, y: 1}
+      m_Max: {x: 0, y: 1}
+  - m_Name: AI Image
+    m_UpInfor: {x: -40, y: -30}
+    m_DownInfor: {x: 160, y: 160}
+    m_AnchorInfor:
+      m_Min: {x: 1, y: 1}
+      m_Max: {x: 1, y: 1}
+  m_VerticalInfor:
+  - m_Name: BasketThrowSlider
+    m_UpInfor: {x: 400, y: 100}
+    m_DownInfor: {x: 60, y: 800}
+    m_AnchorInfor:
+      m_Min: {x: 0, y: 0}
+      m_Max: {x: 0, y: 0}
+  - m_Name: FireBonusSlider
+    m_UpInfor: {x: 50, y: -240}
+    m_DownInfor: {x: 320, y: 85}
+    m_AnchorInfor:
+      m_Min: {x: 0, y: 1}
+      m_Max: {x: 0, y: 1}
+  - m_Name: PlayerImage
+    m_UpInfor: {x: 40, y: -30}
+    m_DownInfor: {x: 160, y: 160}
+    m_AnchorInfor:
+      m_Min: {x: 0, y: 1}
+      m_Max: {x: 0, y: 1}
+  - m_Name: AI Image
+    m_UpInfor: {x: -40, y: -30}
+    m_DownInfor: {x: 160, y: 160}
+    m_AnchorInfor:
+      m_Min: {x: 1, y: 1}
+      m_Max: {x: 1, y: 1}

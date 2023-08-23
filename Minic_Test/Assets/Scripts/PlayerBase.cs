@@ -36,9 +36,9 @@ public class PlayerBase : MonoBehaviour
 
     protected bool doBackboardShot;
     protected int pointsEarned;
+    protected bool makePoints;
 
     internal bool ignoreInputs;
-    protected bool makePoints;
 
     private void Awake()
     {

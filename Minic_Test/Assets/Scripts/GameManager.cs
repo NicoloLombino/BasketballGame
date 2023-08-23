@@ -7,6 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    private const float THROWING_BALL_SLIDER_MOBILE_HEIGHT = 800;
+    private const float THROWING_BALL_SLIDER_MOBILE_POSITION_Y = 150;
+    private const float THROWING_BALL_SLIDER_PC_HEIGHT = 600;
+    private const float THROWING_BALL_SLIDER_PC_POSITION_Y = 100;
+
     public bool isAndroidSetup;
 
     [Header("SaveData")]
@@ -75,11 +80,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject newRecordText;
 
-    [Header("UI 3D")]
+    [Header("Points Text Effect")]
     [SerializeField]
     private PointsEffectText pointsEffectText;
     [SerializeField]
     private GameObject backboardBonusShotPointsUI;
+    [SerializeField]
+    private RectTransform AIPointsUIEffect;
+    [SerializeField]
+    private TextMeshProUGUI AIPointsUIEffectText;
 
     [Header("UI edit texts")]
     [SerializeField]
@@ -102,16 +111,16 @@ public class GameManager : MonoBehaviour
     private int[] pointsToIncreaseShotValuesOnSlider;
     [SerializeField]
     private float shotIndicatorPositionInSliderIncrement;
+    public RectTransform throwingBallSliderRect;
 
     [Header("Values to get points on Throwing Ball Slider, (from 0 to 10)")]
-    public float valueTo3PointsMin;  // P
-    public float valueTo3PointsMax;  // P + x
-    public float valueTo2PointsMin;  // P - y
-    public float valueTo2PointsMax;  // P + x + y
-    public float valueToBackboardAndPointsMin;  // > P + x + y && < B + z
-    public float valueToBackboardAndPointsMax;  // B + z
-    public float valueToHitBasketAndGoOut; // < P - y
-
+    public float valueTo3PointsMin;
+    public float valueTo3PointsMax;
+    public float valueTo2PointsMin;
+    public float valueTo2PointsMax;
+    public float valueToBackboardAndPointsMin;
+    public float valueToBackboardAndPointsMax;
+    public float valueToHitBasketAndGoOut;
 
     internal bool isFireBonusActive;
     internal bool isBackBoardBonusActive;
@@ -123,8 +132,15 @@ public class GameManager : MonoBehaviour
     private int levelOnShotSlider = 0;
     private int nextPointsToIncreaseShotValuesOnSlider;
 
+    private void Awake()
+    {
+        CheckGamePlatformAndEditUI();
+    }
+
     void Start()
     {
+        CheckGamePlatformAndEditUI();
+
         isInGame = true;
         backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
         timer = gameTime;
@@ -154,22 +170,24 @@ public class GameManager : MonoBehaviour
 
     public void SetPositionOfShotPointsOnSlider()
     {
-        perfectShotIndicator.localPosition = new Vector3(perfectShotIndicator.localPosition.x, valueTo3PointsMin * 800 / 10, perfectShotIndicator.localPosition.z);
-        backboardShotIndicator.localPosition = new Vector3(backboardShotIndicator.localPosition.x, valueToBackboardAndPointsMin * 800 / 10, backboardShotIndicator.localPosition.z);
+        perfectShotIndicator.localPosition = new Vector3(perfectShotIndicator.localPosition.x, valueTo3PointsMin * throwingBallSliderRect.rect.height / 10, perfectShotIndicator.localPosition.z);
+        backboardShotIndicator.localPosition = new Vector3(backboardShotIndicator.localPosition.x, valueToBackboardAndPointsMin * throwingBallSliderRect.rect.height / 10, backboardShotIndicator.localPosition.z);
 
-        perfectShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueTo3PointsMax - valueTo3PointsMin) / 10) * 800));
-        backboardShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueToBackboardAndPointsMax - valueToBackboardAndPointsMin) / 10) * 800));
+        perfectShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueTo3PointsMax - valueTo3PointsMin) / 10) * throwingBallSliderRect.rect.height));
+        backboardShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueToBackboardAndPointsMax - valueToBackboardAndPointsMin) / 10) * throwingBallSliderRect.rect.height));
     }
 
     public void AddPlayerPoints(int points, bool isBackboardShot, bool playerHasFireBonusActive)
     {
         // check points to give
         int pointsToGive = points;
+        bool mustBackboardEffectSpawn = false;
 
         if (isBackboardShot && isBackBoardBonusActive)
         {
             pointsToGive += pointsToGiveOnBackboardBonus;
             DisableBackboardBonus();
+            mustBackboardEffectSpawn = true;
         }
         if (playerHasFireBonusActive)
         {
@@ -194,18 +212,20 @@ public class GameManager : MonoBehaviour
             IncreaseShotValuesOnSlider();
         }
 
-        SpawnPointsOnUI(points, pointsToGive, isBackboardShot && isBackBoardBonusActive);
+        SpawnPointsOnUI(points, pointsToGive, mustBackboardEffectSpawn);
     }
 
     public void AddAIPoints(int points, bool isBackboardShot, bool hasFireBonusActive)
     {
         // check points to give
         int pointsToGive = points;
+        bool mustBackboardEffectSpawn = false;
 
         if (isBackboardShot && isBackBoardBonusActive)
         {
             pointsToGive += pointsToGiveOnBackboardBonus;
             DisableBackboardBonus();
+            mustBackboardEffectSpawn = true;
         }
         if (hasFireBonusActive)
         {
@@ -214,6 +234,8 @@ public class GameManager : MonoBehaviour
 
         AIPoints += pointsToGive;
         aiPointsText.text = AIPoints.ToString();
+
+        StartCoroutine(SpawnPointsOnUIForAI(points, pointsToGive, mustBackboardEffectSpawn));
     }
 
     public void DoRandomBackboardBonus()
@@ -297,7 +319,6 @@ public class GameManager : MonoBehaviour
         {
             pointsTextEffect.pointsText.color = new Color(1.0f, 0.64f, 0.0f);  // orange
 
-
             if(isBackboardShotWithBonusActive)
             {
                 GameObject backboardBonusTextEffect = Instantiate(backboardBonusShotPointsUI, basketTransform.position + Vector3.up, Quaternion.identity);
@@ -310,6 +331,40 @@ public class GameManager : MonoBehaviour
         }
 
         pointsTextEffect.pointsText.text = "+ " + totalPoints + " Pts!";
+    }
+
+    private IEnumerator SpawnPointsOnUIForAI(int pointsBase, int totalPoints, bool isBackboardShotWithBonusActive)
+    {
+        AIPointsUIEffect.gameObject.SetActive(true);
+        AIPointsUIEffectText.text = "+ " + totalPoints + " Pts!";
+        Vector2 uiStartPosition = AIPointsUIEffect.anchoredPosition;
+
+        float timer = 0;
+
+        if (pointsBase == 2)
+        {
+            AIPointsUIEffectText.color = new Color(1.0f, 0.64f, 0.0f);  // orange
+
+            if (isBackboardShotWithBonusActive)
+            {
+                AIPointsUIEffect.transform.GetChild(0).gameObject.SetActive(true);
+            }
+        }
+        else // pointsBase == 3 -> Perfect shot
+        {
+            AIPointsUIEffectText.color = Color.green;
+        }
+
+        while (timer < 1f)
+        {
+            timer += Time.deltaTime;
+            AIPointsUIEffect.anchoredPosition += new Vector2(Mathf.Sin(Time.time * 10f) * 0.2f, 0);
+            yield return null;
+        }
+
+        AIPointsUIEffect.anchoredPosition = uiStartPosition;
+        AIPointsUIEffect.transform.GetChild(0).gameObject.SetActive(false);
+        AIPointsUIEffect.gameObject.SetActive(false);
     }
 
     private void EndMatch()
@@ -385,5 +440,24 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
+    }
+
+    /// <summary>
+    /// edit the UI according to the platform
+    /// </summary>
+    private void CheckGamePlatformAndEditUI()
+    {
+        if(isAndroidSetup)
+        {
+            throwingBallSliderRect.sizeDelta = new Vector2(throwingBallSliderRect.sizeDelta.x, THROWING_BALL_SLIDER_MOBILE_HEIGHT);
+            throwingBallSliderRect.anchoredPosition = new Vector3(throwingBallSliderRect.anchoredPosition.x, THROWING_BALL_SLIDER_MOBILE_POSITION_Y);
+        }
+        else
+        {
+            throwingBallSliderRect.sizeDelta = new Vector2(throwingBallSliderRect.sizeDelta.x, THROWING_BALL_SLIDER_PC_HEIGHT);
+            throwingBallSliderRect.anchoredPosition = new Vector2(throwingBallSliderRect.anchoredPosition.x, THROWING_BALL_SLIDER_PC_POSITION_Y);
+        }
+
+        SetPositionOfShotPointsOnSlider();
     }
 }

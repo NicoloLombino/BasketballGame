@@ -84,7 +84,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &2434011776999581205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 428609a05b3cc9a47a85a591ed1d7e57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 1.2
+  lifeTime: 1.5
   pointsText: {fileID: 0}
   upText: {fileID: 0}
   isAnimated: 0
@@ -272,8 +272,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294961664
-  m_fontColor: {r: 0, g: 0.91571236, b: 1, a: 1}
+    rgba: 4294960640
+  m_fontColor: {r: 0, g: 0.9019608, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

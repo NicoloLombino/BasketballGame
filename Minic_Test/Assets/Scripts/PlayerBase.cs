@@ -101,13 +101,13 @@ public class PlayerBase : MonoBehaviour
         while (movingPercent < 1)
         {
             movingTimer += Time.deltaTime;
-            movingPercent = movingTimer / 0.5f;
+            movingPercent = movingTimer / 0.2f;
             transform.position = Vector3.Lerp(startPosition, playerPositions[currentPlayerPosition].position, movingPercent);
             transform.eulerAngles = Vector3.Lerp(startRotation, playerPositions[currentPlayerPosition].eulerAngles, movingPercent);
             yield return null;
         }
 
-        yield return new WaitForSecondsRealtime(0.5f);
+        //yield return new WaitForSecondsRealtime(0.5f);
         ignoreInputs = false;
     }
 }

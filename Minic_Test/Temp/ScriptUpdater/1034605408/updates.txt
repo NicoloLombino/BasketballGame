@@ -1,0 +1,1 @@
+Temp/ScriptUpdater/1034605408\1739018646_EffectController.cs => Assets/Particlecollection_Free samples/Plugins/Effect/Script/EffectController.cs

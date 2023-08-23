@@ -106,7 +106,6 @@ public class Player : PlayerBase
         }
         gameManager.DoRandomBackboardBonus();
 
-        //yield return new WaitForSecondsRealtime(0.1f);
         ResetShot();
     }
 
@@ -122,6 +121,7 @@ public class Player : PlayerBase
         pointsEarned = 0;
         doBackboardShot = false;
         ball.hasMakeSound = false;
+
         if (makePoints)
         {
             MovePlayerToNextPosition(1);

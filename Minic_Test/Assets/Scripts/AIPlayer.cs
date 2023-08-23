@@ -262,12 +262,12 @@ public class AIPlayer : PlayerBase
             if (fireBonusValue >= gameManager.maxFireBonusTime)
             {
                 fireBonusValue = gameManager.maxFireBonusTime;
-                StartCoroutine(ActiveFireBonus());
+                StartCoroutine(StartFireBonus());
             }
         }
     }
 
-    private IEnumerator ActiveFireBonus()
+    private IEnumerator StartFireBonus()
     {
         isFireBonusActive = true;
         fireOnBallParticles.SetActive(true);

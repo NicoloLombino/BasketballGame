@@ -9,11 +9,19 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private SaveData saveDataScriptableObject;
     [SerializeField]
+    private SceneLoader sceneLoader;
+
+    [Header("UI components")]
+    [SerializeField]
     private Slider AISlider;
     [SerializeField]
     private TextMeshProUGUI goldText;
     [SerializeField]
     private TextMeshProUGUI maxScoreText;
+    [SerializeField]
+    private RectTransform loadingImageBase;
+    [SerializeField]
+    private Image loadingImage;
 
     void Start()
     {
@@ -36,5 +44,22 @@ public class MenuManager : MonoBehaviour
     public void SetBallMaterial(int materialIndex)
     {
         saveDataScriptableObject.SetBallMaterial(materialIndex);
+    }
+
+    public void StartLoadingScene()
+    {
+        StartCoroutine(LoadingScene());
+    }
+
+    private IEnumerator LoadingScene()
+    {
+        while(loadingImage.fillAmount < 1)
+        {
+            loadingImageBase.localEulerAngles += Vector3.forward * 500 * Time.deltaTime;
+            loadingImage.fillAmount += Time.deltaTime / 3;
+            yield return null;
+        }
+
+        sceneLoader.GoToGameScene();
     }
 }

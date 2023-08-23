@@ -90,6 +90,11 @@ public class Ball : MonoBehaviour
         {
             audioSource.clip = null;
         }
+
+        if(playerOwner.ignoreInputs)
+        {
+            transform.eulerAngles += new Vector3(0, 150, -300) * Time.deltaTime;
+        }
     }
 
     /// <summary>

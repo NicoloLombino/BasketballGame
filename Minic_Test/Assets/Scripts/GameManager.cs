@@ -66,7 +66,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI rewardText;
     [SerializeField]
-    private GameObject newRecordText;
+    private GameObject newRecordText; 
+    [SerializeField]
+    private TextMeshProUGUI countdownText;
 
     [Header("Text Effect")]
     [SerializeField]
@@ -112,10 +114,11 @@ public class GameManager : MonoBehaviour
     public float valueToBackboardAndPointsMax;
     public float valueToHitBasketAndGoOut;
 
+    internal bool isInGame;
+
     internal bool isFireBonusActive;
     internal bool isBackBoardBonusActive;
     internal int pointsToGiveOnBackboardBonus;
-    internal bool isInGame;
 
     private int playerPoints;
     private int AIPoints;
@@ -134,11 +137,11 @@ public class GameManager : MonoBehaviour
     {
         CheckGamePlatformAndEditUI();
 
-        isInGame = true;
         backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
         timer = gameTime;
         nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
         SetPositionOfShotPointsOnSlider();
+        StartCoroutine(CountDown(1, gameTime));
     }
 
     void Update()
@@ -166,6 +169,9 @@ public class GameManager : MonoBehaviour
 
     public void AddPlayerPoints(int points, bool isBackboardShot, bool playerHasFireBonusActive)
     {
+        if (!isInGame)
+            return;
+
         // check points to give
         int pointsToGive = points;
         bool mustBackboardEffectSpawn = false;
@@ -194,6 +200,9 @@ public class GameManager : MonoBehaviour
 
     public void AddAIPoints(int points, bool isBackboardShot, bool hasFireBonusActive)
     {
+        if (!isInGame)
+            return;
+
         // check points to give
         int pointsToGive = points;
         bool mustBackboardEffectSpawn = false;
@@ -321,9 +330,10 @@ public class GameManager : MonoBehaviour
 
     private void EndMatch()
     {
-        if(CheckIfGameEnd())
+        isInGame = false;
+
+        if (CheckIfGameEnd())
         {
-            isInGame = false;
             CheckWinner();
             CheckRecordScore();
             CheckReward();
@@ -331,9 +341,33 @@ public class GameManager : MonoBehaviour
         else
         {
             // draw
-            timer = timeToGiveWhenDraw;
+            timerImagePlayer.gameObject.GetComponent<Animator>().enabled = true;
+            timerImageAI.gameObject.GetComponent<Animator>().enabled = true;
             Instantiate(drawTextPrefab, basketTransform.position + Vector3.up, Quaternion.identity);
+            StartCoroutine(CountDown(2, timeToGiveWhenDraw));
+            gameTime = timeToGiveWhenDraw;
         }
+    }
+
+    private IEnumerator CountDown(float timeToWaitBeforeStart ,float matchTimer)
+    {
+        yield return new WaitForSecondsRealtime(timeToWaitBeforeStart);
+        //countdownText.gameObject.SetActive(true);
+        countdownText.transform.parent.gameObject.SetActive(true);
+
+        int countdownValue = 3;
+
+        while (countdownValue > 0)
+        {
+            countdownText.text = countdownValue.ToString();
+            yield return new WaitForSecondsRealtime(1);
+            countdownValue--;
+        }
+
+        countdownText.transform.parent.gameObject.SetActive(false);
+        //countdownText.gameObject.SetActive(false);
+        isInGame = true;
+        timer = matchTimer;
     }
 
     private void CheckWinner()

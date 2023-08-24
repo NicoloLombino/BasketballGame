@@ -9,15 +9,15 @@ C:\Program Files\Unity\Hub\Editor\2021.3.11f1\Editor\Unity.exe
 -batchMode
 -noUpm
 -name
-AssetImportWorker3
+AssetImportWorker10
 -projectPath
-C:/PROGETTI MOBILE UNITY/Minic_Test/Minic_Test
+C:/Users/Nicolò/Desktop/Minic_Test/Minic_Test
 -logFile
-Logs/AssetImportWorker3.log
+Logs/AssetImportWorker10.log
 -srvPort
-52960
-Successfully changed project path to: C:/PROGETTI MOBILE UNITY/Minic_Test/Minic_Test
-C:/PROGETTI MOBILE UNITY/Minic_Test/Minic_Test
+49287
+Successfully changed project path to: C:/Users/Nicolò/Desktop/Minic_Test/Minic_Test
+C:/Users/Nicolò/Desktop/Minic_Test/Minic_Test
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
     "memorysetup-bucket-allocator-granularity=16"
     "memorysetup-bucket-allocator-bucket-count=8"
@@ -47,11 +47,11 @@ C:/PROGETTI MOBILE UNITY/Minic_Test/Minic_Test
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 205.87 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 107.93 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.3.11f1 (0a5ca18544bf)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path C:/PROGETTI MOBILE UNITY/Minic_Test/Minic_Test/Assets
+[Subsystems] Discovering subsystems at path C:/Users/Nicolò/Desktop/Minic_Test/Minic_Test/Assets
 GfxDevice: creating device client; threaded=0; jobified=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
@@ -63,92 +63,92 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56252
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56460
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.009029 seconds.
+Registered in 0.005207 seconds.
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
-Refreshing native plugins compatible for Editor in 239.79 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 131.97 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.094 seconds
+- Completed reload, in  0.921 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1094ms)
-		BeginReloadAssembly (85ms)
+	ReloadAssembly (922ms)
+		BeginReloadAssembly (100ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (866ms)
-			LoadAssemblies (85ms)
+		EndReloadAssembly (686ms)
+			LoadAssemblies (100ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (156ms)
+			SetupTypeCache (166ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (43ms)
-			SetupLoadedEditorAssemblies (568ms)
+			RebuildScriptCaches (32ms)
+			SetupLoadedEditorAssemblies (424ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (132ms)
+				InitializePlatformSupportModulesInManaged (75ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (240ms)
+				RefreshPlugins (132ms)
 				BeforeProcessingInitializeOnLoad (2ms)
-				ProcessInitializeOnLoadAttributes (143ms)
-				ProcessInitializeOnLoadMethodAttributes (49ms)
+				ProcessInitializeOnLoadAttributes (133ms)
+				ProcessInitializeOnLoadMethodAttributes (81ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.005803 seconds.
+Registered in 0.005319 seconds.
 Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory doesn't match image C:\PROGETTI MOBILE UNITY\Minic_Test\Minic_Test\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
-Symbol file LoadedFromMemory doesn't match image C:\PROGETTI MOBILE UNITY\Minic_Test\Minic_Test\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\Nicolò\Desktop\Minic_Test\Minic_Test\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image C:\Users\Nicolò\Desktop\Minic_Test\Minic_Test\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
-Refreshing native plugins compatible for Editor in 1.10 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 0.89 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.826 seconds
+- Completed reload, in  1.674 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1827ms)
-		BeginReloadAssembly (356ms)
+	ReloadAssembly (1675ms)
+		BeginReloadAssembly (267ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (10ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (145ms)
-		EndReloadAssembly (1314ms)
-			LoadAssemblies (228ms)
+			CreateAndSetChildDomain (129ms)
+		EndReloadAssembly (1230ms)
+			LoadAssemblies (130ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (462ms)
+			SetupTypeCache (423ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (67ms)
-			SetupLoadedEditorAssemblies (557ms)
+			RebuildScriptCaches (87ms)
+			SetupLoadedEditorAssemblies (542ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (19ms)
-				SetLoadedEditorAssemblies (1ms)
+				InitializePlatformSupportModulesInManaged (18ms)
+				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (104ms)
-				ProcessInitializeOnLoadAttributes (384ms)
-				ProcessInitializeOnLoadMethodAttributes (38ms)
+				BeforeProcessingInitializeOnLoad (110ms)
+				ProcessInitializeOnLoadAttributes (361ms)
+				ProcessInitializeOnLoadMethodAttributes (43ms)
 				AfterProcessingInitializeOnLoad (9ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (13ms)
+			AwakeInstancesAfterBackupRestoration (11ms)
 Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.15 seconds
-Refreshing native plugins compatible for Editor in 1.39 ms, found 5 plugins.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.07 seconds
+Refreshing native plugins compatible for Editor in 1.03 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 3578 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 30 unused Assets / (150.4 KB). Loaded Objects now: 4046.
-Memory consumption went from 203.2 MB to 203.0 MB.
-Total: 7.339000 ms (FindLiveObjects: 0.569500 ms CreateObjectMapping: 0.268400 ms MarkObjects: 6.287600 ms  DeleteObjects: 0.195900 ms)
+Unloading 30 unused Assets / (151.3 KB). Loaded Objects now: 4041.
+Memory consumption went from 203.0 MB to 202.8 MB.
+Total: 4.885500 ms (FindLiveObjects: 0.414600 ms CreateObjectMapping: 0.191600 ms MarkObjects: 4.106600 ms  DeleteObjects: 0.171500 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
@@ -162,34 +162,34 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 693753.331622 seconds.
-  path: Assets/My Images/texture blue 3.jpg
-  artifactKey: Guid(a536620c6f2fdf54b977001c0904774f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/My Images/texture blue 3.jpg using Guid(a536620c6f2fdf54b977001c0904774f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0608abed8d615347af21a81fe987bedf') in 0.219744 seconds 
+  Time since last request: 714425.699487 seconds.
+  path: Assets/Dark_Brown_GUI_kit/background/mini/mini_dark_background.png
+  artifactKey: Guid(f941ad5a526b00d468ded93fce6f376a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Dark_Brown_GUI_kit/background/mini/mini_dark_background.png using Guid(f941ad5a526b00d468ded93fce6f376a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '71eb75642bcea553e0aab21f6938d72e') in 0.166821 seconds 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000044 seconds.
-  path: Assets/My Images/Texture blue-purple.jpg
-  artifactKey: Guid(3af4449ff741b814e84a04cf52e76799) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/My Images/Texture blue-purple.jpg using Guid(3af4449ff741b814e84a04cf52e76799) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a7916076c20ed66e1c26d9d42cb18d25') in 0.129627 seconds 
+  Time since last request: 0.000043 seconds.
+  path: Assets/EffectExamples/Magic Effects/Textures/DustPuffSmall.png
+  artifactKey: Guid(a547fca3b7d596c4d9bcb07a747ec5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/EffectExamples/Magic Effects/Textures/DustPuffSmall.png using Guid(a547fca3b7d596c4d9bcb07a747ec5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4e626292a3a67c7eb6ff8c4a8d01e011') in 0.037598 seconds 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000055 seconds.
-  path: Assets/My Images/texture red 1.jpg
-  artifactKey: Guid(71f91d706f44c1e4087e8b7cc825c209) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/My Images/texture red 1.jpg using Guid(71f91d706f44c1e4087e8b7cc825c209) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2cc7061b51475980301e6a3bdac0ac53') in 0.071443 seconds 
+  Time since last request: 0.000024 seconds.
+  path: Assets/Puzzle stage & settings GUI Pack/Image_purple/Square button/sound1.png
+  artifactKey: Guid(efb2f69b3eb9b66448e156fb6849d283) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Puzzle stage & settings GUI Pack/Image_purple/Square button/sound1.png using Guid(efb2f69b3eb9b66448e156fb6849d283) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '41ab889baadd20d9c278e8524d6ab004') in 0.160131 seconds 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000047 seconds.
-  path: Assets/My Images/texture blue2.jpg
-  artifactKey: Guid(90f523f458df6c64ba877acb01afeae2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/My Images/texture blue2.jpg using Guid(90f523f458df6c64ba877acb01afeae2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'acb9c6bfaff2b1218a9b6612f85dcdb3') in 0.023489 seconds 
+  Time since last request: 0.000019 seconds.
+  path: Assets/Puzzle stage & settings GUI Pack/Image_pink/s_b/sound1.png
+  artifactKey: Guid(c608052aafc86984ca82923076934258) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Puzzle stage & settings GUI Pack/Image_pink/s_b/sound1.png using Guid(c608052aafc86984ca82923076934258) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '24712c0b5559976ccbb2374c4a90344f') in 0.066312 seconds 
 ========================================================================
 Received Import Request.
-  Time since last request: 55.501892 seconds.
-  path: Assets/My Images/texture blue 6.jpg
-  artifactKey: Guid(8c9353d756c63014681437fa486f7090) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/My Images/texture blue 6.jpg using Guid(8c9353d756c63014681437fa486f7090) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5963c9caba25587066a080d218508f77') in 0.109562 seconds 
+  Time since last request: 0.000020 seconds.
+  path: Assets/Dark_Brown_GUI_kit/bar/mini/mini_darkness_bar1.png
+  artifactKey: Guid(e466468e92ffc5549bb6f8ee2198183f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Dark_Brown_GUI_kit/bar/mini/mini_darkness_bar1.png using Guid(e466468e92ffc5549bb6f8ee2198183f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4f948bfa1d1ef49743a6244d67b794ed') in 0.026473 seconds 
 Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
 AssetImportWorker is now disconnected from the server
 Process exiting

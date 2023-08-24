@@ -31,6 +31,8 @@ public class PlayerBase : MonoBehaviour
     protected GameObject fireOnBallParticles;
     [SerializeField]
     protected GameObject fireBonusUI;
+    [SerializeField]
+    private AudioClip fireBonusEndClip;
     protected bool isFireBonusActive;
     protected float fireBonusValue;
 
@@ -95,6 +97,7 @@ public class PlayerBase : MonoBehaviour
     protected void SetThrowValues(int pointsToGive, bool isBackboardShot)
     {
         pointsEarned = pointsToGive;
+        Debug.Log("POINTS " + pointsEarned);
         doBackboardShot = isBackboardShot;
     }
 
@@ -146,7 +149,6 @@ public class PlayerBase : MonoBehaviour
         if (throwPower < basketboard)
         {
             // NO, no points
-            Debug.Log("AI --> GO OUT");
             DisableFireBonus();
             ball.hasMakeSound = true;
             ballThrowingAnimationIndex = 0;
@@ -154,7 +156,6 @@ public class PlayerBase : MonoBehaviour
         else if (throwPower >= basketboard && throwPower < twoPointsLess)
         {
             // basket board, no points
-            Debug.Log("AI --> HIT BASKET");
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(0, 0, hasFireBonus);
             DisableFireBonus();
             ballThrowingAnimationIndex = 1;
@@ -162,7 +163,6 @@ public class PlayerBase : MonoBehaviour
         else if (throwPower >= twoPointsLess && throwPower < perfectShotValueMin)
         {
             // enter in basket --> 2 points
-            Debug.Log("AI --> ENTER 2 POINTS LESS");
             points = 2;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
             makePoints = true;
@@ -171,7 +171,6 @@ public class PlayerBase : MonoBehaviour
         else if (throwPower >= perfectShotValueMin && throwPower <= perfectShotValueMax)
         {
             // enter in basket --> 3 points
-            Debug.Log("AI --> ENTER 3 POINTS");
             points = 3;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 3, hasFireBonus);
             makePoints = true;
@@ -180,7 +179,6 @@ public class PlayerBase : MonoBehaviour
         else if (throwPower > perfectShotValueMax && throwPower <= twoPointsMore)
         {
             // enter in basket --> 2 points
-            Debug.Log("AI --> ENTER 2 POINTS MORE");
             points = 2;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
             makePoints = true;
@@ -189,7 +187,6 @@ public class PlayerBase : MonoBehaviour
         else if (throwPower > twoPointsMore && throwPower < backboardShotValue)
         {
             // hit backboard and go out --> NO points
-            Debug.Log("AI --> HIT BACKBOARD AND GO OUT LESS");
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
             DisableFireBonus();
             ballThrowingAnimationIndex = 4;
@@ -197,7 +194,6 @@ public class PlayerBase : MonoBehaviour
         else if (throwPower >= backboardShotValue && throwPower <= backboardMore)
         {
             // hit backboard and enter in basket --> 2 points
-            Debug.Log("AI --> HIT BACKBOARD AND ENTER 2 POINTS");
             points = 2;
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(3, 2, hasFireBonus);
             isBackboardShot = true;
@@ -206,9 +202,9 @@ public class PlayerBase : MonoBehaviour
         }
         else
         {
-            // hit backboard and go out
-            Debug.Log("AI --> HIT BACKBOARD AND GO OUT MORE");
+            // hit backboard and go out --> NO points
             ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
+            points = 0;
             DisableFireBonus();
             ballThrowingAnimationIndex = 6;
         }
@@ -244,6 +240,9 @@ public class PlayerBase : MonoBehaviour
 
     protected virtual void CheckFireBonus(int points)
     {
+        if (points == 0)
+            return;
+
         if (!isFireBonusActive)
         {
             fireBonusValue += points == 2 ? 2.5f : 4f;
@@ -278,6 +277,11 @@ public class PlayerBase : MonoBehaviour
 
     protected virtual void DisableFireBonus()
     {
+        if (isFireBonusActive)
+        {
+            audioSource.PlayOneShot(fireBonusEndClip);
+        }
+
         fireBonusValue = 0;
         isFireBonusActive = false;
         fireOnBallParticles.SetActive(false);

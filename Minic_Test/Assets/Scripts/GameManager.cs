@@ -8,9 +8,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private const float THROWING_BALL_SLIDER_MOBILE_HEIGHT = 800;
-    private const float THROWING_BALL_SLIDER_MOBILE_POSITION_Y = 150;
+    private const float THROWING_BALL_SLIDER_MOBILE_POSITION_Y = 200;
     private const float THROWING_BALL_SLIDER_PC_HEIGHT = 600;
-    private const float THROWING_BALL_SLIDER_PC_POSITION_Y = 100;
+    private const float THROWING_BALL_SLIDER_PC_POSITION_Y = 150;
 
     public bool isAndroidSetup;
 
@@ -18,14 +18,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private SaveData saveDataScriptableObject;
 
-    [Header("Game Manager")]
+    [Header("Timer Manager")]
     [SerializeField]
     private float gameTime;
+    [SerializeField]
+    private float timeToGiveWhenDraw;
     private float timer;
-    [SerializeField]
-    private int playerPoints;
-    [SerializeField]
-    private int AIPoints;
 
     [Header("Random Backboard Bonus")]
     [SerializeField]
@@ -41,16 +39,6 @@ public class GameManager : MonoBehaviour
     private int percentageToActiveBackboardBonus5;
 
     [Header("Fire Bonus")]
-    [SerializeField]
-    private Slider fireBonusSlider;
-    [SerializeField]
-    private Image fireImageBackground;
-    [SerializeField]
-    private GameObject fireOnBallParticles;
-    [SerializeField]
-    private Color fireImageBackgroundColorWhenActive;
-    [SerializeField]
-    private GameObject fireBonusUI;
     public float maxFireBonusTime;
     public float fireBonusDecreasingSpeedDivisor;
 
@@ -80,7 +68,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject newRecordText;
 
-    [Header("Points Text Effect")]
+    [Header("Text Effect")]
     [SerializeField]
     private PointsEffectText pointsEffectText;
     [SerializeField]
@@ -89,6 +77,8 @@ public class GameManager : MonoBehaviour
     private RectTransform AIPointsUIEffect;
     [SerializeField]
     private TextMeshProUGUI AIPointsUIEffectText;
+    [SerializeField]
+    private GameObject drawTextPrefab;
 
     [Header("UI edit texts")]
     [SerializeField]
@@ -127,6 +117,9 @@ public class GameManager : MonoBehaviour
     internal int pointsToGiveOnBackboardBonus;
     internal bool isInGame;
 
+    private int playerPoints;
+    private int AIPoints;
+
     private PlayerBase winner;
     private int backBoardBonusTurnDuration;
     private int levelOnShotSlider = 0;
@@ -145,7 +138,6 @@ public class GameManager : MonoBehaviour
         backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
         timer = gameTime;
         nextPointsToIncreaseShotValuesOnSlider = pointsToIncreaseShotValuesOnSlider[levelOnShotSlider];
-        fireBonusSlider.maxValue = maxFireBonusTime;
         SetPositionOfShotPointsOnSlider();
     }
 
@@ -160,11 +152,6 @@ public class GameManager : MonoBehaviour
             {
                 EndMatch();
             }
-        }
-
-        if (!isFireBonusActive)
-        {
-            fireBonusSlider.value -= Time.deltaTime / fireBonusDecreasingSpeedDivisor;
         }
     }
 
@@ -196,16 +183,6 @@ public class GameManager : MonoBehaviour
 
         playerPoints += pointsToGive;
         playerPointsText.text = playerPoints.ToString();
-        if(!isFireBonusActive) 
-        {
-            fireBonusSlider.value += points == 2 ? 2.5f : 4f;
-
-            if (fireBonusSlider.value >= maxFireBonusTime)
-            {
-                fireBonusSlider.value = maxFireBonusTime;
-                StartCoroutine(ActiveFireBonus());
-            }
-        }
 
         if(playerPoints >= nextPointsToIncreaseShotValuesOnSlider)
         {
@@ -282,36 +259,6 @@ public class GameManager : MonoBehaviour
         pointsToGiveOnBackboardBonus = 0;
     }
 
-    private IEnumerator ActiveFireBonus()
-    {
-        isFireBonusActive = true;
-        fireImageBackground.color = fireImageBackgroundColorWhenActive;
-        fireOnBallParticles.SetActive(true);
-        fireBonusUI.SetActive(true);
-
-        while (fireBonusSlider.value > 0)
-        {
-            fireBonusSlider.value -= Time.deltaTime;
-            yield return null;
-        }
-
-        while (player.ignoreInputs)
-        {
-            yield return null;
-        }
-
-        DisableFireBonus();
-    }
-
-    public void DisableFireBonus()
-    {
-        fireBonusSlider.value = 0;
-        isFireBonusActive = false;
-        fireImageBackground.color = Color.white;
-        fireOnBallParticles.SetActive(false);
-        fireBonusUI.SetActive(false);
-    }
-
     private void SpawnPointsOnUI(int pointsBase, int totalPoints, bool isBackboardShotWithBonusActive)
     {
         PointsEffectText pointsTextEffect = Instantiate(pointsEffectText, basketTransform.position + Vector3.up, Quaternion.identity);
@@ -367,27 +314,33 @@ public class GameManager : MonoBehaviour
         AIPointsUIEffect.gameObject.SetActive(false);
     }
 
+    private bool CheckIfGameEnd()
+    {
+        return playerPoints != AIPoints ? true : false;
+    }
+
     private void EndMatch()
     {
-        isInGame = false;
-        CheckWinner();
-        CheckRecordScore();
-        CheckReward();
+        if(CheckIfGameEnd())
+        {
+            isInGame = false;
+            CheckWinner();
+            CheckRecordScore();
+            CheckReward();
+        }
+        else
+        {
+            // draw
+            timer = timeToGiveWhenDraw;
+            Instantiate(drawTextPrefab, basketTransform.position + Vector3.up, Quaternion.identity);
+        }
     }
 
     private void CheckWinner()
     {
         endUI.SetActive(true);
-        if (playerPoints != AIPoints)
-        {
-            endUIText.text = playerPoints > AIPoints ? winText : loseText;
-            winner = playerPoints > AIPoints ? player : AI;
-        }
-        else
-        {
-            endUIText.text = drawText;
-            winner = null;
-        }
+        endUIText.text = playerPoints > AIPoints ? winText : loseText;
+        winner = playerPoints > AIPoints ? player : AI;
     }
 
     private void CheckReward()

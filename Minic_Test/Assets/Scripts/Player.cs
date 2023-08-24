@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Player : PlayerBase
 {
+    private const float PERCENTAGE_MAX_OF_SCREEN_HEIGHT_FOR_SLIDER = 50;
+    private const float PERCENTAGE_MIN_OF_POWER_SLIDER_TO_THWOW_BALL = 0.1f;
+
     [SerializeField]
     private GameObject myCamera;
 
@@ -19,13 +22,21 @@ public class Player : PlayerBase
     private RectTransform sliderValueCursor;
 
     [Header("Mobile inputs components")]
-    Touch touch;
-    Vector3 inputInitPosition;
-    Vector2 maxPosY;
+    private Touch touch;
+    private Vector3 inputInitPosition;
+    private Vector2 maxPosY;
 
     [Header("PC inputs components")]
-    Vector3 mouseStartPosition;
+    private Vector3 mouseStartPosition;
     private bool mouseMovementStarted;
+
+    [Header("Player Fire Bonus Components")]
+    [SerializeField]
+    private Slider fireBonusSlider;
+    [SerializeField]
+    private Image fireImageBackground;
+    [SerializeField]
+    private Color fireImageBackgroundColorWhenActive;
 
     private float swipingTimer;
 
@@ -33,7 +44,11 @@ public class Player : PlayerBase
     private float pixelMaxPerc;
     private float pixelMaxY;
 
-
+    protected override void Start()
+    {
+        base.Start();
+        fireBonusSlider.maxValue = gameManager.maxFireBonusTime;
+    }
     protected override void Update()
     {
         base.Update();
@@ -50,7 +65,9 @@ public class Player : PlayerBase
             }              
         }
 
-        sliderValueCursor.localPosition = new Vector2(sliderValueCursor.localPosition.x, throwingPowerSlider.value * gameManager.throwingBallSliderRect.rect.height - sliderValueCursor.sizeDelta.y/2);
+        SetPositionOfSliderPowerIndicator();
+
+        fireBonusSlider.value = fireBonusValue;
     }
 
     /// <summary>
@@ -85,7 +102,7 @@ public class Player : PlayerBase
             throwingTimer += Time.deltaTime;
             throwingPercent = throwingTimer / throwingDuration;
             ball.transform.position = Vector3.Lerp(throwStartPosition.position, throwEndPosition.position, throwingPercent)
-                + Vector3.up * 5 * Mathf.Sin(throwingPercent * 3.14f);
+                + Vector3.up * 5 * Mathf.Sin(throwingPercent * Mathf.PI);
             yield return null;
         }
 
@@ -96,7 +113,7 @@ public class Player : PlayerBase
             throwingTimer += Time.deltaTime;
             throwingPercent2 = throwingTimer / (throwingDuration / 2);
             ball.transform.position = Vector3.Lerp(throwEndPosition.position, throwEndPositionChild.position, throwingPercent2)
-                + transform.up * 0.75f * Mathf.Sin(throwingPercent2 * 3.14f);
+                + transform.up * 0.75f * Mathf.Sin(throwingPercent2 * Mathf.PI);
             yield return null;
         }
 
@@ -106,134 +123,160 @@ public class Player : PlayerBase
         }
         gameManager.DoRandomBackboardBonus();
 
-        ResetShot();
+        ResetShot(1);
     }
 
-    private void ResetShot()
+    protected override void ResetShot(int directionOfMovement)
     {
-        ball.transform.position = dribblePosition.position + Vector3.up * 0.7f;
-        isThrowingBall = false;
         touch.phase = TouchPhase.Ended;
         swipingTimer = 0;
         inputInitPosition = Vector3.zero;
-        throwingTimer = 0;
         throwingPowerSlider.value = 0;
-        pointsEarned = 0;
-        doBackboardShot = false;
-        ball.hasMakeSound = false;
 
-        if (makePoints)
-        {
-            MovePlayerToNextPosition(1);
-            makePoints = false;
-        }
-        else
-        {
-            ignoreInputs = false;
-        }
+        base.ResetShot(directionOfMovement);
     }
 
-    private void CheckThrowingResult(float throwPower, bool hasFireBonus)
+    protected override void CheckFireBonus(int points)
     {
-        float basketboard = gameManager.valueToHitBasketAndGoOut / 10; // 0 points
-        float twoPointsLess = gameManager.valueTo2PointsMin / 10; // 2 points
-        float perfectShotValueMin = gameManager.valueTo3PointsMin / 10; // 3 points
-        float perfectShotValueMax = gameManager.valueTo3PointsMax / 10; // 3 points
-        float twoPointsMore = gameManager.valueTo2PointsMax / 10; // hit the backboard left or right
-        float backboardShotValue = gameManager.valueToBackboardAndPointsMin / 10; // 2 points backboard
-        float backboardMore = gameManager.valueToBackboardAndPointsMax / 10; // 2 points backboard
+        base.CheckFireBonus(points);
 
-        int ballThrowingAnimationIndex;
-
-        if (throwPower < basketboard)
+        if(isFireBonusActive)
         {
-            // NO, no points
-            Debug.Log("GO OUT");
-            gameManager.DisableFireBonus();
-            ball.hasMakeSound = true;
-            ballThrowingAnimationIndex = 0;
-
+            fireImageBackground.color = fireImageBackgroundColorWhenActive;
         }
-        else if (throwPower >= basketboard && throwPower < twoPointsLess)
-        {
-            // basket board, no points
-            Debug.Log("HIT BASKET");
-            gameManager.DisableFireBonus();
-            ball.SetAudioClipToPlayAndParticlesToUse(0, 0, hasFireBonus);
-            ballThrowingAnimationIndex = 1;
-
-        }
-        else if (throwPower >= twoPointsLess && throwPower < perfectShotValueMin)
-        {
-            // enter in basket --> 2 points
-            Debug.Log("ENTER 2 POINTS LESS");
-            //gameManager.AddPlayerPoints(2, false, hasFireBonus);
-            SetThrowValues(2, false);
-            makePoints = true;
-            ball.SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
-            ballThrowingAnimationIndex = 2;
-
-        }
-        else if (throwPower >= perfectShotValueMin && throwPower <= perfectShotValueMax)
-        {
-            // enter in basket --> 3 points
-            Debug.Log("ENTER 3 POINTS");
-            //gameManager.AddPlayerPoints(3, false, hasFireBonus);
-            SetThrowValues(3, false);
-            makePoints = true;
-            ball.SetAudioClipToPlayAndParticlesToUse(1, 3, hasFireBonus);
-            ballThrowingAnimationIndex = 3;
-
-        }
-        else if (throwPower > perfectShotValueMax && throwPower <= twoPointsMore)
-        {
-            // enter in basket --> 2 points
-            Debug.Log("ENTER 2 POINTS MORE");
-            //gameManager.AddPlayerPoints(2, false, hasFireBonus);
-            SetThrowValues(2, false);
-            makePoints = true;
-            ball.SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
-            ballThrowingAnimationIndex = 2;
-
-        }
-        else if (throwPower > twoPointsMore && throwPower < backboardShotValue)
-        {
-            // hit backboard and go out --> NO points
-            Debug.Log("HIT BACKBOARD AND GO OUT LESS");
-            gameManager.DisableFireBonus();
-            ball.SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
-            ballThrowingAnimationIndex = 4;
-
-        }
-        else if (throwPower >= backboardShotValue && throwPower <= backboardMore)
-        {
-            // hit backboard and enter in basket --> 2 points
-            Debug.Log("HIT BACKBOARD AND ENTER 2 POINTS");
-            //gameManager.AddPlayerPoints(2, true, hasFireBonus);
-            SetThrowValues(2, true);
-            makePoints = true;
-            ball.SetAudioClipToPlayAndParticlesToUse(3, 2, hasFireBonus);
-            ballThrowingAnimationIndex = 5;
-
-        }
-        else
-        {
-            // hit backboard and go out
-            Debug.Log("HIT BACKBOARD AND GO OUT MORE");
-            gameManager.DisableFireBonus();
-            ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
-            ballThrowingAnimationIndex = 6;
-
-        }
-
-        SetBallAnimationPositionsOnThrowing(
-            ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex],
-            ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex].GetChild(0));
     }
-
-    public void HandleEndGame()
+    protected override void DisableFireBonus()
     {
-        ignoreInputs = true;
+        base.DisableFireBonus();
+        fireImageBackground.color = Color.white;
+    }
+    //protected override void ResetShot()
+    //{
+    //    ball.transform.position = dribblePosition.position + Vector3.up * 0.7f;
+    //    isThrowingBall = false;
+    //    touch.phase = TouchPhase.Ended;
+    //    swipingTimer = 0;
+    //    inputInitPosition = Vector3.zero;
+    //    throwingTimer = 0;
+    //    throwingPowerSlider.value = 0;
+    //    pointsEarned = 0;
+    //    doBackboardShot = false;
+    //    ball.hasMakeSound = false;
+
+    //    if (makePoints)
+    //    {
+    //        MovePlayerToNextPosition(1);
+    //        makePoints = false;
+    //    }
+    //    else
+    //    {
+    //        ignoreInputs = false;
+    //    }
+    //}
+
+    //private void CheckThrowingResult(float throwPower, bool hasFireBonus)
+    //{
+    //    float basketboard = gameManager.valueToHitBasketAndGoOut / 10; // 0 points
+    //    float twoPointsLess = gameManager.valueTo2PointsMin / 10; // 2 points
+    //    float perfectShotValueMin = gameManager.valueTo3PointsMin / 10; // 3 points
+    //    float perfectShotValueMax = gameManager.valueTo3PointsMax / 10; // 3 points
+    //    float twoPointsMore = gameManager.valueTo2PointsMax / 10; // hit the backboard left or right
+    //    float backboardShotValue = gameManager.valueToBackboardAndPointsMin / 10; // 2 points backboard
+    //    float backboardMore = gameManager.valueToBackboardAndPointsMax / 10; // 2 points backboard
+
+    //    int ballThrowingAnimationIndex;
+
+    //    if (throwPower < basketboard)
+    //    {
+    //        // NO, no points
+    //        Debug.Log("GO OUT");
+    //        gameManager.DisableFireBonus();
+    //        ball.hasMakeSound = true;
+    //        ballThrowingAnimationIndex = 0;
+
+    //    }
+    //    else if (throwPower >= basketboard && throwPower < twoPointsLess)
+    //    {
+    //        // basket board, no points
+    //        Debug.Log("HIT BASKET");
+    //        gameManager.DisableFireBonus();
+    //        ball.SetAudioClipToPlayAndParticlesToUse(0, 0, hasFireBonus);
+    //        ballThrowingAnimationIndex = 1;
+
+    //    }
+    //    else if (throwPower >= twoPointsLess && throwPower < perfectShotValueMin)
+    //    {
+    //        // enter in basket --> 2 points
+    //        Debug.Log("ENTER 2 POINTS LESS");
+    //        //gameManager.AddPlayerPoints(2, false, hasFireBonus);
+    //        SetThrowValues(2, false);
+    //        makePoints = true;
+    //        ball.SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
+    //        ballThrowingAnimationIndex = 2;
+
+    //    }
+    //    else if (throwPower >= perfectShotValueMin && throwPower <= perfectShotValueMax)
+    //    {
+    //        // enter in basket --> 3 points
+    //        Debug.Log("ENTER 3 POINTS");
+    //        //gameManager.AddPlayerPoints(3, false, hasFireBonus);
+    //        SetThrowValues(3, false);
+    //        makePoints = true;
+    //        ball.SetAudioClipToPlayAndParticlesToUse(1, 3, hasFireBonus);
+    //        ballThrowingAnimationIndex = 3;
+
+    //    }
+    //    else if (throwPower > perfectShotValueMax && throwPower <= twoPointsMore)
+    //    {
+    //        // enter in basket --> 2 points
+    //        Debug.Log("ENTER 2 POINTS MORE");
+    //        //gameManager.AddPlayerPoints(2, false, hasFireBonus);
+    //        SetThrowValues(2, false);
+    //        makePoints = true;
+    //        ball.SetAudioClipToPlayAndParticlesToUse(1, 2, hasFireBonus);
+    //        ballThrowingAnimationIndex = 2;
+
+    //    }
+    //    else if (throwPower > twoPointsMore && throwPower < backboardShotValue)
+    //    {
+    //        // hit backboard and go out --> NO points
+    //        Debug.Log("HIT BACKBOARD AND GO OUT LESS");
+    //        gameManager.DisableFireBonus();
+    //        ball.SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
+    //        ballThrowingAnimationIndex = 4;
+
+    //    }
+    //    else if (throwPower >= backboardShotValue && throwPower <= backboardMore)
+    //    {
+    //        // hit backboard and enter in basket --> 2 points
+    //        Debug.Log("HIT BACKBOARD AND ENTER 2 POINTS");
+    //        //gameManager.AddPlayerPoints(2, true, hasFireBonus);
+    //        SetThrowValues(2, true);
+    //        makePoints = true;
+    //        ball.SetAudioClipToPlayAndParticlesToUse(3, 2, hasFireBonus);
+    //        ballThrowingAnimationIndex = 5;
+
+    //    }
+    //    else
+    //    {
+    //        // hit backboard and go out
+    //        Debug.Log("HIT BACKBOARD AND GO OUT MORE");
+    //        gameManager.DisableFireBonus();
+    //        ball.GetComponent<Ball>().SetAudioClipToPlayAndParticlesToUse(2, 0, hasFireBonus);
+    //        ballThrowingAnimationIndex = 6;
+
+    //    }
+
+    //    SetBallAnimationPositionsOnThrowing(
+    //        ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex],
+    //        ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex].GetChild(0));
+    //}
+
+    private void SetPositionOfSliderPowerIndicator()
+    {
+        sliderValueCursor.localPosition = 
+            new Vector2(sliderValueCursor.localPosition.x, throwingPowerSlider.value * 
+            gameManager.throwingBallSliderRect.rect.height - sliderValueCursor.sizeDelta.y / 2);
     }
 
     private void ReadAndroidInput()
@@ -246,7 +289,7 @@ public class Player : PlayerBase
                 inputInitPosition = touch.position;
                 maxPosY = touch.position;
                 pixelInitPerc = inputInitPosition.y * 100 / Screen.height;
-                pixelMaxPerc = pixelInitPerc + 50;
+                pixelMaxPerc = pixelInitPerc + PERCENTAGE_MAX_OF_SCREEN_HEIGHT_FOR_SLIDER;
                 pixelMaxY = pixelMaxPerc * Screen.height / 100;
             }
 
@@ -260,10 +303,8 @@ public class Player : PlayerBase
                     maxPosY = touch.position;
                 }
             }
-            if (touch.phase == TouchPhase.Ended || swipingTimer >= maxSwipingTimer)
+            if (touch.phase == TouchPhase.Ended && throwingPowerSlider.value > PERCENTAGE_MIN_OF_POWER_SLIDER_TO_THWOW_BALL || swipingTimer >= maxSwipingTimer)
             {
-                //Debug.Log("init "+ inputInitPosition.y);
-                //Debug.Log("end " + touch.position.y);
                 StartCoroutine(ThrowingBall(throwingPowerSlider.value, gameManager.isFireBonusActive));
             }
         }
@@ -279,7 +320,7 @@ public class Player : PlayerBase
                 maxPosY = Input.mousePosition;
                 mouseMovementStarted = true;
                 pixelInitPerc = mouseStartPosition.y * 100 / Screen.height;
-                pixelMaxPerc = pixelInitPerc + 50;
+                pixelMaxPerc = pixelInitPerc + PERCENTAGE_MAX_OF_SCREEN_HEIGHT_FOR_SLIDER;
                 pixelMaxY = pixelMaxPerc * Screen.height / 100;
             }
             else if (Input.GetMouseButton(0) && mouseMovementStarted && swipingTimer < maxSwipingTimer)
@@ -291,7 +332,7 @@ public class Player : PlayerBase
                     maxPosY = Input.mousePosition;
                 }
             }
-            else if (Input.GetMouseButtonUp(0) || swipingTimer >= maxSwipingTimer)
+            else if (Input.GetMouseButtonUp(0) && throwingPowerSlider.value > PERCENTAGE_MIN_OF_POWER_SLIDER_TO_THWOW_BALL || swipingTimer >= maxSwipingTimer)
             {
                 mouseMovementStarted = false;
                 StartCoroutine(ThrowingBall(throwingPowerSlider.value, gameManager.isFireBonusActive));

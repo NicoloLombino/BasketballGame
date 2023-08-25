@@ -9,7 +9,18 @@ public class SaveData : ScriptableObject
     public int maxScore;
     public int AILevel;
     public int ballMaterialIndex;
+    public int playerMaterialIndex;
 
+
+    [Header("Player Materials")]
+    public Material playerChosenMaterial;
+    public Material[] playerMaterials;
+
+
+    [Header("Ball Materials")]
+    public Material ballChosenMaterial;
+    public Material[] ballMaterials;
+    
 
     public void AddGold(int goldToAdd)
     {
@@ -33,10 +44,20 @@ public class SaveData : ScriptableObject
     {
         ballMaterialIndex = materialIndex;
         PlayerPrefs.SetInt("BallMaterialIndex", materialIndex);
+        ballChosenMaterial = ballMaterials[materialIndex];
+    }
+
+    public void SetPlayerMaterial(int materialIndex)
+    {
+        playerMaterialIndex = materialIndex;
+        PlayerPrefs.SetInt("PlayerMaterialIndex", materialIndex);
+        playerChosenMaterial = playerMaterials[materialIndex];
     }
 
     public void LoadAllSavedValues()
     {
+        ballChosenMaterial = ballMaterials[ballMaterialIndex];
+        playerChosenMaterial = playerMaterials[playerMaterialIndex];
         gold = PlayerPrefs.GetInt("Gold");
         maxScore = PlayerPrefs.GetInt("MaxScore");
         AILevel = PlayerPrefs.GetInt("AILevel");

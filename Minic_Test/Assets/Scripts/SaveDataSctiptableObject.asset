@@ -12,7 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b56cfba90dd6b34ab4719076541c987, type: 3}
   m_Name: SaveDataSctiptableObject
   m_EditorClassIdentifier: 
-  gold: 1511
-  maxScore: 54
-  AILevel: 9
-  ballMaterialIndex: 1
+  gold: 1591
+  maxScore: 55
+  AILevel: 6
+  ballMaterialIndex: 3
+  playerMaterialIndex: 7
+  playerMaterials:
+  - {fileID: 2100000, guid: 37e4ea089c418da43abf578d10f51877, type: 2}
+  - {fileID: 2100000, guid: 620cd21644678f34180de38badb639eb, type: 2}
+  - {fileID: 2100000, guid: 4a650e3859ee64a40b70b7ceb803b704, type: 2}
+  - {fileID: 2100000, guid: 62d0c0e9e5c0e3e47bcac2e1ab6ad5f7, type: 2}
+  - {fileID: 2100000, guid: bb8b9443b5e21304e97894451ab08723, type: 2}
+  - {fileID: 2100000, guid: bd249be13db1e72439a7ac386263bbf4, type: 2}
+  - {fileID: 2100000, guid: 2242c2582462daa41964a2772c172c5e, type: 2}
+  - {fileID: 2100000, guid: 03be9a4bc30d42e43a7caf4e960beb7f, type: 2}
+  - {fileID: 2100000, guid: 658bf25a3ddfe0449abe90e365e3b5a7, type: 2}
+  ballMaterials:
+  - {fileID: 2100000, guid: 34f29492a44494841a3dd47d50775be2, type: 2}
+  - {fileID: 2100000, guid: a1df690903ca42f4f8ade413dd32cb2b, type: 2}
+  - {fileID: 2100000, guid: 9731e657731bea440a1b24053df5495c, type: 2}
+  - {fileID: 2100000, guid: da5f9090c5b85264cae2ca870e92f361, type: 2}
+  - {fileID: 2100000, guid: 2d4a7882e98738b4590d1f01549aa8f8, type: 2}
+  - {fileID: 2100000, guid: 4e65bb483a2572c43bf9eca527ee8757, type: 2}
+  - {fileID: 2100000, guid: 49573f09943f5834bbe355bc9860e7c8, type: 2}
+  - {fileID: 2100000, guid: 16a24d3102a299245b9e9de8f66d37f3, type: 2}

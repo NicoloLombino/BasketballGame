@@ -9,6 +9,8 @@ public class PlayerBase : MonoBehaviour
     [Header("reference")]
     [SerializeField]
     protected GameManager gameManager;
+    [SerializeField]
+    protected SaveData saveDataScriptableObject;
 
     [Header("Ball components")]
     [SerializeField]
@@ -63,8 +65,6 @@ public class PlayerBase : MonoBehaviour
         transform.eulerAngles = playerPositions[currentPlayerPosition].eulerAngles;
         fireValueDecreasingDivisor = gameManager.fireBonusDecreasingSpeedDivisor;
     }
-
-    // Update is called once per frame
     protected virtual void Update()
     {
         if (!ignoreInputs)
@@ -93,7 +93,6 @@ public class PlayerBase : MonoBehaviour
     {
         StartCoroutine(MovingPlayerToNextPosition(direction));
     }
-
     protected void SetThrowValues(int pointsToGive, bool isBackboardShot)
     {
         pointsEarned = pointsToGive;
@@ -126,7 +125,6 @@ public class PlayerBase : MonoBehaviour
             yield return null;
         }
 
-        //yield return new WaitForSecondsRealtime(0.5f);
         transform.LookAt(throwEndPosition, Vector3.up);
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         ignoreInputs = false;
@@ -213,7 +211,6 @@ public class PlayerBase : MonoBehaviour
             ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex],
             ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex].GetChild(0));
 
-        //gameManager.AddAIPoints(points, isBackboardShot, hasFireBonus);
         SetThrowValues(points, isBackboardShot);
         CheckFireBonus(points);
     }
@@ -222,7 +219,6 @@ public class PlayerBase : MonoBehaviour
     {
         ball.transform.position = dribblePosition.position + Vector3.up * 0.7f;
         pointsEarned = 0;
-        //isThrowingBall = false;
         throwingTimer = 0;
         ball.hasMakeSound = false;
         doBackboardShot = false;

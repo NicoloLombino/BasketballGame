@@ -28,10 +28,6 @@ public class Ball : MonoBehaviour
     "2 take 3 points and have fire bonus ")]
     private GameObject[] particlesToUse;
 
-    [Header("Ball Materials")]
-    [SerializeField]
-    private Material[] materials;
-
     [System.Serializable]
     public struct BallThrowingPosition
     {
@@ -49,28 +45,15 @@ public class Ball : MonoBehaviour
     [Header("Ball Throwing Position to use according to player throw")]
     public BallThrowingPosition[] ballThrowingPositions;
 
-    //[Header("Ball Throwing Position to use according to player throw")]
-    //[SerializeField, Tooltip("Positions: " +
-    //"0 go out, " +
-    //"1 hit basket and go out" +
-    //"2 take 2 points" +
-    //"3 take 3 points ")]
-
     internal bool hasMakeSound;
 
     private int clipToPlay;
     private int pointsToGive;
     private bool isFireBonusActive;
 
-
-
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        if (playerOwner.gameObject.GetComponent<Player>() != null)
-        {
-            gameObject.GetComponent<MeshRenderer>().material = materials[PlayerPrefs.GetInt("BallMaterialIndex")];
-        }
     }
 
     void Update()
@@ -152,6 +135,4 @@ public class Ball : MonoBehaviour
             }
         }
     }
-
-
 }

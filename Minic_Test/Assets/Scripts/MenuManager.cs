@@ -23,22 +23,23 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private Image loadingImage;
 
+    [Header("3D UI")]
+    [SerializeField]
+    private GameObject UI3D_imageMobile;
+    [SerializeField]
+    private GameObject UI3D_imagePC;
+
     void Start()
     {
         saveDataScriptableObject.LoadAllSavedValues();
         AISlider.value = saveDataScriptableObject.AILevel;
         SetValuesOnMenu();
+        CheckPlatformToShowPlayerOnUI();
     }
 
     public void SaveDataInScriptableObject()
     {
         saveDataScriptableObject.SetAILevel((int)AISlider.value);
-    }
-
-    private void SetValuesOnMenu()
-    {
-        maxScoreText.text = saveDataScriptableObject.maxScore.ToString();
-        goldText.text = saveDataScriptableObject.gold.ToString();
     }
 
     public void SetBallMaterial(int materialIndex)
@@ -51,6 +52,28 @@ public class MenuManager : MonoBehaviour
         StartCoroutine(LoadingScene());
     }
 
+    /// <summary>
+    /// Check the platform and show the right image on UI
+    /// </summary>
+    private void CheckPlatformToShowPlayerOnUI()
+    {
+        if (SystemInfo.deviceType == DeviceType.Desktop)
+        {
+            UI3D_imagePC.SetActive(true);
+        }
+        else if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            UI3D_imageMobile.SetActive(true);
+        }
+    }
+
+    private void SetValuesOnMenu()
+    {
+        maxScoreText.text = saveDataScriptableObject.maxScore.ToString();
+        goldText.text = saveDataScriptableObject.gold.ToString();
+    }
+
+    // a fake loading for search an opponent
     private IEnumerator LoadingScene()
     {
         while(loadingImage.fillAmount < 1)

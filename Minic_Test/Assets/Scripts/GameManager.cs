@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     private const float THROWING_BALL_SLIDER_PC_HEIGHT = 600;
     private const float THROWING_BALL_SLIDER_PC_POSITION_Y = 150;
 
+    private const float TIME_TO_TIMER_FLASH = 10;
+
     public bool isAndroidSetup;
 
     [Header("SaveData")]
@@ -116,7 +118,6 @@ public class GameManager : MonoBehaviour
 
     internal bool isInGame;
 
-    internal bool isFireBonusActive;
     internal bool isBackBoardBonusActive;
     internal int pointsToGiveOnBackboardBonus;
 
@@ -127,6 +128,8 @@ public class GameManager : MonoBehaviour
     private int backBoardBonusTurnDuration;
     private int levelOnShotSlider = 0;
     private int nextPointsToIncreaseShotValuesOnSlider;
+
+    private bool isTimerAnimated;
 
     private void Awake()
     {
@@ -155,9 +158,17 @@ public class GameManager : MonoBehaviour
             {
                 EndMatch();
             }
+            else if(timer <= TIME_TO_TIMER_FLASH && !isTimerAnimated)
+            {
+                // active the blinking animation of timers on UI
+                timerImagePlayer.gameObject.GetComponent<Animator>().enabled = true;
+                timerImageAI.gameObject.GetComponent<Animator>().enabled = true;
+                isTimerAnimated = true;
+            }
         }
     }
 
+    // set the position of green and purple indicator on slider
     public void SetPositionOfShotPointsOnSlider()
     {
         perfectShotIndicator.localPosition = new Vector3(perfectShotIndicator.localPosition.x, valueTo3PointsMin * throwingBallSliderRect.rect.height / 10, perfectShotIndicator.localPosition.z);
@@ -190,6 +201,7 @@ public class GameManager : MonoBehaviour
         playerPoints += pointsToGive;
         playerPointsText.text = playerPoints.ToString();
 
+        // raise the indicators on slider when the player reach a set score 
         if(playerPoints >= nextPointsToIncreaseShotValuesOnSlider)
         {
             IncreaseShotValuesOnSlider();
@@ -228,6 +240,7 @@ public class GameManager : MonoBehaviour
     {
         if (isBackBoardBonusActive)
         {
+            // the backboard bonus lasts for a defined number of throws
             backBoardBonusTurnDuration--;
             if(backBoardBonusTurnDuration <= 0)
             {
@@ -236,10 +249,12 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // check if the bonus must be activated
             int rnd1 = Random.Range(0, 100);
-            Debug.Log("rand back 1 = " + rnd1);
+
             if(rnd1 <= percentageToActiveBackboardBonus)
             {
+                // if the bonus is activated check if it will be a +4 or +5
                 int rnd2 = Random.Range(0, 100);
                 Debug.Log("rand back 2 = " + rnd2);
                 if (rnd2 <= percentageToActiveBackboardBonus5)
@@ -323,17 +338,20 @@ public class GameManager : MonoBehaviour
         AIPointsUIEffect.gameObject.SetActive(false);
     }
 
+    // check if the game end or is a draw
     private bool CheckIfGameEnd()
     {
         return playerPoints != AIPoints ? true : false;
     }
 
+    // a manager for end match
     private void EndMatch()
     {
         isInGame = false;
 
         if (CheckIfGameEnd())
         {
+            // game end and go to result
             CheckWinner();
             CheckRecordScore();
             CheckReward();
@@ -341,8 +359,6 @@ public class GameManager : MonoBehaviour
         else
         {
             // draw
-            timerImagePlayer.gameObject.GetComponent<Animator>().enabled = true;
-            timerImageAI.gameObject.GetComponent<Animator>().enabled = true;
             Instantiate(drawTextPrefab, basketTransform.position + Vector3.up, Quaternion.identity);
             StartCoroutine(CountDown(2, timeToGiveWhenDraw));
             gameTime = timeToGiveWhenDraw;
@@ -352,7 +368,6 @@ public class GameManager : MonoBehaviour
     private IEnumerator CountDown(float timeToWaitBeforeStart ,float matchTimer)
     {
         yield return new WaitForSecondsRealtime(timeToWaitBeforeStart);
-        //countdownText.gameObject.SetActive(true);
         countdownText.transform.parent.gameObject.SetActive(true);
 
         int countdownValue = 3;
@@ -365,7 +380,6 @@ public class GameManager : MonoBehaviour
         }
 
         countdownText.transform.parent.gameObject.SetActive(false);
-        //countdownText.gameObject.SetActive(false);
         isInGame = true;
         timer = matchTimer;
     }
@@ -406,6 +420,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // raise the indicators on slider
     private void IncreaseShotValuesOnSlider()
     {
         if (levelOnShotSlider < pointsToIncreaseShotValuesOnSlider.Length - 1)

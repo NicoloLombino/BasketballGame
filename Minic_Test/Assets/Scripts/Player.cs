@@ -48,6 +48,7 @@ public class Player : PlayerBase
     {
         base.Start();
         fireBonusSlider.maxValue = gameManager.maxFireBonusTime;
+        SetMaterialsToPlayerAndBall();
     }
     protected override void Update()
     {
@@ -71,9 +72,10 @@ public class Player : PlayerBase
     }
 
     /// <summary>
-    /// 
+    /// throw the ball and set his movement
     /// </summary>
-    /// <param name="throwPower"></param> is the value of the slider when player throw the ball
+    /// <param name="throwPower">is the value of the slider when player throw the ball</param>
+    /// <param name="hasFireBonus">if the fire bonus is active</param>
     /// <returns></returns>
     private IEnumerator ThrowingBall(float throwPower, bool hasFireBonus)
     {
@@ -158,6 +160,12 @@ public class Player : PlayerBase
             gameManager.throwingBallSliderRect.rect.height - sliderValueCursor.sizeDelta.y / 2);
     }
 
+    private void SetMaterialsToPlayerAndBall()
+    {
+        gameObject.GetComponent<MeshRenderer>().material = saveDataScriptableObject.playerChosenMaterial;
+        ball.gameObject.GetComponent<MeshRenderer>().material = saveDataScriptableObject.ballChosenMaterial;
+    }
+
     private void ReadAndroidInput()
     {
         if (Input.touchCount > 0 && !ignoreInputs)
@@ -184,7 +192,7 @@ public class Player : PlayerBase
             }
             if (touch.phase == TouchPhase.Ended && throwingPowerSlider.value > PERCENTAGE_MIN_OF_POWER_SLIDER_TO_THWOW_BALL || swipingTimer >= maxSwipingTimer)
             {
-                StartCoroutine(ThrowingBall(throwingPowerSlider.value, gameManager.isFireBonusActive));
+                StartCoroutine(ThrowingBall(throwingPowerSlider.value, isFireBonusActive));
             }
         }
     }
@@ -214,7 +222,7 @@ public class Player : PlayerBase
             else if (Input.GetMouseButtonUp(0) && throwingPowerSlider.value > PERCENTAGE_MIN_OF_POWER_SLIDER_TO_THWOW_BALL || swipingTimer >= maxSwipingTimer)
             {
                 mouseMovementStarted = false;
-                StartCoroutine(ThrowingBall(throwingPowerSlider.value, gameManager.isFireBonusActive));
+                StartCoroutine(ThrowingBall(throwingPowerSlider.value, isFireBonusActive));
             }
         }
     }

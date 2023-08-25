@@ -5,22 +5,23 @@ using UnityEngine;
 [CreateAssetMenu]
 public class SaveData : ScriptableObject
 {
+    [Header("Platform")]
+    public bool isMobileGame;
+
+    [Header("Data")]
     public int gold;
     public int maxScore;
     public int AILevel;
     public int ballMaterialIndex;
     public int playerMaterialIndex;
 
-
     [Header("Player Materials")]
     public Material playerChosenMaterial;
     public Material[] playerMaterials;
 
-
     [Header("Ball Materials")]
     public Material ballChosenMaterial;
-    public Material[] ballMaterials;
-    
+    public Material[] ballMaterials;   
 
     public void AddGold(int goldToAdd)
     {

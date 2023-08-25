@@ -449,6 +449,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void CheckGamePlatformAndEditUI()
     {
+        isAndroidSetup = saveDataScriptableObject.isMobileGame;
+
         if(isAndroidSetup)
         {
             throwingBallSliderRect.sizeDelta = new Vector2(throwingBallSliderRect.sizeDelta.x, THROWING_BALL_SLIDER_MOBILE_HEIGHT);

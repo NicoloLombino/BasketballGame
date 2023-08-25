@@ -16640,6 +16640,8 @@ MonoBehaviour:
   loadingImage: {fileID: 1278221708}
   UI3D_imageMobile: {fileID: 2127009495}
   UI3D_imagePC: {fileID: 297578356}
+  ballScroll: {fileID: 1937303282}
+  skinScroll: {fileID: 1832288428}
 --- !u!4 &1765119324
 Transform:
   m_ObjectHideFlags: 0

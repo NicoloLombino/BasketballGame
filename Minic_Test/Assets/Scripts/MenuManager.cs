@@ -6,6 +6,9 @@ using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
+    private const float SIZE_ANCHOR_PC = 800;
+    private const float SIZE_ANCHOR_MOBILE = 0;
+
     [SerializeField]
     private SaveData saveDataScriptableObject;
     [SerializeField]
@@ -28,6 +31,12 @@ public class MenuManager : MonoBehaviour
     private GameObject UI3D_imageMobile;
     [SerializeField]
     private GameObject UI3D_imagePC;
+
+    [Header("UI")]
+    [SerializeField]
+    private RectTransform ballScroll;
+    [SerializeField]
+    private RectTransform skinScroll;
 
     void Start()
     {
@@ -60,10 +69,14 @@ public class MenuManager : MonoBehaviour
         if (SystemInfo.deviceType == DeviceType.Desktop)
         {
             UI3D_imagePC.SetActive(true);
+            ballScroll.offsetMin = new Vector2(SIZE_ANCHOR_PC, ballScroll.offsetMin.y);
+            skinScroll.offsetMin = new Vector2(SIZE_ANCHOR_PC, ballScroll.offsetMin.y);
         }
         else if (SystemInfo.deviceType == DeviceType.Handheld)
         {
             UI3D_imageMobile.SetActive(true);
+            ballScroll.offsetMin = new Vector2(SIZE_ANCHOR_MOBILE, ballScroll.offsetMin.y);
+            skinScroll.offsetMin = new Vector2(SIZE_ANCHOR_MOBILE, ballScroll.offsetMin.y);
         }
     }
 

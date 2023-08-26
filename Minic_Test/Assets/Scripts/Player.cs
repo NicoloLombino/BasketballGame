@@ -66,7 +66,7 @@ public class Player : PlayerBase
             }              
         }
 
-        SetPositionOfSliderPowerIndicator();
+        SetPositionOfPowerSliderIndicator();
 
         fireBonusSlider.value = fireBonusValue;
     }
@@ -153,7 +153,7 @@ public class Player : PlayerBase
         fireImageBackground.color = Color.white;
     }
 
-    private void SetPositionOfSliderPowerIndicator()
+    private void SetPositionOfPowerSliderIndicator()
     {
         sliderValueCursor.localPosition = 
             new Vector2(sliderValueCursor.localPosition.x, throwingPowerSlider.value * 

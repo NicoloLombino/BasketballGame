@@ -32,7 +32,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private GameObject UI3D_imagePC;
 
-    [Header("UI")]
+    [Header("other UI")]
     [SerializeField]
     private RectTransform ballScroll;
     [SerializeField]
@@ -63,16 +63,17 @@ public class MenuManager : MonoBehaviour
 
     /// <summary>
     /// Check the platform and show the right image on UI
+    /// i can use only one type of condition (SystemInfo.deviceType or check on save data)
     /// </summary>
     private void CheckPlatformToShowPlayerOnUI()
     {
-        if (SystemInfo.deviceType == DeviceType.Desktop)
+        if (SystemInfo.deviceType == DeviceType.Desktop || !saveDataScriptableObject.isMobileGame)
         {
             UI3D_imagePC.SetActive(true);
             ballScroll.offsetMin = new Vector2(SIZE_ANCHOR_PC, ballScroll.offsetMin.y);
             skinScroll.offsetMin = new Vector2(SIZE_ANCHOR_PC, ballScroll.offsetMin.y);
         }
-        else if (SystemInfo.deviceType == DeviceType.Handheld)
+        else if (SystemInfo.deviceType == DeviceType.Handheld || saveDataScriptableObject.isMobileGame)
         {
             UI3D_imageMobile.SetActive(true);
             ballScroll.offsetMin = new Vector2(SIZE_ANCHOR_MOBILE, ballScroll.offsetMin.y);

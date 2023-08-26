@@ -19,9 +19,9 @@ public class PlayerUI3D : MonoBehaviour
     [SerializeField]
     protected float dribbleHeight;
 
-    private void OnEnable()
+    void Start()
     {
-        ball.gameObject.GetComponent<MeshRenderer>().material = SaveDataScriptableObject.ballMaterials[PlayerPrefs.GetInt("BallMaterialIndex")];
+        // set the materials to player and his Ball for 3D UI
         SetMaterialOnPlayer(PlayerPrefs.GetInt("PlayerMaterialIndex"));
         SetMaterialOnBall(PlayerPrefs.GetInt("BallMaterialIndex"));
     }

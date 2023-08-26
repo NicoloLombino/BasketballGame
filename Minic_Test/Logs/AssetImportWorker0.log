@@ -15,7 +15,7 @@ C:/Users/Nicolò/Desktop/Minic_Test/Minic_Test
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-58596
+59448
 Successfully changed project path to: C:/Users/Nicolò/Desktop/Minic_Test/Minic_Test
 C:/Users/Nicolò/Desktop/Minic_Test/Minic_Test
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -47,7 +47,7 @@ C:/Users/Nicolò/Desktop/Minic_Test/Minic_Test
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 76.00 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 85.21 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.3.11f1 (0a5ca18544bf)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/Resources/UnitySubsystems
@@ -63,92 +63,92 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56808
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56424
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.004168 seconds.
+Registered in 0.005222 seconds.
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
-Refreshing native plugins compatible for Editor in 111.69 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 73.60 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.734 seconds
+- Completed reload, in  0.608 seconds
 Domain Reload Profiling:
-	ReloadAssembly (735ms)
-		BeginReloadAssembly (106ms)
+	ReloadAssembly (609ms)
+		BeginReloadAssembly (66ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (2ms)
-		EndReloadAssembly (498ms)
-			LoadAssemblies (101ms)
+			CreateAndSetChildDomain (1ms)
+		EndReloadAssembly (446ms)
+			LoadAssemblies (64ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (88ms)
+			SetupTypeCache (100ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (27ms)
-			SetupLoadedEditorAssemblies (329ms)
+			RebuildScriptCaches (34ms)
+			SetupLoadedEditorAssemblies (262ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (59ms)
+				InitializePlatformSupportModulesInManaged (67ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (112ms)
-				BeforeProcessingInitializeOnLoad (2ms)
-				ProcessInitializeOnLoadAttributes (98ms)
-				ProcessInitializeOnLoadMethodAttributes (56ms)
+				RefreshPlugins (74ms)
+				BeforeProcessingInitializeOnLoad (1ms)
+				ProcessInitializeOnLoadAttributes (76ms)
+				ProcessInitializeOnLoadMethodAttributes (44ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.005771 seconds.
+Registered in 0.004848 seconds.
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory doesn't match image C:\Users\Nicolò\Desktop\Minic_Test\Minic_Test\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
 Symbol file LoadedFromMemory doesn't match image C:\Users\Nicolò\Desktop\Minic_Test\Minic_Test\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
-Refreshing native plugins compatible for Editor in 1.09 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 1.04 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.069 seconds
+- Completed reload, in  1.085 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1070ms)
-		BeginReloadAssembly (237ms)
+	ReloadAssembly (1086ms)
+		BeginReloadAssembly (225ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (5ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (150ms)
-		EndReloadAssembly (733ms)
-			LoadAssemblies (77ms)
+			CreateAndSetChildDomain (136ms)
+		EndReloadAssembly (770ms)
+			LoadAssemblies (90ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (261ms)
+			SetupTypeCache (266ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (43ms)
-			SetupLoadedEditorAssemblies (325ms)
+			RebuildScriptCaches (56ms)
+			SetupLoadedEditorAssemblies (337ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (13ms)
-				SetLoadedEditorAssemblies (0ms)
+				SetLoadedEditorAssemblies (1ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (79ms)
-				ProcessInitializeOnLoadAttributes (201ms)
-				ProcessInitializeOnLoadMethodAttributes (26ms)
-				AfterProcessingInitializeOnLoad (4ms)
+				BeforeProcessingInitializeOnLoad (83ms)
+				ProcessInitializeOnLoadAttributes (211ms)
+				ProcessInitializeOnLoadMethodAttributes (23ms)
+				AfterProcessingInitializeOnLoad (6ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (6ms)
 Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.06 seconds
-Refreshing native plugins compatible for Editor in 1.06 ms, found 5 plugins.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.09 seconds
+Refreshing native plugins compatible for Editor in 1.05 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 3580 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 30 unused Assets / (151.0 KB). Loaded Objects now: 4038.
-Memory consumption went from 130.1 MB to 130.0 MB.
-Total: 4.361600 ms (FindLiveObjects: 0.523000 ms CreateObjectMapping: 0.369700 ms MarkObjects: 3.286700 ms  DeleteObjects: 0.181200 ms)
+Unloading 30 unused Assets / (151.1 KB). Loaded Objects now: 4042.
+Memory consumption went from 130.7 MB to 130.5 MB.
+Total: 3.886200 ms (FindLiveObjects: 0.366000 ms CreateObjectMapping: 0.269200 ms MarkObjects: 3.079800 ms  DeleteObjects: 0.170300 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
@@ -162,23 +162,13 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 818238.101756 seconds.
-  path: Assets/grey.mat
-  artifactKey: Guid(d904ee90b836e094c8c6216efbf092f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/grey.mat using Guid(d904ee90b836e094c8c6216efbf092f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '44033b1120dd7cfdfc231f148b4fbdc5') in 0.360821 seconds 
+  Time since last request: 883748.307867 seconds.
+  path: Assets/Scenes/Main.unity
+  artifactKey: Guid(163adec682b5ccd4c8dbb7766c20f3fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Main.unity using Guid(163adec682b5ccd4c8dbb7766c20f3fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3e2e756dee25e62a610d1c67b327ce66') in 0.010792 seconds 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000030 seconds.
-  path: Assets/Main Camera Profile.asset
-  artifactKey: Guid(a2c5621595413ca4a81d437f1d534aff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Main Camera Profile.asset using Guid(a2c5621595413ca4a81d437f1d534aff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a10445c89244076458e0e31b79dabafe') in 0.008512 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000036 seconds.
-  path: Assets/Readme.asset
-  artifactKey: Guid(83c2ed844a8c74b779a4c823d16594b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Readme.asset using Guid(83c2ed844a8c74b779a4c823d16594b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4b9eed57b2a38ea50d63037f7455b12f') in 0.005599 seconds 
-Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
-AssetImportWorker is now disconnected from the server
-Process exiting
-Exiting without the bug reporter. Application will terminate with return code 0
+  Time since last request: 0.000034 seconds.
+  path: Assets/Scenes/Test.unity
+  artifactKey: Guid(bd77d9ed60b81e9408a30074c6f56fe2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Test.unity using Guid(bd77d9ed60b81e9408a30074c6f56fe2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0b66f43412410f4d6331f9d0b5375e29') in 0.013108 seconds 

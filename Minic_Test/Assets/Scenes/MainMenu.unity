@@ -751,7 +751,7 @@ GameObject:
   - component: {fileID: 144198374}
   - component: {fileID: 144198378}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player For UI 3D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -828,20 +828,19 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144198371}
-  m_LocalRotation: {x: 0, y: 0.5735764, z: 0, w: 0.8191521}
-  m_LocalPosition: {x: -912, y: 1, z: 2486}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -300, y: 1, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1687643710}
-  - {fileID: 1168124390}
   - {fileID: 1078069469}
-  - {fileID: 1589694939}
   - {fileID: 717370067}
+  - {fileID: 1589694939}
   - {fileID: 2048077338}
   m_Father: {fileID: 0}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 70, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &144198378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -859,6 +858,7 @@ MonoBehaviour:
   ball: {fileID: 1589694939}
   dribblePosition: {fileID: 1078069469}
   dribbleHeight: 5
+  rotationSpeed: 10
 --- !u!1 &160529087
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,6 +1630,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 144198378}
+        m_TargetAssemblyTypeName: PlayerUI3D, Assembly-CSharp
+        m_MethodName: SetRotationToZero
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &242990885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2067,6 +2079,7 @@ GameObject:
   - component: {fileID: 297578360}
   - component: {fileID: 297578359}
   - component: {fileID: 297578358}
+  - component: {fileID: 297578362}
   m_Layer: 5
   m_Name: 3D UI Payer PC
   m_TagString: Untagged
@@ -2160,6 +2173,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297578356}
   m_CullTransparentMesh: 1
+--- !u!114 &297578362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297578356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1707a26f4c524c047b6a5637d3daf507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerUI: {fileID: 144198378}
 --- !u!1 &300070679
 GameObject:
   m_ObjectHideFlags: 0
@@ -5834,7 +5860,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 144198377}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &717370068
 SphereCollider:
@@ -9556,7 +9582,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 144198377}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1082772088
 GameObject:
@@ -10114,6 +10140,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 144198378}
+        m_TargetAssemblyTypeName: PlayerUI3D, Assembly-CSharp
+        m_MethodName: SetRotationToZero
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11073,14 +11111,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168124386}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 2.5}
+  m_LocalRotation: {x: 0, y: -1, z: -0, w: 0}
+  m_LocalPosition: {x: -300, y: 1, z: -97.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 144198377}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &1184769452
 GameObject:
   m_ObjectHideFlags: 0
@@ -20613,7 +20651,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 144198377}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &2048077339
 SphereCollider:
@@ -20845,6 +20883,7 @@ GameObject:
   - component: {fileID: 2127009499}
   - component: {fileID: 2127009498}
   - component: {fileID: 2127009497}
+  - component: {fileID: 2127009501}
   m_Layer: 5
   m_Name: 3D UI Payer Mobile
   m_TagString: Untagged
@@ -20938,6 +20977,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2127009495}
   m_CullTransparentMesh: 1
+--- !u!114 &2127009501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127009495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1707a26f4c524c047b6a5637d3daf507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerUI: {fileID: 144198378}
 --- !u!1 &2138350616
 GameObject:
   m_ObjectHideFlags: 0

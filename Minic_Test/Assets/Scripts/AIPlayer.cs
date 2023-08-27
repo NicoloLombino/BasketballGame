@@ -128,9 +128,8 @@ public class AIPlayer : PlayerBase
 
         if (makePoints)
         {
-            gameManager.AddAIPoints(pointsEarned, doBackboardShot, hasFireBonus);
+            gameManager.AddAIPoints(pointsEarned, doBackboardShot, hasFireBonus, isLuckyBallActive);
         }
-        gameManager.DoRandomBackboardBonus();
 
         ResetShot(-1);
     }

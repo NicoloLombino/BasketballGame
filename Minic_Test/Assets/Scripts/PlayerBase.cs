@@ -26,6 +26,8 @@ public class PlayerBase : MonoBehaviour
     [SerializeField]
     protected Transform throwStartPosition;
     [SerializeField]
+    protected Transform throwEndPosition;
+    [SerializeField]
     protected Transform[] playerPositions;
 
     [Header("Fire bonus components")]
@@ -38,8 +40,9 @@ public class PlayerBase : MonoBehaviour
     protected bool isFireBonusActive;
     protected float fireBonusValue;
 
-    [SerializeField]
-    protected Transform throwEndPosition;
+    [Header("Lucky Ball components")]
+    protected bool isLuckyBallActive;
+
     protected Transform throwEndPositionChild;
 
     protected int currentPlayerPosition = 0;
@@ -64,6 +67,8 @@ public class PlayerBase : MonoBehaviour
         transform.position = playerPositions[currentPlayerPosition].position;
         transform.eulerAngles = playerPositions[currentPlayerPosition].eulerAngles;
         fireValueDecreasingDivisor = gameManager.fireBonusDecreasingSpeedDivisor;
+
+        ball.baseMaterial = saveDataScriptableObject.ballChosenMaterial;
     }
     protected virtual void Update()
     {
@@ -222,6 +227,8 @@ public class PlayerBase : MonoBehaviour
         throwingTimer = 0;
         ball.hasMakeSound = false;
         doBackboardShot = false;
+        gameManager.DoRandomBackboardBonus();
+        RandomLuckyBallBonus();
 
         if (makePoints)
         {
@@ -282,5 +289,35 @@ public class PlayerBase : MonoBehaviour
         isFireBonusActive = false;
         fireOnBallParticles.SetActive(false);
         fireBonusUI.SetActive(false);
+    }
+
+    protected void RandomLuckyBallBonus()
+    {
+        if(isLuckyBallActive)
+        {
+            DisableLuckyBallBonus();
+        }
+        else
+        {
+            // check if the bonus must be activated only if backboard bonus is not active
+            int rnd = Random.Range(0, 101);
+
+            if (rnd <= gameManager.percentageToActiveLuckyBall)
+            {
+                ActiveLuckyBall();
+            }
+        }
+    }
+
+    protected virtual void ActiveLuckyBall()
+    {
+        isLuckyBallActive = true;
+        ball.HandleLuckyBallBonus(true);
+    }
+
+    protected void DisableLuckyBallBonus()
+    {
+        isLuckyBallActive = false;
+        ball.HandleLuckyBallBonus(false);
     }
 }

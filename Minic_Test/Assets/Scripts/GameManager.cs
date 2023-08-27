@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 
     private const float TIME_TO_TIMER_FLASH = 10;
 
+    AudioSource audioSource;
+
     public bool isAndroidSetup;
 
     [Header("SaveData")]
@@ -29,6 +31,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Random Backboard Bonus")]
     [SerializeField]
+    private GameObject backBoardBonusActivedUI;
+    [SerializeField]
     private GameObject backBoardBonusUI4;
     [SerializeField]
     private GameObject backBoardBonusUI5;
@@ -43,6 +47,10 @@ public class GameManager : MonoBehaviour
     [Header("Fire Bonus")]
     public float maxFireBonusTime;
     public float fireBonusDecreasingSpeedDivisor;
+
+    [Header("Lucky Ball Bonus")]
+    [Range(0,100)]
+    public float percentageToActiveLuckyBall;
 
     [Header("Reference")]
     [SerializeField]
@@ -116,6 +124,16 @@ public class GameManager : MonoBehaviour
     public float valueToBackboardAndPointsMax;
     public float valueToHitBasketAndGoOut;
 
+    [Header("Clips")]
+    [SerializeField]
+    private AudioClip countdownStepClip;
+    [SerializeField]
+    private AudioClip gameStartClip;
+    [SerializeField]
+    private AudioClip gameEndClip;
+    [SerializeField]
+    private AudioClip gameDrawClip;
+
     internal bool isInGame;
 
     internal bool isBackBoardBonusActive;
@@ -129,11 +147,13 @@ public class GameManager : MonoBehaviour
     private int levelOnShotSlider = 0;
     private int nextPointsToIncreaseShotValuesOnSlider;
 
+    private bool isGameStarted;
     private bool isTimerAnimated;
 
     private void Awake()
     {
         CheckGamePlatformAndEditUI();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -178,7 +198,7 @@ public class GameManager : MonoBehaviour
         backboardShotIndicator.sizeDelta = new Vector2(perfectShotIndicator.sizeDelta.x, (((valueToBackboardAndPointsMax - valueToBackboardAndPointsMin) / 10) * throwingBallSliderRect.rect.height));
     }
 
-    public void AddPlayerPoints(int points, bool isBackboardShot, bool playerHasFireBonusActive)
+    public void AddPlayerPoints(int points, bool isBackboardShot, bool playerHasFireBonusActive, bool playerHasLuckyBall)
     {
         if (!isInGame)
             return;
@@ -187,16 +207,20 @@ public class GameManager : MonoBehaviour
         int pointsToGive = points;
         bool mustBackboardEffectSpawn = false;
 
+        // increase the points to give according to all bonus
+        pointsToGive += playerHasLuckyBall ? 2 : 0;
         if (isBackboardShot && isBackBoardBonusActive)
         {
             pointsToGive += pointsToGiveOnBackboardBonus;
             DisableBackboardBonus();
             mustBackboardEffectSpawn = true;
         }
-        if (playerHasFireBonusActive)
-        {
-            pointsToGive *= 2;
-        }
+
+        pointsToGive *= playerHasFireBonusActive ? 2 : 1;
+        //if (playerHasFireBonusActive)
+        //{
+        //    pointsToGive *= 2;
+        //}
 
         playerPoints += pointsToGive;
         playerPointsText.text = playerPoints.ToString();
@@ -207,10 +231,10 @@ public class GameManager : MonoBehaviour
             IncreaseShotValuesOnSlider();
         }
 
-        SpawnPointsOnUI(points, pointsToGive, mustBackboardEffectSpawn);
+        SpawnPointsOnUI(points, pointsToGive, mustBackboardEffectSpawn, playerHasLuckyBall);
     }
 
-    public void AddAIPoints(int points, bool isBackboardShot, bool hasFireBonusActive)
+    public void AddAIPoints(int points, bool isBackboardShot, bool hasFireBonusActive, bool hasLuckyBall)
     {
         if (!isInGame)
             return;
@@ -219,21 +243,25 @@ public class GameManager : MonoBehaviour
         int pointsToGive = points;
         bool mustBackboardEffectSpawn = false;
 
+        // increase the points to give according to all bonus
+        pointsToGive += hasLuckyBall ? 2 : 0;
+
         if (isBackboardShot && isBackBoardBonusActive)
         {
             pointsToGive += pointsToGiveOnBackboardBonus;
             DisableBackboardBonus();
             mustBackboardEffectSpawn = true;
         }
-        if (hasFireBonusActive)
-        {
-            pointsToGive *= 2;
-        }
+        pointsToGive *= hasFireBonusActive ? 2 : 1;
+        //if (hasFireBonusActive)
+        //{
+        //    pointsToGive *= 2;
+        //}
 
         AIPoints += pointsToGive;
         aiPointsText.text = AIPoints.ToString();
 
-        StartCoroutine(SpawnPointsOnUIForAI(points, pointsToGive, mustBackboardEffectSpawn));
+        StartCoroutine(SpawnPointsOnUIForAI(points, pointsToGive, mustBackboardEffectSpawn, hasLuckyBall));
     }
 
     public void DoRandomBackboardBonus()
@@ -250,12 +278,12 @@ public class GameManager : MonoBehaviour
         else
         {
             // check if the bonus must be activated
-            int rnd1 = Random.Range(0, 100);
+            int rnd1 = Random.Range(0, 101);
 
             if(rnd1 <= percentageToActiveBackboardBonus)
             {
                 // if the bonus is activated check if it will be a +4 or +5
-                int rnd2 = Random.Range(0, 100);
+                int rnd2 = Random.Range(0, 101);
                 Debug.Log("rand back 2 = " + rnd2);
                 if (rnd2 <= percentageToActiveBackboardBonus5)
                 {
@@ -270,6 +298,7 @@ public class GameManager : MonoBehaviour
 
                 isBackBoardBonusActive = true;
                 backBoardBonusTurnDuration = backBoardBonusTurnDurationMax;
+                Instantiate(backBoardBonusActivedUI, Vector3.zero, Quaternion.identity);
             }
         }
     }
@@ -283,7 +312,7 @@ public class GameManager : MonoBehaviour
         pointsToGiveOnBackboardBonus = 0;
     }
 
-    private void SpawnPointsOnUI(int pointsBase, int totalPoints, bool isBackboardShotWithBonusActive)
+    private void SpawnPointsOnUI(int pointsBase, int totalPoints, bool isBackboardShotWithBonusActive, bool hasLuckyBall)
     {
         PointsEffectText pointsTextEffect = Instantiate(pointsEffectText, basketTransform.position + Vector3.up, Quaternion.identity);
         if (pointsBase == 2)
@@ -299,12 +328,17 @@ public class GameManager : MonoBehaviour
         {
             pointsTextEffect.pointsText.color = Color.green;
             pointsTextEffect.upText.gameObject.SetActive(true);
-        }
 
+            if(hasLuckyBall)
+            {
+                pointsTextEffect.pointsText.color = Color.blue;
+                pointsTextEffect.upText.color = Color.blue;
+            }
+        }
         pointsTextEffect.pointsText.text = "+ " + totalPoints + " Pts!";
     }
 
-    private IEnumerator SpawnPointsOnUIForAI(int pointsBase, int totalPoints, bool isBackboardShotWithBonusActive)
+    private IEnumerator SpawnPointsOnUIForAI(int pointsBase, int totalPoints, bool isBackboardShotWithBonusActive, bool hasLuckyBall)
     {
         AIPointsUIEffect.gameObject.SetActive(true);
         AIPointsUIEffectText.text = "+ " + totalPoints + " Pts!";
@@ -323,7 +357,14 @@ public class GameManager : MonoBehaviour
         }
         else // pointsBase == 3 -> Perfect shot
         {
-            AIPointsUIEffectText.color = Color.green;
+            if(hasLuckyBall)
+            {
+                AIPointsUIEffectText.color = Color.blue; ;
+            }
+            else
+            {
+                AIPointsUIEffectText.color = Color.green;
+            }
         }
 
         while (timer < 1f)
@@ -355,13 +396,15 @@ public class GameManager : MonoBehaviour
             CheckWinner();
             CheckRecordScore();
             CheckReward();
+            audioSource.PlayOneShot(gameEndClip);
         }
         else
         {
             // draw
-            Instantiate(drawTextPrefab, basketTransform.position + Vector3.up, Quaternion.identity);
+            Instantiate(drawTextPrefab, Vector3.zero, Quaternion.identity);
             StartCoroutine(CountDown(2, timeToGiveWhenDraw));
             gameTime = timeToGiveWhenDraw;
+            audioSource.PlayOneShot(gameDrawClip);
         }
     }
 
@@ -375,6 +418,7 @@ public class GameManager : MonoBehaviour
         while (countdownValue > 0)
         {
             countdownText.text = countdownValue.ToString();
+            audioSource.PlayOneShot(countdownStepClip);
             yield return new WaitForSecondsRealtime(1);
             countdownValue--;
         }
@@ -382,6 +426,12 @@ public class GameManager : MonoBehaviour
         countdownText.transform.parent.gameObject.SetActive(false);
         isInGame = true;
         timer = matchTimer;
+
+        if(!isGameStarted)
+        {
+            audioSource.PlayOneShot(gameStartClip);
+            isGameStarted = true;
+        }
     }
 
     private void CheckWinner()

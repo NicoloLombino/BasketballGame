@@ -38,6 +38,10 @@ public class Player : PlayerBase
     [SerializeField]
     private Color fireImageBackgroundColorWhenActive;
 
+    [Header("Player LuckyBall Components")]
+    [SerializeField]
+    private GameObject luckyBallActiveUI;
+
     private float swipingTimer;
 
     private float pixelInitPerc;
@@ -121,9 +125,9 @@ public class Player : PlayerBase
 
         if(makePoints)
         {
-            gameManager.AddPlayerPoints(pointsEarned, doBackboardShot, hasFireBonus);
+            gameManager.AddPlayerPoints(pointsEarned, doBackboardShot, hasFireBonus, isLuckyBallActive);
         }
-        gameManager.DoRandomBackboardBonus();
+        //gameManager.DoRandomBackboardBonus();
 
         ResetShot(1);
     }
@@ -136,6 +140,12 @@ public class Player : PlayerBase
         throwingPowerSlider.value = 0;
 
         base.ResetShot(directionOfMovement);
+    }
+
+    protected override void ActiveLuckyBall()
+    {
+        base.ActiveLuckyBall();
+        Instantiate(luckyBallActiveUI, Vector3.zero, Quaternion.identity);
     }
 
     protected override void CheckFireBonus(int points)

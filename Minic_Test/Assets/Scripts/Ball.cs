@@ -5,9 +5,21 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     AudioSource audioSource;
+    MeshRenderer ballMesh;
+    internal Material baseMaterial;
 
     [SerializeField]
     private PlayerBase playerOwner;
+
+    [Header("Fire Bonus Components")]
+    [SerializeField]
+    protected GameObject fireOnBallParticles;
+
+    [Header("Lucky Ball Components")]
+    [SerializeField]
+    private Material luckyBallMaterial;
+    [SerializeField]
+    protected GameObject luckyBallParticles;
 
     [Header("Ball audioclips")]
     [SerializeField]
@@ -25,7 +37,8 @@ public class Ball : MonoBehaviour
     [SerializeField, Tooltip("clips to instantiate: " +
     "0 take 2 points, " +
     "1 take 3 points without fire bonus" +
-    "2 take 3 points and have fire bonus ")]
+    "2 take 3 points and have fire bonus " +
+    "3 take points and have lucky ball bonus")]
     private GameObject[] particlesToUse;
 
     [System.Serializable]
@@ -50,10 +63,13 @@ public class Ball : MonoBehaviour
     private int clipToPlay;
     private int pointsToGive;
     private bool isFireBonusActive;
+    private bool isLuckyBallActive;
 
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        ballMesh = GetComponent<MeshRenderer>();
+        baseMaterial = ballMesh.material;
     }
 
     void Update()
@@ -94,24 +110,38 @@ public class Ball : MonoBehaviour
         isFireBonusActive = hasFireBonus;
     }
 
-    private void CheckParticlesToUseOnBasket(int points, bool fireActive)
+    public void HandleLuckyBallBonus(bool active)
+    {
+        ballMesh.material = active == true ? luckyBallMaterial : baseMaterial;
+        luckyBallParticles.SetActive(active);
+        isLuckyBallActive = active;
+    }
+
+    private void CheckParticlesToUseOnBasket(int points, bool isFireBonusActive)
     {
         GameObject particlesOnBasket = new GameObject();
-        if (points == 2)
+        if(isLuckyBallActive)
         {
-            particlesOnBasket = Instantiate(particlesToUse[0], basketPosition.position, Quaternion.identity);
-            // rotate the particles
-            particlesOnBasket.transform.eulerAngles += Vector3.right * -90;
+            Instantiate(particlesToUse[3], basketPosition.position, Quaternion.identity);
         }
-        else if (points == 3)
+        else
         {
-            if (fireActive)
+            if (points == 2)
             {
-                particlesOnBasket = Instantiate(particlesToUse[2], basketPosition.position, Quaternion.identity);
+                particlesOnBasket = Instantiate(particlesToUse[0], basketPosition.position, Quaternion.identity);
+                // rotate the particles
+                particlesOnBasket.transform.eulerAngles += Vector3.right * -90;
             }
-            else
+            else if (points == 3)
             {
-                particlesOnBasket = Instantiate(particlesToUse[1], basketPosition.position, Quaternion.identity);
+                if (isFireBonusActive)
+                {
+                    particlesOnBasket = Instantiate(particlesToUse[2], basketPosition.position, Quaternion.identity);
+                }
+                else
+                {
+                    particlesOnBasket = Instantiate(particlesToUse[1], basketPosition.position, Quaternion.identity);
+                }
             }
         }
         pointsToGive = 0;

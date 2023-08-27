@@ -278,14 +278,14 @@ public class GameManager : MonoBehaviour
         else
         {
             // check if the bonus must be activated
-            int rnd1 = Random.Range(0, 101);
+            int rnd1 = Random.Range(0, 100);
 
-            if(rnd1 <= percentageToActiveBackboardBonus)
+            if(rnd1 < percentageToActiveBackboardBonus)
             {
                 // if the bonus is activated check if it will be a +4 or +5
-                int rnd2 = Random.Range(0, 101);
+                int rnd2 = Random.Range(0, 100);
                 Debug.Log("rand back 2 = " + rnd2);
-                if (rnd2 <= percentageToActiveBackboardBonus5)
+                if (rnd2 < percentageToActiveBackboardBonus5)
                 {
                     backBoardBonusUI5.SetActive(true);
                     pointsToGiveOnBackboardBonus = 5;

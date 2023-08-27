@@ -180,6 +180,8 @@ public class Player : PlayerBase
     {
         if (Input.touchCount > 0 && !ignoreInputs)
         {
+            // check initial touch and convert accordind to screen size and
+            // convert the slide distance to 0 - 1 and set this value on slider with inverse lerp
             touch = Input.GetTouch(0);
             if (inputInitPosition == Vector3.zero)
             {
@@ -213,6 +215,8 @@ public class Player : PlayerBase
         {
             if (Input.GetMouseButtonDown(0) && !mouseMovementStarted)
             {
+                // check initial click and convert accordind to screen size and
+                // convert the slide distance to 0 - 1 and set this value on slider with inverse lerp
                 mouseStartPosition = Input.mousePosition;
                 maxPosY = Input.mousePosition;
                 mouseMovementStarted = true;

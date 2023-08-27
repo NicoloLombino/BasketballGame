@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBase : MonoBehaviour
+public abstract class PlayerBase : MonoBehaviour
 {
     protected AudioSource audioSource;
 
@@ -302,7 +302,7 @@ public class PlayerBase : MonoBehaviour
             // check if the bonus must be activated only if backboard bonus is not active
             int rnd = Random.Range(0, 101);
 
-            if (rnd <= gameManager.percentageToActiveLuckyBall)
+            if (rnd < gameManager.percentageToActiveLuckyBall)
             {
                 ActiveLuckyBall();
             }

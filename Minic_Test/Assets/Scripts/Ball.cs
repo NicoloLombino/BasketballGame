@@ -119,8 +119,7 @@ public class Ball : MonoBehaviour
 
     private void CheckParticlesToUseOnBasket(int points, bool isFireBonusActive)
     {
-        GameObject particlesOnBasket = new GameObject();
-        if(isLuckyBallActive)
+        if (isLuckyBallActive)
         {
             Instantiate(particlesToUse[3], basketPosition.position, Quaternion.identity);
         }
@@ -128,7 +127,7 @@ public class Ball : MonoBehaviour
         {
             if (points == 2)
             {
-                particlesOnBasket = Instantiate(particlesToUse[0], basketPosition.position, Quaternion.identity);
+                GameObject particlesOnBasket = Instantiate(particlesToUse[0], basketPosition.position, Quaternion.identity);
                 // rotate the particles
                 particlesOnBasket.transform.eulerAngles += Vector3.right * -90;
             }
@@ -136,16 +135,15 @@ public class Ball : MonoBehaviour
             {
                 if (isFireBonusActive)
                 {
-                    particlesOnBasket = Instantiate(particlesToUse[2], basketPosition.position, Quaternion.identity);
+                    Instantiate(particlesToUse[2], basketPosition.position, Quaternion.identity);
                 }
                 else
                 {
-                    particlesOnBasket = Instantiate(particlesToUse[1], basketPosition.position, Quaternion.identity);
+                    Instantiate(particlesToUse[1], basketPosition.position, Quaternion.identity);
                 }
             }
         }
         pointsToGive = 0;
-        Destroy(particlesOnBasket, 1);
     }
 
     private void OnTriggerEnter(Collider other)

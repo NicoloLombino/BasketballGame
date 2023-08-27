@@ -28,7 +28,7 @@ public abstract class PlayerBase : MonoBehaviour
     [SerializeField]
     protected Transform throwEndPosition;
     [SerializeField]
-    protected Transform[] playerPositions;
+    protected PlayerPosition[] playerPositions;
 
     [Header("Fire bonus components")]
     [SerializeField]
@@ -64,8 +64,8 @@ public abstract class PlayerBase : MonoBehaviour
     protected virtual void Start()
     {
         currentPlayerPosition = Random.Range(0, playerPositions.Length);
-        transform.position = playerPositions[currentPlayerPosition].position;
-        transform.eulerAngles = playerPositions[currentPlayerPosition].eulerAngles;
+        transform.position = playerPositions[currentPlayerPosition].transform.position;
+        transform.eulerAngles = playerPositions[currentPlayerPosition].transform.eulerAngles;
         fireValueDecreasingDivisor = gameManager.fireBonusDecreasingSpeedDivisor;
 
         ball.baseMaterial = saveDataScriptableObject.ballChosenMaterial;
@@ -107,7 +107,9 @@ public abstract class PlayerBase : MonoBehaviour
 
     private IEnumerator MovingPlayerToNextPosition(int direction)
     {
+        playerPositions[currentPlayerPosition].isFull = false;
         currentPlayerPosition += direction;
+
         if (currentPlayerPosition >= playerPositions.Length)
         {
             currentPlayerPosition = 0;
@@ -117,6 +119,20 @@ public abstract class PlayerBase : MonoBehaviour
             currentPlayerPosition = playerPositions.Length - 1;
         }
 
+        if (playerPositions[currentPlayerPosition].isFull)
+        {
+            currentPlayerPosition += direction;
+            if (currentPlayerPosition >= playerPositions.Length)
+            {
+                currentPlayerPosition = 0;
+            }
+            else if (currentPlayerPosition < 0)
+            {
+                currentPlayerPosition = playerPositions.Length - 1;
+            }
+        }
+
+        playerPositions[currentPlayerPosition].isFull = true;
         float movingTimer = 0;
         float movingPercent = 0;
         Vector3 startPosition = transform.position;
@@ -125,8 +141,8 @@ public abstract class PlayerBase : MonoBehaviour
         {
             movingTimer += Time.deltaTime;
             movingPercent = movingTimer / 0.2f;
-            transform.position = Vector3.Lerp(startPosition, playerPositions[currentPlayerPosition].position, movingPercent);
-            transform.eulerAngles = Vector3.Lerp(startRotation, playerPositions[currentPlayerPosition].eulerAngles, movingPercent);
+            transform.position = Vector3.Lerp(startPosition, playerPositions[currentPlayerPosition].transform.position, movingPercent);
+            transform.eulerAngles = Vector3.Lerp(startRotation, playerPositions[currentPlayerPosition].transform.eulerAngles, movingPercent);
             yield return null;
         }
 
@@ -135,8 +151,14 @@ public abstract class PlayerBase : MonoBehaviour
         ignoreInputs = false;
     }
 
+    /// <summary>
+    /// check the type of ball shot and set the various parameters
+    /// </summary>
+    /// <param name="throwPower"> the power of the shot </param>
+    /// <param name="hasFireBonus"> if the player has fire bonus active </param>
     protected void CheckThrowingResult(float throwPower, bool hasFireBonus)
     {
+        // get the values of the shots and divides them by 10 to convert in range 0 - 1
         float basketboard = gameManager.valueToHitBasketAndGoOut / 10; // 0 points
         float twoPointsLess = gameManager.valueTo2PointsMin / 10; // 2 points
         float perfectShotValueMin = gameManager.valueTo3PointsMin / 10; // 3 points

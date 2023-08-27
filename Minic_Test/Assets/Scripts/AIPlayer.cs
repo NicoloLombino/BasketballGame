@@ -19,8 +19,10 @@ public class AIPlayer : PlayerBase
         timerToThrow += (10 / saveDataScriptableObject.AILevel) / 3;
 
         // set the materials to AI player and his Ball
-        SetMaterialToBallAndAI(saveDataScriptableObject.playerMaterials, gameObject);
-        SetMaterialToBallAndAI(saveDataScriptableObject.ballMaterials, ball.gameObject);
+        SetMaterialToBallAndAI(saveDataScriptableObject.playerMaterials, gameObject,
+            saveDataScriptableObject.playerChosenMaterial);
+        SetMaterialToBallAndAI(saveDataScriptableObject.ballMaterials, ball.gameObject,
+            saveDataScriptableObject.ballChosenMaterial);
 
     }
 
@@ -41,10 +43,12 @@ public class AIPlayer : PlayerBase
 
     private void AIThrowingBall(float sliderValue)
     {
+        // Generate a value for the throw
         int rndValueOnThrow = Random.Range(accuracy, 11);
+        // Calculate the error on throw according to player level and the random value "rndValueOnThrow"
         float rndError = ((10f - rndValueOnThrow) / 10f) * (1 - saveDataScriptableObject.AILevel / 10f);
+        // Generate a random direction for the error, give +1 or -1 according to accuracy value
         int rndAim = Random.Range(0, 11);
-        Debug.Log("rndAim = " + rndAim);
         float aimSign = 1;
         float totalAim = ((float)(accuracy + saveDataScriptableObject.AILevel) / 2);
         if (rndAim <= totalAim)
@@ -55,12 +59,18 @@ public class AIPlayer : PlayerBase
         {
             aimSign = -1;
         }
+        // Calculate the final error and the final value of throw in range 0 - 1
+        // and throw the ball with the generated values
         float rndErrorOnThrow = rndError * aimSign;
         float finalThrowValueOnSlider = sliderValue + rndErrorOnThrow;
-        Debug.Log("with RND= " + rndValueOnThrow + " AND ERROR= " + rndErrorOnThrow + " FINAL= " + finalThrowValueOnSlider);
+
+        // use this to see the values generated for AI
+        //Debug.Log("with RND= " + rndValueOnThrow + " AND ERROR= " + rndErrorOnThrow + " FINAL= " + finalThrowValueOnSlider);
         StartCoroutine(ThrowingBall(finalThrowValueOnSlider, isFireBonusActive));
     }
 
+    // check if AI can get more points by aiming to backboard of to the basket
+    // This will be the value on the slider that the AI will try to take
     private void CheckBestThrow()
     {
         ignoreInputs = true;
@@ -76,6 +86,7 @@ public class AIPlayer : PlayerBase
             throwValue = (gameManager.valueTo3PointsMin + gameManager.valueTo3PointsMax) / 20;
         }
 
+        // prepare the values for the shot
         AIThrowingBall(throwValue);
     }
 
@@ -88,6 +99,8 @@ public class AIPlayer : PlayerBase
     private IEnumerator ThrowingBall(float throwPower, bool hasFireBonus)
     {
         ignoreInputs = true;
+
+        // prepare to shoot the ball
         float preparingTimer = 0;
         float preparingPercent = 0;
         Vector3 ballPosition = ball.transform.position;
@@ -100,11 +113,12 @@ public class AIPlayer : PlayerBase
             yield return null;
         }
 
-        CheckThrowingResult(throwPower, hasFireBonus);
-
         // the sound of throwing ball
         audioSource.Play();
+        // check the shot type and his result
+        CheckThrowingResult(throwPower, hasFireBonus);
 
+        // throw the ball in the the specified position
         float throwingPercent = 0;
         while (throwingPercent < 1)
         {
@@ -115,6 +129,7 @@ public class AIPlayer : PlayerBase
             yield return null;
         }
 
+        // handles the ball bounce
         throwingTimer = 0;
         float throwingPercent2 = 0;
         while (throwingPercent2 < 1)
@@ -126,6 +141,7 @@ public class AIPlayer : PlayerBase
             yield return null;
         }
 
+        // check the score and give points to player
         if (makePoints)
         {
             gameManager.AddAIPoints(pointsEarned, doBackboardShot, hasFireBonus, isLuckyBallActive);
@@ -139,10 +155,11 @@ public class AIPlayer : PlayerBase
     /// </summary>
     /// <param name="materials"> the materials array, (using the SAVE DATA) </param>
     /// <param name="obj"> the object to change the color of </param>
-    private void SetMaterialToBallAndAI(Material[] materials, GameObject obj)
+    /// <param name="materialToExclude"> the selected by the player </param>
+    private void SetMaterialToBallAndAI(Material[] materials, GameObject obj, Material materialToExclude)
     {
         int rndMaterial = Random.Range(0, materials.Length);
-        if (materials[rndMaterial] != saveDataScriptableObject.playerChosenMaterial)
+        if (materials[rndMaterial] != materialToExclude)
         {
             obj.GetComponent<MeshRenderer>().material = materials[rndMaterial];
         }

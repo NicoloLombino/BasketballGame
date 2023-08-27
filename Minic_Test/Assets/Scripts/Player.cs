@@ -84,6 +84,8 @@ public class Player : PlayerBase
     private IEnumerator ThrowingBall(float throwPower, bool hasFireBonus)
     {
         ignoreInputs = true;
+
+        // prepare to shoot the ball
         float preparingTimer = 0;
         float preparingPercent = 0;
         Vector3 ballPosition = ball.transform.position;
@@ -98,10 +100,12 @@ public class Player : PlayerBase
 
         // the sound of throwing ball
         audioSource.Play();
-
+        // start the camera animation
         myCamera.GetComponent<Animator>().SetTrigger("Throw");
+        // check the shot type and his result
         CheckThrowingResult(throwPower, hasFireBonus);
 
+        // throw the ball in the the specified position
         float throwingPercent = 0;
         while (throwingPercent < 1)
         {
@@ -112,6 +116,7 @@ public class Player : PlayerBase
             yield return null;
         }
 
+        // handles the ball bounce
         throwingTimer = 0;
         float throwingPercent2 = 0;
         while (throwingPercent2 < 1)
@@ -123,11 +128,11 @@ public class Player : PlayerBase
             yield return null;
         }
 
+        // check the score and give points to player
         if(makePoints)
         {
             gameManager.AddPlayerPoints(pointsEarned, doBackboardShot, hasFireBonus, isLuckyBallActive);
         }
-        //gameManager.DoRandomBackboardBonus();
 
         ResetShot(1);
     }
@@ -181,7 +186,7 @@ public class Player : PlayerBase
         if (Input.touchCount > 0 && !ignoreInputs)
         {
             // check initial touch and convert accordind to screen size and
-            // convert the slide distance to 0 - 1 and set this value on slider with inverse lerp
+            // convert the slide distance to range 0 - 1 and set this value on slider with inverse lerp
             touch = Input.GetTouch(0);
             if (inputInitPosition == Vector3.zero)
             {
@@ -216,7 +221,7 @@ public class Player : PlayerBase
             if (Input.GetMouseButtonDown(0) && !mouseMovementStarted)
             {
                 // check initial click and convert accordind to screen size and
-                // convert the slide distance to 0 - 1 and set this value on slider with inverse lerp
+                // convert the slide distance to range 0 - 1 and set this value on slider with inverse lerp
                 mouseStartPosition = Input.mousePosition;
                 maxPosY = Input.mousePosition;
                 mouseMovementStarted = true;

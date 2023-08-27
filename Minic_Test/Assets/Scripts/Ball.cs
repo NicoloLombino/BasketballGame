@@ -117,6 +117,7 @@ public class Ball : MonoBehaviour
         isLuckyBallActive = active;
     }
 
+    // check the particles to instantiate after a point
     private void CheckParticlesToUseOnBasket(int points, bool isFireBonusActive)
     {
         if (isLuckyBallActive)
@@ -156,7 +157,8 @@ public class Ball : MonoBehaviour
         else if(other.CompareTag("Basket"))
         {
             CheckParticlesToUseOnBasket(pointsToGive, isFireBonusActive);
-            if(!hasMakeSound)
+            // Avoid multiple collisions
+            if (!hasMakeSound)
             {
                 audioSource.PlayOneShot(clips[clipToPlay]);
                 hasMakeSound = true;

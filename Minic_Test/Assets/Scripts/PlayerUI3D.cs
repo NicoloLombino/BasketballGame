@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// A player used solely for display in the UI
+/// A player used only for display in the UI
 /// </summary>
 public class PlayerUI3D : MonoBehaviour
 {

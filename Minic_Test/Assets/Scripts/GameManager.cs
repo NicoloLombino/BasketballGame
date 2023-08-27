@@ -284,7 +284,7 @@ public class GameManager : MonoBehaviour
             {
                 // if the bonus is activated check if it will be a +4 or +5
                 int rnd2 = Random.Range(0, 100);
-                Debug.Log("rand back 2 = " + rnd2);
+
                 if (rnd2 < percentageToActiveBackboardBonus5)
                 {
                     backBoardBonusUI5.SetActive(true);

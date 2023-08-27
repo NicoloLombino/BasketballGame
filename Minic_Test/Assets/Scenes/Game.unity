@@ -904,7 +904,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 90f07941403aea54c9eeb6f8c79599c1, type: 2}
+  - {fileID: 2100000, guid: 2242c2582462daa41964a2772c172c5e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11439,7 +11439,6 @@ GameObject:
   - component: {fileID: 1752631233}
   - component: {fileID: 1752631232}
   - component: {fileID: 1752631231}
-  - component: {fileID: 1752631235}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -11532,24 +11531,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1752631235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1752631230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ba73e5ee6170e8459c7a16a866db34b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UIInfor: {fileID: 11400000, guid: daca9d1325493214aa27423bc27d47ac, type: 2}
-  m_IsHorizontal: 1
-  m_UI_1: {fileID: 2070114859}
-  m_UI_2: {fileID: 788616147}
-  m_UI_3: {fileID: 1780539257}
-  m_UI_4: {fileID: 1271851832}
 --- !u!1 &1753648049
 GameObject:
   m_ObjectHideFlags: 0
@@ -12402,7 +12383,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d904ee90b836e094c8c6216efbf092f6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15205,7 +15186,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 81761f33747be444c95c97badc6dbdee, type: 2}
+  - {fileID: 2100000, guid: bb8b9443b5e21304e97894451ab08723, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

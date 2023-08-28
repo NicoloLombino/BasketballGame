@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 
 /// <summary>
 /// Allows player rotation on the 3D UI

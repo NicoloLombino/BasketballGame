@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b56cfba90dd6b34ab4719076541c987, type: 3}
   m_Name: SaveDataSctiptableObject
   m_EditorClassIdentifier: 
-  isMobileGame: 0
-  gold: 1993
-  maxScore: 67
-  AILevel: 9
-  playerMaterialIndex: 4
-  ballMaterialIndex: 3
-  playerChosenMaterial: {fileID: 2100000, guid: bb8b9443b5e21304e97894451ab08723,
+  isMobileGame: 1
+  gold: 2341
+  maxScore: 80
+  AILevel: 10
+  playerMaterialIndex: 6
+  ballMaterialIndex: 7
+  playerChosenMaterial: {fileID: 2100000, guid: 2242c2582462daa41964a2772c172c5e,
     type: 2}
   playerMaterials:
   - {fileID: 2100000, guid: 37e4ea089c418da43abf578d10f51877, type: 2}
@@ -31,7 +31,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 03be9a4bc30d42e43a7caf4e960beb7f, type: 2}
   - {fileID: 2100000, guid: 658bf25a3ddfe0449abe90e365e3b5a7, type: 2}
   - {fileID: 2100000, guid: 463ec833e87bf3f4ca5809a7f8a29cd7, type: 2}
-  ballChosenMaterial: {fileID: 2100000, guid: da5f9090c5b85264cae2ca870e92f361, type: 2}
+  ballChosenMaterial: {fileID: 2100000, guid: 16a24d3102a299245b9e9de8f66d37f3, type: 2}
   ballMaterials:
   - {fileID: 2100000, guid: 34f29492a44494841a3dd47d50775be2, type: 2}
   - {fileID: 2100000, guid: a1df690903ca42f4f8ade413dd32cb2b, type: 2}

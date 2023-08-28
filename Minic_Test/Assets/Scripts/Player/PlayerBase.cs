@@ -1,9 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour
 {
+    private const float FIRE_BONUS_INCREMENT_2_POINTS_SHOT = 2.5f;
+    private const float FIRE_BONUS_INCREMENT_3_POINTS_SHOT = 4.2f;
+
     protected AudioSource audioSource;
 
     [Header("reference")]
@@ -50,7 +52,7 @@ public abstract class PlayerBase : MonoBehaviour
     protected bool isThrowingBall;
 
     protected bool doBackboardShot;
-    protected int pointsEarned;
+    protected int pointsEarnedBase;
     protected bool makePoints;
 
     internal bool ignoreInputs;
@@ -98,7 +100,7 @@ public abstract class PlayerBase : MonoBehaviour
     }
     protected void SetThrowValues(int pointsToGive, bool isBackboardShot)
     {
-        pointsEarned = pointsToGive;
+        pointsEarnedBase = pointsToGive;
         doBackboardShot = isBackboardShot;
     }
 
@@ -236,13 +238,18 @@ public abstract class PlayerBase : MonoBehaviour
             ball.ballThrowingPositions[currentPlayerPosition].ballPositions[ballThrowingAnimationIndex].GetChild(0));
 
         SetThrowValues(points, isBackboardShot);
-        CheckFireBonus(points);
+        //CheckFireBonus(points);
     }
 
+    /// <summary>
+    /// reset all value and prepare the player for the next shot
+    /// </summary>
+    /// <param name="directionOfMovement"> the direction of movement, it can be 1 or -1 </param>
     protected virtual void ResetShot(int directionOfMovement)
     {
+        CheckFireBonus(pointsEarnedBase);
         ball.transform.position = dribblePosition.position + Vector3.up * 0.7f;
-        pointsEarned = 0;
+        pointsEarnedBase = 0;
         throwingTimer = 0;
         ball.hasMakeSound = false;
         doBackboardShot = false;
@@ -267,7 +274,9 @@ public abstract class PlayerBase : MonoBehaviour
 
         if (!isFireBonusActive)
         {
-            fireBonusValue += points == 2 ? 2.5f : 4f;
+            // check the value to increment on fire bonus bar
+            fireBonusValue += points == 2 ? 
+                FIRE_BONUS_INCREMENT_2_POINTS_SHOT : FIRE_BONUS_INCREMENT_3_POINTS_SHOT;
 
             if (fireBonusValue >= gameManager.maxFireBonusTime)
             {

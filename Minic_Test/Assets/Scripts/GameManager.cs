@@ -1,16 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     private const float THROWING_BALL_SLIDER_MOBILE_HEIGHT = 800;
     private const float THROWING_BALL_SLIDER_MOBILE_POSITION_Y = 200;
     private const float THROWING_BALL_SLIDER_PC_HEIGHT = 600;
-    private const float THROWING_BALL_SLIDER_PC_POSITION_Y = 150;
+    private const float THROWING_BALL_SLIDER_PC_POSITION_Y = 120;
 
     private const float TIME_TO_TIMER_FLASH = 10;
 

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AIPlayer : PlayerBase
@@ -144,7 +143,7 @@ public class AIPlayer : PlayerBase
         // check the score and give points to player
         if (makePoints)
         {
-            gameManager.AddAIPoints(pointsEarned, doBackboardShot, hasFireBonus, isLuckyBallActive);
+            gameManager.AddAIPoints(pointsEarnedBase, doBackboardShot, hasFireBonus, isLuckyBallActive);
         }
 
         ResetShot(-1);
@@ -159,11 +158,8 @@ public class AIPlayer : PlayerBase
     private void SetMaterialToBallAndAI(Material[] materials, GameObject obj, Material materialToExclude)
     {
         int rndMaterial = Random.Range(0, materials.Length);
-        if (materials[rndMaterial] != materialToExclude)
-        {
-            obj.GetComponent<MeshRenderer>().material = materials[rndMaterial];
-        }
-        else
+        Debug.Log(rndMaterial);
+        if (materials[rndMaterial] == materialToExclude)
         {
             if (rndMaterial != materials.Length - 1)
             {
@@ -173,8 +169,7 @@ public class AIPlayer : PlayerBase
             {
                 rndMaterial -= 1;
             }
-
-            obj.GetComponent<MeshRenderer>().material = materials[rndMaterial];
         }
+        obj.GetComponent<MeshRenderer>().material = materials[rndMaterial];
     }
 }

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 /// <summary>
 /// used to exit from the game in a PC platform

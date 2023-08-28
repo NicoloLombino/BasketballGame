@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -131,7 +130,7 @@ public class Player : PlayerBase
         // check the score and give points to player
         if(makePoints)
         {
-            gameManager.AddPlayerPoints(pointsEarned, doBackboardShot, hasFireBonus, isLuckyBallActive);
+            gameManager.AddPlayerPoints(pointsEarnedBase, doBackboardShot, hasFireBonus, isLuckyBallActive);
         }
 
         ResetShot(1);

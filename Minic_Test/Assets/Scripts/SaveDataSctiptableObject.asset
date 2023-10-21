@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b56cfba90dd6b34ab4719076541c987, type: 3}
   m_Name: SaveDataSctiptableObject
   m_EditorClassIdentifier: 
-  isMobileGame: 1
+  isMobileGame: 0
   gold: 2341
   maxScore: 80
   AILevel: 10

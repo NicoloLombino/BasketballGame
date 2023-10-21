@@ -215,10 +215,6 @@ public class GameManager : MonoBehaviour
         }
 
         pointsToGive *= playerHasFireBonusActive ? 2 : 1;
-        //if (playerHasFireBonusActive)
-        //{
-        //    pointsToGive *= 2;
-        //}
 
         playerPoints += pointsToGive;
         playerPointsText.text = playerPoints.ToString();
@@ -251,10 +247,6 @@ public class GameManager : MonoBehaviour
             mustBackboardEffectSpawn = true;
         }
         pointsToGive *= hasFireBonusActive ? 2 : 1;
-        //if (hasFireBonusActive)
-        //{
-        //    pointsToGive *= 2;
-        //}
 
         AIPoints += pointsToGive;
         aiPointsText.text = AIPoints.ToString();
